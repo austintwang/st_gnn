@@ -60,6 +60,7 @@ def parse_cell(line):
 
     z = int(slice_id.split("_")[1][5:]) * 10
 
+    print(x,y,z) ####
     return cell_id, x, y, z
 
 def load_file(tables, in_path):
