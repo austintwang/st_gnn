@@ -20,8 +20,8 @@ class CellTable(object):
     def add_cell(self, cell_id, x, y, z):
         coords = (x, y, z)
         self.cell_pos[cell_id] = coords
-        x_lh, y_lh, z_lh = [int((i - radius) * self.scale) // self.bsize_scaled for i in coords]
-        x_uh, y_uh, z_uh = [int((i + radius) * self.scale) // self.bsize_scaled for i in coords]
+        x_lh, y_lh, z_lh = (int((i - self.radius) * self.scale) // self.bsize_scaled for i in coords)
+        x_uh, y_uh, z_uh = (int((i + self.radius) * self.scale) // self.bsize_scaled for i in coords)
 
         adj = set()
         for i in range(x_lh, x_uh + 1):
