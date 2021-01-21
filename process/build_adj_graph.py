@@ -61,7 +61,8 @@ def parse_cell(line):
     z = int(slice_id.split("_")[1][5:]) * 10
 
     # print(x,y,z) ####
-    print(x_b[0], x_b[-1]) ####
+    # print(x_b[0], x_b[-1]) ####
+    print(y_b[0], y_b[-1]) ####
     if np.isnan(x) or np.isnan(y):
         print(x_b)
         print(y_b)
