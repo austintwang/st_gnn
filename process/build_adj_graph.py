@@ -44,7 +44,11 @@ class CellTable(object):
         return {"cells": self.cell_pos, "graph": self.graph}
 
 def parse_cell(line):
-    cell_id, x_b, _, y_b, slice_id = line.split("\"")
+    try:
+        cell_id, x_b, _, y_b, slice_id = line.split("\"")
+    except ValueError:
+        print(line) ####
+        raise ValueError
     cell_id = cell_id.rstrip(",")
 
     x1 = np.fromstring(x_b, sep=",")
@@ -64,7 +68,7 @@ def parse_cell(line):
 
     z = int(slice_id.split("_")[1][5:]) * 10
 
-    print(x,y,z) ####
+    # print(x,y,z) ####
     # print(x_b[0], x_b[-1]) ####
     # print(y_b[0], y_b[-1]) ####
     if np.isnan(x) or np.isnan(y):
