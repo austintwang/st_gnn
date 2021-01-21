@@ -101,7 +101,7 @@ if __name__ == '__main__':
     data_path = "/dfs/user/atwang/data/spt_zhuang/"
     in_dir = os.path.join(data_path, "source", "processed_data")
 
-    indiv = ["mouse1, mouse2"]
+    indiv = ["mouse1", "mouse2"]
     for i in indiv:
         out_dir = os.path.join(data_path, "parsed", "adj_graphs", indiv)
         in_paths = glob.glob(os.path.join(in_dir, f"segmented_cells_{i}sample*.csv"))
