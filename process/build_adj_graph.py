@@ -50,7 +50,7 @@ def parse_cell(line):
         x = float(x)
         y = float(y)
         z = int(slice_id.split("_")[1][5:]) * 10
-        print(x, y) ####
+        # print(x, y) ####
         return cell_id, x, y, z
         
     cell_id, x_b, _, y_b, slice_id = line.split("\"")
@@ -65,7 +65,7 @@ def parse_cell(line):
     if a == 0:
         x = np.mean((x1 + x2)) / 2
         y = np.mean((y1 + y2)) / 2
-        print(x1, y1) ####
+        # print(x1, y1) ####
     else:
         x = np.sum((x1 + x2) * q) / (3 * a)
         y = np.sum((y1 + y2) * q) / (3 * a)
@@ -75,9 +75,9 @@ def parse_cell(line):
     # print(x,y,z) ####
     # print(x_b[0], x_b[-1]) ####
     # print(y_b[0], y_b[-1]) ####
-    if np.isnan(x) or np.isnan(y):
-        print(x1) ####
-        print(y1) ####
+    # if np.isnan(x) or np.isnan(y):
+    #     print(x1) ####
+    #     print(y1) ####
     return cell_id, x, y, z
 
 def load_file(tables, in_path):
