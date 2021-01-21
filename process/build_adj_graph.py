@@ -60,7 +60,10 @@ def parse_cell(line):
 
     z = int(slice_id.split("_")[1][5:]) * 10
 
-    print(x,y,z) ####
+    # print(x,y,z) ####
+    if np.isnan(x) or np.isnan(y): ####
+        print(x_b)
+        prin(y_b)
     return cell_id, x, y, z
 
 def load_file(tables, in_path):
