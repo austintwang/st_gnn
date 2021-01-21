@@ -24,7 +24,7 @@ class CellTable(object):
         # if cell_id in self.cell_pos: ####
         #     print(x,y,z)
         #     print(self.cell_pos[cell_id]) ####
-        self.graph.AddNode(counter)
+        self.graph.AddNode(self.counter)
         self.nodes[cell_id] = self.counter
         self.counter += 1
 
