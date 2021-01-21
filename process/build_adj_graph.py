@@ -44,11 +44,16 @@ class CellTable(object):
         return {"cells": self.cell_pos, "graph": self.graph}
 
 def parse_cell(line):
-    try:
-        cell_id, x_b, _, y_b, slice_id = line.split("\"")
-    except ValueError:
-        print(line) ####
-        raise ValueError
+    entries = line.split("\"")
+    if len(entries) == 1:
+        cell_id, x, y, slice_id = line.split(",")
+        x = float(x)
+        y = float(y)
+        z = int(slice_id.split("_")[1][5:]) * 10
+        print(x, y) ####
+        return cell_id, x, y, z
+        
+    cell_id, x_b, _, y_b, slice_id = line.split("\"")
     cell_id = cell_id.rstrip(",")
 
     x1 = np.fromstring(x_b, sep=",")
@@ -60,8 +65,7 @@ def parse_cell(line):
     if a == 0:
         x = np.mean((x1 + x2)) / 2
         y = np.mean((y1 + y2)) / 2
-        print(x1) ####
-        print(y1) ####
+        print(x1, y1) ####
     else:
         x = np.sum((x1 + x2) * q) / (3 * a)
         y = np.sum((y1 + y2) * q) / (3 * a)
