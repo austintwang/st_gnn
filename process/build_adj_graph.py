@@ -47,12 +47,10 @@ def parse_cell(line):
     cell_id, x_b, _, y_b, slice_id = line.split("\"")
     cell_id = cell_id.rstrip(",")
 
-    x_b = np.fromstring(x_b, sep=",")
-    y_b = np.fromstring(y_b, sep=",")
-    x1 = x_b[:-1]
-    x2 = x_b[1:]
-    y1 = y_b[:-1]
-    y2 = y_b[1:]
+    x1 = np.fromstring(x_b, sep=",")
+    y1 = np.fromstring(y_b, sep=",")
+    x2 = np.roll(x_b, -1)
+    y2 = np.roll(y_b, -1)
     q = x1 * y2 - x2 * y1
     a = np.sum(q)
     x = np.sum((x1 + x2) * q) / (3 * a)
@@ -60,12 +58,12 @@ def parse_cell(line):
 
     z = int(slice_id.split("_")[1][5:]) * 10
 
-    # print(x,y,z) ####
+    print(x,y,z) ####
     # print(x_b[0], x_b[-1]) ####
-    print(y_b[0], y_b[-1]) ####
+    # print(y_b[0], y_b[-1]) ####
     if np.isnan(x) or np.isnan(y):
-        print(x_b)
-        print(y_b)
+        print(x1) ####
+        print(y1) ####
     return cell_id, x, y, z
 
 def load_file(tables, in_path):
