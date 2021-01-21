@@ -1,8 +1,35 @@
+import networkx as nx
+
 import os
 import glob
 import numpy as np 
-import snap
 import tqdm
+
+def get_egonet(graph, node, hop):
+    egonet = graph.GetEgonetHop(node, hop)
+    nx.Graph(egonet.Edges())
+
+
+    visited = set([node])
+    current = set([node])
+    for _ in range(distance):
+        after = set()
+        for c in current:
+            nbrs = cell_graph[c]
+            for n in nbrs:
+                if n not in visited:
+                    after.add(n)
+
+        visited |= after
+        current = after
+
+    nbrhood = nx.Graph()
+    for i in visited:
+        for j in cell_graph[i]:
+            nbrhood.add_edge(i, j)
+
+    return nbrhood
+
 
 class CellTable(object):
     def __init__(self, bucket_size, radius, precision=6):
@@ -16,14 +43,12 @@ class CellTable(object):
         self.cell_pos = {}
 
         # self.edges = set()
-        self.graph = snap.TUNGraph.New()
+        self.graph = {}
 
     def add_cell(self, cell_id, x, y, z):
-        # if cell_id in self.cell_pos: ####
-        #     print(x,y,z)
-        #     print(self.cell_pos[cell_id]) ####
-        self.graph.AddNode(cell_id)
-
+        if cell_id in self.cell_pos: ####
+            print(x,y,z)
+            print(self.cell_pos[cell_id]) ####
         coords = (x, y, z)
         self.cell_pos[cell_id] = coords
         x_lh, y_lh, z_lh = (int((i - self.radius) * self.scale) // self.bsize_scaled for i in coords)
@@ -43,9 +68,8 @@ class CellTable(object):
                     bucket.append(cell_id)
 
         for c in adj:
-            self.graph.AddEdge(cell_id, c)
-            # self.graph.setdefault(c, set()).add(cell_id)
-            # self.graph.setdefault(cell_id, set()).add(c)
+            self.graph.setdefault(c, set()).add(cell_id)
+            self.graph.setdefault(cell_id, set()).add(c)
 
     def get_graph(self):
         return {"cells": self.cell_pos, "graph": self.graph}
