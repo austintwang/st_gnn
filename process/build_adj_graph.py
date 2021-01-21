@@ -53,8 +53,14 @@ def parse_cell(line):
     y2 = np.roll(y1, -1)
     q = x1 * y2 - x2 * y1
     a = np.sum(q)
-    x = np.sum((x1 + x2) * q) / (3 * a)
-    y = np.sum((y1 + y2) * q) / (3 * a)
+    if a == 0:
+        x = np.mean((x1 + x2)) / 2
+        y = np.mean((y1 + y2)) / 2
+        print(x1) ####
+        print(y1) ####
+    else:
+        x = np.sum((x1 + x2) * q) / (3 * a)
+        y = np.sum((y1 + y2) * q) / (3 * a)
 
     z = int(slice_id.split("_")[1][5:]) * 10
 
