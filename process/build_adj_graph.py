@@ -18,6 +18,9 @@ class CellTable(object):
         self.graph = {}
 
     def add_cell(self, cell_id, x, y, z):
+        if cell_id in cell_pos: ####
+            print(x,y,z)
+            print(cell_id[cell_pos]) ####
         coords = (x, y, z)
         self.cell_pos[cell_id] = coords
         x_lh, y_lh, z_lh = (int((i - self.radius) * self.scale) // self.bsize_scaled for i in coords)
