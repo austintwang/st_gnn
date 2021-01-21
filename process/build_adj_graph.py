@@ -31,7 +31,7 @@ class CellTable(object):
                     bucket = self.buckets.setdefault(bidx, [])
                     for c in bucket:
                         xc, yc, zc = self.cell_pos[c]
-                        if (xc - x)**2 + (yc - y)**2 + (zc - z)**2 <= radsq:
+                        if (xc - x)**2 + (yc - y)**2 + (zc - z)**2 <= self.radsq:
                             adj.add(c)
 
                     bucket.append(cell_id)
