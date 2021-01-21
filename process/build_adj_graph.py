@@ -63,7 +63,7 @@ def parse_cell(line):
     # print(x,y,z) ####
     if np.isnan(x) or np.isnan(y): ####
         print(x_b)
-        prin(y_b)
+        print(y_b)
     return cell_id, x, y, z
 
 def load_file(tables, in_path):
