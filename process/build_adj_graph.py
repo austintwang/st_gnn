@@ -49,8 +49,8 @@ def parse_cell(line):
 
     x1 = np.fromstring(x_b, sep=",")
     y1 = np.fromstring(y_b, sep=",")
-    x2 = np.roll(x_b, -1)
-    y2 = np.roll(y_b, -1)
+    x2 = np.roll(x1, -1)
+    y2 = np.roll(y1, -1)
     q = x1 * y2 - x2 * y1
     a = np.sum(q)
     x = np.sum((x1 + x2) * q) / (3 * a)
