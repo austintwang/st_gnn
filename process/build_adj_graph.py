@@ -25,7 +25,7 @@ class CellTable(object):
         #     print(x,y,z)
         #     print(self.cell_pos[cell_id]) ####
         self.graph.AddNode(counter)
-        self.nodes[cell_id] = counter
+        self.nodes[cell_id] = self.counter
         self.counter += 1
 
         coords = (x, y, z)
