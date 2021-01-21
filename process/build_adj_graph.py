@@ -103,7 +103,7 @@ if __name__ == '__main__':
 
     indiv = ["mouse1", "mouse2"]
     for i in indiv:
-        out_dir = os.path.join(data_path, "parsed", "adj_graphs", indiv)
+        out_dir = os.path.join(data_path, "parsed", "adj_graphs", i)
         in_paths = glob.glob(os.path.join(in_dir, f"segmented_cells_{i}sample*.csv"))
         build_graphs(params, in_paths, out_dir)
 
