@@ -17,12 +17,16 @@ class CellTable(object):
 
         # self.edges = set()
         self.graph = snap.TUNGraph.New()
+        self.nodes = {}
+        self.counter = 0
 
     def add_cell(self, cell_id, x, y, z):
         # if cell_id in self.cell_pos: ####
         #     print(x,y,z)
         #     print(self.cell_pos[cell_id]) ####
-        self.graph.AddNode(cell_id)
+        self.graph.AddNode(counter)
+        self.nodes[cell_id] = counter
+        self.counter += 1
 
         coords = (x, y, z)
         self.cell_pos[cell_id] = coords
@@ -43,7 +47,7 @@ class CellTable(object):
                     bucket.append(cell_id)
 
         for c in adj:
-            self.graph.AddEdge(cell_id, c)
+            self.graph.AddEdge(self.nodes[cell_id], self.nodes[c])
             # self.graph.setdefault(c, set()).add(cell_id)
             # self.graph.setdefault(cell_id, set()).add(c)
 
