@@ -50,7 +50,7 @@ class CellTable(object):
                         # print(len(c)) ####
                         xc, yc, zc = self.cell_pos[c]
                         if (xc - x)**2 + (yc - y)**2 + (zc - z)**2 <= self.radsq:
-                            self.graph.AddEdge(self.nodes[cell_id], self.nodes[c])
+                            self.graph.AddEdge(self.node_map[cell_id], self.node_map[c])
                             # adj.add(c)
 
                     bucket.append(cell_id)
