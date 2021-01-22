@@ -22,7 +22,7 @@ def load_graph(graph_dir):
 
 def get_egonet(graph, node, hop):
     egonet = graph.GetEgonetHop(node, hop)
-    # egonet.Dump() ####
+    egonet.Dump() ####
     # for i in egonet.Edges():
     #     print(i.GetSrcNId(), i.GetDstNId()) ####
     # print(i for i in egonet.Edges()) ####
