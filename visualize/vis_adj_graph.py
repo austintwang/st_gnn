@@ -22,7 +22,7 @@ def load_graph(graph_dir):
 
 def get_egonet(graph, node, hop):
     egonet = graph.GetEgonetHop(node, hop)
-    egonet.Dump() ####
+    # egonet.Dump() ####
     # for i in egonet.Edges():
     #     print(i.GetSrcNId(), i.GetDstNId()) ####
     # print(i for i in egonet.Edges()) ####
@@ -93,7 +93,7 @@ def make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir):
 
 if __name__ == '__main__':
     num_subgraphs = 5
-    radii = [10, 20, 50, 100]
+    radii = [20, 50, 100]
     hop = 3
 
     data_path = "/dfs/user/atwang/data/spt_zhuang/"
