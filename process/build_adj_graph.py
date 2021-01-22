@@ -39,8 +39,9 @@ class CellTable(object):
                 for k in range(z_lh, z_uh + 1):
                     bidx = (i,j,k)
                     bucket = self.buckets.setdefault(bidx, [])
+                    print(bucket) ####
                     for c in bucket:
-                        print(len(c)) ####
+                        # print(len(c)) ####
                         xc, yc, zc = self.cell_pos[c]
                         if (xc - x)**2 + (yc - y)**2 + (zc - z)**2 <= self.radsq:
                             self.graph.AddEdge(self.nodes[cell_id], self.nodes[c])
