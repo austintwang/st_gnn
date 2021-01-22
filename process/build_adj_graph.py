@@ -60,14 +60,12 @@ class CellTable(object):
             # self.graph.setdefault(c, set()).add(cell_id`1)
             # self.graph.setdefault(cell_id, set()).add(c)
 
-    def get_graph(self):
-        return {"cells": self.nodes, "cell_map": self.node_map, "cell_pos": self.cell_pos, "graph": self.graph}
-
     def save_graph(self, out_dir):
+        meta = {"cells": self.nodes, "cell_map": self.node_map, "cell_pos": self.cell_pos}
         os.makedirs(out_dir, exist_ok=True)
         metadata_path = os.path.join(out_dir, "meta.pickle")
         with open(metadata_path, "wb") as out_file:
-            pickle.dump(v.get_graph(), out_file)
+            pickle.dump(meta, out_file)
         graph_path = os.path.join(out_dir, "graph.txt")
         self.graph.SaveEdgeList(graph_path)
 
@@ -124,6 +122,7 @@ def load_file(tables, in_path):
             cell_id, x, y, z = parse_cell(line)
             for t in tables.values():
                 t.add_cell(cell_id, x, y, z)
+        return ####
 
 def build_graphs(params, in_paths, out_dir):
     tables = {}
