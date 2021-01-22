@@ -7,28 +7,32 @@ import tqdm
 
 def get_egonet(graph, node, hop):
     egonet = graph.GetEgonetHop(node, hop)
-    nx.Graph(egonet.Edges())
-
-
-    visited = set([node])
-    current = set([node])
-    for _ in range(distance):
-        after = set()
-        for c in current:
-            nbrs = cell_graph[c]
-            for n in nbrs:
-                if n not in visited:
-                    after.add(n)
-
-        visited |= after
-        current = after
-
-    nbrhood = nx.Graph()
-    for i in visited:
-        for j in cell_graph[i]:
-            nbrhood.add_edge(i, j)
-
+    nbrhood = nx.Graph(egonet.Edges())
     return nbrhood
+
+def get_annotations(subgraph, cells, cell_pos):
+    nodelist = list(subgraph.nodes)
+    xs = []
+    ys = []
+    zs = []
+    for n in nodelist:
+        cell = cells[n]
+        x, y, z = cell_pos[cell]
+        xs.append(x)
+        ys.append(y)
+        zs.append(z)
+
+    xs = np.array(xs)
+    ys = np.array(ys)
+    xs -= np.min(xs)
+    ys -= np.min(ys)
+    xs /= np.max(xs)
+    ys /= np.max(ys)
+
+    pos = {}
+    for n, x, y in zip(nodelist, xs, ys):
+        pos[n] = (x,y)
+
 
 
 class CellTable(object):

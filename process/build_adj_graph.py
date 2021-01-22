@@ -18,7 +18,8 @@ class CellTable(object):
 
         # self.edges = set()
         self.graph = snap.TUNGraph.New()
-        self.nodes = {}
+        self.nodes = []
+        self.node_map = {}
         self.counter = 0
 
     def add_cell(self, cell_id, x, y, z, report=False):
@@ -26,7 +27,8 @@ class CellTable(object):
         #     print(x,y,z)
         #     print(self.cell_pos[cell_id]) ####
         self.graph.AddNode(self.counter)
-        self.nodes[cell_id] = self.counter
+        self.node_map[cell_id] = self.counter
+        self.nodes.append(cell_id)
         self.counter += 1
 
         coords = (x, y, z)
@@ -59,7 +61,7 @@ class CellTable(object):
             # self.graph.setdefault(cell_id, set()).add(c)
 
     def get_graph(self):
-        return {"cells": self.cell_pos, "graph": self.graph}
+        return {"cells": self.nodes, "cell_map": self.node_map, "cell_pos": self.cell_pos, "graph": self.graph}
 
 def parse_cell(line):
     entries = line.split("\"")
@@ -125,13 +127,14 @@ def build_graphs(params, in_paths, out_dir):
     os.makedirs(out_dir, exist_ok=True)
     for k, v in tables.items():
         out_path = os.path.join(out_dir, f"adj_r_{k}.pickle")
-        pickle.dump(v.get_graph(), out_path)
+        with open(out_path, "wb") as out_file:
+            pickle.dump(v.get_graph(), out_file)
 
 if __name__ == '__main__':
     params = [
-        (10, 20),
-        (100, 200),
-        (1000, 2000)
+        (10, 100),
+        (100, 1000),
+        (1000, 10000)
     ]
 
     data_path = "/dfs/user/atwang/data/spt_zhuang/"
