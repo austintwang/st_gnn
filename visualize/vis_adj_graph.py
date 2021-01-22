@@ -44,7 +44,7 @@ def get_annotations(subgraph, cells, cell_pos):
     xs = np.array(xs)
     ys = np.array(ys)
     zs = np.array(zs)
-    print(zs) ####
+    print(xs, ys, zs) ####
     xs -= np.min(xs)
     ys -= np.min(ys)
     zs -= np.min(zs)
