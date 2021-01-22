@@ -19,6 +19,7 @@ def load_graph(graph_dir):
 
 def get_egonet(graph, node, hop):
     egonet = graph.GetEgonetHop(node, hop)
+    print(i for i in egonet.Edges()) ####
     nbrhood = nx.Graph(list(egonet.Edges()))
     return nbrhood
 
