@@ -33,7 +33,7 @@ class CellTable(object):
         x_lh, y_lh, z_lh = (int((i - self.radius) * self.scale) // self.bsize_scaled for i in coords)
         x_uh, y_uh, z_uh = (int((i + self.radius) * self.scale) // self.bsize_scaled for i in coords)
 
-        adj = set()
+        # adj = set()
         for i in range(x_lh, x_uh + 1):
             for j in range(y_lh, y_uh + 1):
                 for k in range(z_lh, z_uh + 1):
@@ -42,13 +42,14 @@ class CellTable(object):
                     for c in bucket:
                         xc, yc, zc = self.cell_pos[c]
                         if (xc - x)**2 + (yc - y)**2 + (zc - z)**2 <= self.radsq:
-                            adj.add(c)
+                            self.graph.AddEdge(self.nodes[cell_id], self.nodes[c])
+                            # adj.add(c)
 
                     bucket.append(cell_id)
 
-        for c in adj:
-            self.graph.AddEdge(self.nodes[cell_id], self.nodes[c])
-            # self.graph.setdefault(c, set()).add(cell_id)
+        # for c in adj:
+        #     self.graph.AddEdge(self.nodes[cell_id], self.nodes[c])
+            # self.graph.setdefault(c, set()).add(cell_id`1)
             # self.graph.setdefault(cell_id, set()).add(c)
 
     def get_graph(self):
