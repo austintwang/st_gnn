@@ -20,5 +20,7 @@ adata = sc.read(data_path)
 
 sns.set()
 sns.distplot(np.log10(adata.X.flatten() + 1), kde=False)
+plt.xlabel("log10(Expression + 1)")
+plt.ylabel("Density")
 plt.savefig(os.path.join(result_dir, "hist.svg"), bbox_inches='tight')
 plt.clf()
