@@ -128,13 +128,19 @@ def build_graphs(params, in_paths, out_dir):
 
 if __name__ == '__main__':
     params = [
-        (10, 100),
-        (100, 1000),
-        (500, 5000)
+        (10, 50),
+        (100, 500),
+        (1000, 5000)
     ]
 
     data_path = "/dfs/user/atwang/data/spt_zhuang/"
     in_dir = os.path.join(data_path, "source", "processed_data")
+
+    indiv = ["mouse1"]
+    for i in indiv:
+        out_dir = os.path.join(data_path, "parsed", "adj_graphs_small", i)
+        in_paths = glob.glob(os.path.join(in_dir, f"segmented_cells_{i}sample*.csv"))[0]
+        build_graphs(params, in_paths, out_dir)
 
     indiv = ["mouse1", "mouse2"]
     for i in indiv:
