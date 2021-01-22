@@ -20,7 +20,7 @@ class CellTable(object):
         self.nodes = {}
         self.counter = 0
 
-    def add_cell(self, cell_id, x, y, z):
+    def add_cell(self, cell_id, x, y, z, report=False):
         # if cell_id in self.cell_pos: ####
         #     print(x,y,z)
         #     print(self.cell_pos[cell_id]) ####
@@ -38,10 +38,12 @@ class CellTable(object):
             for j in range(y_lh, y_uh + 1):
                 for k in range(z_lh, z_uh + 1):
                     bidx = (i,j,k)
-                    print(bidx) ####
+                    # print(bidx) ####
                     bucket = self.buckets.setdefault(bidx, [])
                     # print(bucket) ####
                     for c in bucket:
+                        if report:
+                            print(len(c))
                         # print(len(c)) ####
                         xc, yc, zc = self.cell_pos[c]
                         if (xc - x)**2 + (yc - y)**2 + (zc - z)**2 <= self.radsq:
@@ -106,10 +108,10 @@ def load_file(tables, in_path):
 
     with open(in_path) as f:
         next(f)
-        for line in tqdm.tqdm(f, desc=os.path.basename(in_path), total=lines):
+        for ind, line in tqdm.tqdm(enumerate(f), desc=os.path.basename(in_path), total=lines):
             cell_id, x, y, z = parse_cell(line)
             for t in tables.values():
-                t.add_cell(cell_id, x, y, z)
+                t.add_cell(cell_id, x, y, z, report=(ind % 1000 == 0))
 
 def build_graphs(params, in_paths, out_dir):
     tables = {}
