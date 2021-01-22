@@ -10,12 +10,12 @@ result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/expression"
 os.makedirs(result_dir, exist_ok=True)
 
 adata = sc.read(data_path)
-sc.pp.calculate_qc_metrics(adata)
-sc.pp.normalize_total(adata, target_sum=1e4)
-sc.pp.log1p(adata)
-sc.pl.highly_variable_genes(adata)
-plt.savefig(os.path.join(result_dir, "var_genes.svg"), bbox_inches='tight')
-plt.clf()
+# sc.pp.calculate_qc_metrics(adata)
+# sc.pp.normalize_total(adata, target_sum=1e4)
+# sc.pp.log1p(adata)
+# sc.pl.highly_variable_genes(adata)
+# plt.savefig(os.path.join(result_dir, "var_genes.svg"), bbox_inches='tight')
+# plt.clf()
 
 sns.set()
 sns.distplot(adata.X.flatten(), kde=False, ax=axs[0])
