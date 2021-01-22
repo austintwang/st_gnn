@@ -59,7 +59,7 @@ def get_annotations(subgraph, cells, cell_pos):
     return nodelist, pos, zs
 
 def plot_egonet(subgraph, nodelist, pos, z, title, result_path):
-    nx.draw_networkx(subgraph, pos=pos, nodelist=nodelist, node_color=z, with_labels=False, node_size=100)
+    nx.draw_networkx(subgraph, pos=pos, nodelist=nodelist, with_labels=False, node_size=100)
     plt.title(title)
     plt.savefig(result_path, bbox_inches='tight')
     plt.clf()
