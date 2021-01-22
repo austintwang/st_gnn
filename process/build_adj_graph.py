@@ -130,7 +130,7 @@ if __name__ == '__main__':
     params = [
         (10, 100),
         (100, 1000),
-        (1000, 10000)
+        (1000, 2000)
     ]
 
     data_path = "/dfs/user/atwang/data/spt_zhuang/"
