@@ -1,9 +1,10 @@
-import networkx as nx
-
 import os
-import glob
+import random
 import numpy as np 
-import tqdm
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import networkx as nx
 
 def get_egonet(graph, node, hop):
     egonet = graph.GetEgonetHop(node, hop)
@@ -31,8 +32,34 @@ def get_annotations(subgraph, cells, cell_pos):
 
     pos = {}
     for n, x, y in zip(nodelist, xs, ys):
-        pos[n] = (x,y)
+        pos[n] = (x, y)
 
+    return pos, zs
+
+def plot_egonet(subgraph, nodelist, pos, z, title, result_path):
+    nx.draw_networkx(subgraph, pos=pos, nodelist=nodelist, node_color=z)
+    plt.title(title)
+    plt.savefig(result_path, bbox_inches='tight')
+    plt.clf()
+
+def make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir):
+    graphs = {}
+    for r in radii:
+        in_path = os.path.join(in_dir, f"adj_r_{r}.pickle")
+        with open(in_path, "rb") as in_file:
+            in_data = pickle.load(in_file)
+        graphs[r] = in_data
+        cells_ref = in_data["cells"]
+
+    for i in range(num_subgraphs):
+        ref = random.choice(cells_ref)
+        for r, graph_data in graphs.items():
+            graph = graph_data["graph"]
+            cell_map = graph_data["cell_map"]
+            cells = graph_data["cells"]
+            node = cell_map[ref]
+            subgraph = get_egonet(graph, node, hop)
+            pos, z = get_annotations(subgraph, cells, cell_pos)
 
 
 class CellTable(object):
