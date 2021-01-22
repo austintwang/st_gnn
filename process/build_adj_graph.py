@@ -43,8 +43,8 @@ class CellTable(object):
                     bidx = (i,j,k)
                     # print(bidx) ####
                     bucket = self.buckets.setdefault(bidx, [])
-                    if report:
-                        print(len(bucket))
+                    # if report:
+                    #     print(len(bucket))
                     # print(bucket) ####
                     for c in bucket:
                         # print(len(c)) ####
@@ -111,10 +111,10 @@ def load_file(tables, in_path):
 
     with open(in_path) as f:
         next(f)
-        for ind, line in tqdm.tqdm(enumerate(f), desc=os.path.basename(in_path), total=lines):
+        for line in tqdm.tqdm(f, desc=os.path.basename(in_path), total=lines):
             cell_id, x, y, z = parse_cell(line)
             for t in tables.values():
-                t.add_cell(cell_id, x, y, z, report=(ind % 1000 == 0))
+                t.add_cell(cell_id, x, y, z)
 
 def build_graphs(params, in_paths, out_dir):
     tables = {}
