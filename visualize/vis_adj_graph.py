@@ -62,10 +62,15 @@ def make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir):
         graph_dir = os.path.join(in_dir, f"adj_r_{r}")
         in_data = load_graph(graph_dir)
         graphs[r] = in_data
-        cells_ref = in_data["cells"]
+        # cells_ref = in_data["cells"]
+
+    rnd = snap.TRnd(42)
+    rnd.Randomize()
+    graph_ref = in_data[min(r)]
 
     for i in range(num_subgraphs):
-        ref = random.choice(cells_ref)
+        # ref = random.choice(cells_ref)
+        ref = graph_ref["cells"][graph_ref["graph"].GetRndNId(rnd)]
         for r, graph_data in graphs.items():
             graph = graph_data["graph"]
             cell_map = graph_data["cell_map"]
