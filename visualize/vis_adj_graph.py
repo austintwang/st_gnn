@@ -81,6 +81,7 @@ def make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir):
             subgraph = get_egonet(graph, node, hop)
             nodelist, pos, z = get_annotations(subgraph, cells, cell_pos)
 
+            os.makedirs(out_dir, exist_ok=True)
             out_path = os.path.join(out_dir, f"sub_{i}_r_{r}.svg")
             title = f"{r} μm Radius, {hop}-Hop, {ref}"
             plot_egonet(subgraph, nodelist, pos, z, title, out_path)
