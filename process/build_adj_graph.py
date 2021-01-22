@@ -40,10 +40,10 @@ class CellTable(object):
                     bidx = (i,j,k)
                     # print(bidx) ####
                     bucket = self.buckets.setdefault(bidx, [])
+                    if report:
+                        print(len(bucket))
                     # print(bucket) ####
                     for c in bucket:
-                        if report:
-                            print(len(c))
                         # print(len(c)) ####
                         xc, yc, zc = self.cell_pos[c]
                         if (xc - x)**2 + (yc - y)**2 + (zc - z)**2 <= self.radsq:
