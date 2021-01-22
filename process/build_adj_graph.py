@@ -38,8 +38,9 @@ class CellTable(object):
             for j in range(y_lh, y_uh + 1):
                 for k in range(z_lh, z_uh + 1):
                     bidx = (i,j,k)
+                    print(bidx) ####
                     bucket = self.buckets.setdefault(bidx, [])
-                    print(bucket) ####
+                    # print(bucket) ####
                     for c in bucket:
                         # print(len(c)) ####
                         xc, yc, zc = self.cell_pos[c]
