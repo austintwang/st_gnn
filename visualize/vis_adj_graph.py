@@ -12,11 +12,11 @@ def load_graph(graph_dir):
     meta_path = os.path.join(graph_dir, "meta.pickle")
     with open(meta_path, "rb") as in_file:
         data = pickle.load(in_file)
-    graph_path = os.path.join(graph_dir, "graph.txt")
-    graph = snap.LoadEdgeList(snap.TUNGraph, graph_path)
-    # graph_path = os.path.join(graph_dir, "bin.graph")
-    # fin = snap.TFIn(graph_path)
-    # graph = snap.TNGraph.Load(fin)
+    # graph_path = os.path.join(graph_dir, "graph.txt")
+    # graph = snap.LoadEdgeList(snap.TUNGraph, graph_path)
+    graph_path = os.path.join(graph_dir, "bin.graph")
+    fin = snap.TFIn(graph_path)
+    graph = snap.TNGraph.Load(fin)
     data["graph"] = graph
     return data
 
@@ -92,7 +92,7 @@ def make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir):
 
 if __name__ == '__main__':
     num_subgraphs = 5
-    radii = [10, 100, 1000]
+    radii = [10, 20, 50, 100]
     hop = 3
 
     data_path = "/dfs/user/atwang/data/spt_zhuang/"
