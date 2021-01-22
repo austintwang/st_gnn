@@ -43,10 +43,13 @@ def get_annotations(subgraph, cells, cell_pos):
 
     xs = np.array(xs)
     ys = np.array(ys)
+    zs = np.array(zs)
     xs -= np.min(xs)
     ys -= np.min(ys)
+    zs -= np.min(zs)
     xs /= np.max(xs)
     ys /= np.max(ys)
+    zs /= np.max(zs)
 
     pos = {}
     for n, x, y in zip(nodelist, xs, ys):
@@ -55,7 +58,7 @@ def get_annotations(subgraph, cells, cell_pos):
     return nodelist, pos, zs
 
 def plot_egonet(subgraph, nodelist, pos, z, title, result_path):
-    nx.draw_networkx(subgraph, pos=pos, nodelist=nodelist, node_color=z)
+    nx.draw_networkx(subgraph, pos=pos, nodelist=nodelist, node_color=z, with_labels=False, node_size=100)
     plt.title(title)
     plt.savefig(result_path, bbox_inches='tight')
     plt.clf()
@@ -87,7 +90,7 @@ def make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir):
 
             os.makedirs(out_dir, exist_ok=True)
             out_path = os.path.join(out_dir, f"sub_{i}_r_{r}.svg")
-            title = f"{r} μm Radius, {hop}-Hop, {ref}"
+            title = f"{r} μm Radius, {hop}-Hop\nCell {ref}"
             plot_egonet(subgraph, nodelist, pos, z, title, out_path)
 
 
