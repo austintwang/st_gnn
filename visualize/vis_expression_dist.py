@@ -18,6 +18,6 @@ plt.savefig(os.path.join(result_dir, "var_genes.svg"), bbox_inches='tight')
 plt.clf()
 
 sns.set()
-sns.distplot(adata.obs["total_counts"], kde=False, ax=axs[0])
+sns.distplot(adata.X.flatten(), kde=False, ax=axs[0])
 plt.savefig(os.path.join(result_dir, "hist.svg"), bbox_inches='tight')
 plt.clf()
