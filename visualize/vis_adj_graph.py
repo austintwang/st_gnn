@@ -78,23 +78,27 @@ def make_subgraphs(num_subgraphs, radii, in_dir, out_dir):
 
     for i in range(num_subgraphs):
         # ref = random.choice(cells_ref)
-        ref = graph_ref["cells"][graph_ref["graph"].GetRndNId(rnd)]
-        for r, graph_data in graphs.items():
-            hop = radii[r]
-            graph = graph_data["graph"]
-            cell_map = graph_data["cell_map"]
-            cells = graph_data["cells"]
-            cell_pos = graph_data["cell_pos"]
+        while True:
+            try:
+                ref = graph_ref["cells"][graph_ref["graph"].GetRndNId(rnd)]
+                for r, graph_data in graphs.items():
+                    hop = radii[r]
+                    graph = graph_data["graph"]
+                    cell_map = graph_data["cell_map"]
+                    cells = graph_data["cells"]
+                    cell_pos = graph_data["cell_pos"]
 
-            node = cell_map[ref]
-            subgraph = get_egonet(graph, node, hop)
-            nodelist, pos, z = get_annotations(subgraph, cells, cell_pos)
+                    node = cell_map[ref]
+                    subgraph = get_egonet(graph, node, hop)
+                    nodelist, pos, z = get_annotations(subgraph, cells, cell_pos)
 
-            os.makedirs(out_dir, exist_ok=True)
-            out_path = os.path.join(out_dir, f"sub_{i}_r_{r}.svg")
-            title = f"{r} μm Radius, {hop}-Hop\nCell {ref}"
-            plot_egonet(subgraph, nodelist, pos, z, title, out_path)
-
+                    os.makedirs(out_dir, exist_ok=True)
+                    out_path = os.path.join(out_dir, f"sub_{i}_r_{r}.svg")
+                    title = f"{r} μm Radius, {hop}-Hop\nCell {ref}"
+                    plot_egonet(subgraph, nodelist, pos, z, title, out_path)
+                break
+            except ValueError:
+                continue
 
 if __name__ == '__main__':
     num_subgraphs = 5
