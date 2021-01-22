@@ -18,6 +18,6 @@ adata = sc.read(data_path)
 # plt.clf()
 
 sns.set()
-sns.distplot(adata.X.flatten(), kde=False)
+sns.distplot(log10(adata.X.flatten() + 1), kde=False)
 plt.savefig(os.path.join(result_dir, "hist.svg"), bbox_inches='tight')
 plt.clf()
