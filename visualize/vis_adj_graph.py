@@ -16,7 +16,7 @@ def load_graph(graph_dir):
     # graph = snap.LoadEdgeList(snap.TUNGraph, graph_path)
     graph_path = os.path.join(graph_dir, "bin.graph")
     fin = snap.TFIn(graph_path)
-    graph = snap.TNGraph.Load(fin)
+    graph = snap.TUNGraph.Load(fin)
     data["graph"] = graph
     return data
 
