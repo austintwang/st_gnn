@@ -19,10 +19,10 @@ def load_graph(graph_dir):
 
 def get_egonet(graph, node, hop):
     egonet = graph.GetEgonetHop(node, hop)
-    for i in egonet.Edges():
-        print(i.GetSrcNId(), i.GetDstNId()) ####
+    # for i in egonet.Edges():
+    #     print(i.GetSrcNId(), i.GetDstNId()) ####
     # print(i for i in egonet.Edges()) ####
-    nbrhood = nx.Graph(list(egonet.Edges()))
+    nbrhood = nx.Graph([(i.GetSrcNId(), i.GetDstNId()) for i in egonet.Edges()])
     return nbrhood
 
 def get_annotations(subgraph, cells, cell_pos):

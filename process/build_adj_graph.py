@@ -66,8 +66,11 @@ class CellTable(object):
         metadata_path = os.path.join(out_dir, "meta.pickle")
         with open(metadata_path, "wb") as out_file:
             pickle.dump(meta, out_file)
-        graph_path = os.path.join(out_dir, "graph.txt")
-        self.graph.SaveEdgeList(graph_path)
+        graph_path = os.path.join(out_dir, "bin.graph")
+        # self.graph.SaveEdgeList(graph_path)
+        FOut = snap.TFOut(graph_path)
+        self.graph.Save(FOut)
+        FOut.Flush()
 
 
 def parse_cell(line):
