@@ -64,9 +64,9 @@ def plot_egonet(subgraph, nodelist, pos, z, title, result_path):
     plt.savefig(result_path, bbox_inches='tight')
     plt.clf()
 
-def make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir):
+def make_subgraphs(num_subgraphs, radii, in_dir, out_dir):
     graphs = {}
-    for r in radii:
+    for r in radii.keys():
         graph_dir = os.path.join(in_dir, f"adj_r_{r}")
         in_data = load_graph(graph_dir)
         graphs[r] = in_data
@@ -74,12 +74,13 @@ def make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir):
 
     rnd = snap.TRnd(42)
     rnd.Randomize()
-    graph_ref = graphs[min(radii)]
+    graph_ref = graphs[min(radii.keys())]
 
     for i in range(num_subgraphs):
         # ref = random.choice(cells_ref)
         ref = graph_ref["cells"][graph_ref["graph"].GetRndNId(rnd)]
         for r, graph_data in graphs.items():
+            hop = radii[r]
             graph = graph_data["graph"]
             cell_map = graph_data["cell_map"]
             cells = graph_data["cells"]
@@ -97,8 +98,8 @@ def make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir):
 
 if __name__ == '__main__':
     num_subgraphs = 5
-    radii = [20, 50, 100]
-    hop = 3
+    # radii = [20, 50, 100]
+    radii = {20:4, 50:3, 100:2}
 
     data_path = "/dfs/user/atwang/data/spt_zhuang/"
     in_dir = os.path.join(data_path, "parsed", "adj_graphs_small", "mouse1")
@@ -106,5 +107,5 @@ if __name__ == '__main__':
     results_path = "/dfs/user/atwang/results/st_gnn_results"
     out_dir = os.path.join(results_path, "spt_zhuang", "adj_graphs", "subgraphs")
 
-    make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir)
+    make_subgraphs(num_subgraphs, radii, in_dir, out_dir)
 
