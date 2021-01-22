@@ -122,7 +122,7 @@ def load_file(tables, in_path):
             cell_id, x, y, z = parse_cell(line)
             for t in tables.values():
                 t.add_cell(cell_id, x, y, z)
-            return ####
+            # return ####
 
 def build_graphs(params, in_paths, out_dir):
     tables = {}
