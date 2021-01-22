@@ -3,6 +3,7 @@ import glob
 import numpy as np 
 import snap
 import tqdm
+import pickle
 
 class CellTable(object):
     def __init__(self, bucket_size, radius, precision=6):
