@@ -66,7 +66,7 @@ def make_subgraphs(num_subgraphs, radii, hop, in_dir, out_dir):
 
     rnd = snap.TRnd(42)
     rnd.Randomize()
-    graph_ref = in_data[min(r)]
+    graph_ref = in_data[min(radii)]
 
     for i in range(num_subgraphs):
         # ref = random.choice(cells_ref)
