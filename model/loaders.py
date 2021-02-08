@@ -44,9 +44,9 @@ class ZhuangBasic(SaintRWLoader):
         anndata = self.params.get("st_anndata", sc.read(self.params["st_exp_path"]))
         coords = self.params.get("st_coords", pd.read_pickle(self.params["st_coords_path"]))
         organisms = self.params.get("st_organisms", pd.read_pickle(self.params["st_organisms_path"]))
-        print(organisms.keys()) ####
 
-        m1 = random.shuffle(organisms["mouse1"])
+        m1 = organisms["mouse1"]
+        random.shuffle(m1)
         num_train = int(0.8 * self.params["train_prop"])
         train = m1[:num_train]
         val = m1[num_train:]
