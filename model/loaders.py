@@ -63,7 +63,7 @@ class ZhuangBasic(SaintRWLoader):
         gene_to_node = {val: ind for ind, val in enumerate(genes)}
         num_genes = len(genes)
 
-        cells = np.fromiter(i for i in st_anndata.obs_names if i in partition)
+        cells = np.fromiter(i for i in st_anndata.obs_names if i in partition, dtype=object)
         cell_to_node = {val: ind + num_genes for ind, val in enumerate(cells)}
         num_cells = len(cells)
         coords = torch.tensor([st_coords[i] for i in cells])
