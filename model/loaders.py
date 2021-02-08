@@ -74,12 +74,11 @@ class ZhuangBasic(SaintRWLoader):
         x[num_genes:,-1].fill_(1.)
         node_to_id = np.concatenate((genes, cells))
 
-        expr = st_anndata.X
+        expr = np.log(st_anndata.X + 1)
         edges_l = []
         edge_features_l = []
         threshold = self.params["st_exp_threshold"]
-        for index, x in enumerate(expr):
-            x = math.log(x)
+        for index, x in np.ndenumerate(expr):
             if x >= threshold:
                 cell, gene = index
                 a = cell + num_genes
