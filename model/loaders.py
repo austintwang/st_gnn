@@ -126,10 +126,10 @@ if __name__ == '__main__':
     cache_path = "/dfs/user/atwang/data/spt_zhuang/cache/test/loader.pickle"
 
     params = {
-        "batch_size": 50,
+        "batch_size": 500,
         "saint_walk_length": 2,
         "saint_num_steps": 5,
-        "saint_sample_coverage": 100,
+        "saint_sample_coverage": 10,
         "st_exp_path": exp_path,
         "st_coords_path": coords_path,
         "st_organisms_path": orgs_path,
