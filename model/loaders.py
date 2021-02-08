@@ -131,7 +131,7 @@ if __name__ == '__main__':
         "st_exp_path": exp_path,
         "st_coords_path": coords_path,
         "st_organisms_path": orgs_path,
-        "train_prop": 0.8,
+        "train_prop": 0.01,
         "st_exp_threshold": 0.001,
         "num_workers": 16,
     }
