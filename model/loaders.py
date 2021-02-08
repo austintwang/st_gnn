@@ -39,6 +39,7 @@ class SaintRWLoader(Loader):
             walk_length=self.params["saint_walk_length"],
             num_steps=self.params["saint_num_steps"], 
             sample_coverage=self.params["saint_sample_coverage"],
+            num_workers=self.params["num_workers"]
         )
         return sampler
 
@@ -74,7 +75,7 @@ class ZhuangBasic(SaintRWLoader):
         # print(partition) ####
         # print(st_anndata.obs_names[:5]) ####
         # print(partition.pop()) ####
-        print(num_cells) ####
+        # print(num_cells) ####
 
         x = torch.zeros(num_genes + num_cells, num_genes + 1)
         x[:num_genes,:num_genes].fill_diagonal_(1.)
@@ -101,7 +102,8 @@ class ZhuangBasic(SaintRWLoader):
         # edges = torch.tensor(edges_l).transpose_(0, 1)
         # edge_features = torch.tensor(edge_features_l)
 
-        data = Data(x=x, edge_index=edges, edge_attr=edge_features, y=coords)
+        data = Data(x=x, edge_index=edges, edge_attr=edge_features, pos=coords)
+        print(data) ####
         maps = {
             "gene_to_node": gene_to_node,
             "cell_to_node": cell_to_node,
@@ -127,7 +129,7 @@ if __name__ == '__main__':
         "st_organisms_path": orgs_path,
         "train_prop": 0.8,
         "st_exp_threshold": 0.001,
-
+        "num_workers": 8,
     }
     loader = ZhuangBasic(**params)
     for i in loader.train_sampler:
