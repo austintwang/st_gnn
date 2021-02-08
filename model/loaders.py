@@ -73,6 +73,7 @@ class ZhuangBasic(SaintRWLoader):
         coords = torch.tensor([st_coords[i] for i in cells])
         # print(partition) ####
         print(st_anndata.obs_names[:5]) ####
+        print(partition.pop()) ####
 
         x = torch.zeros(num_genes + num_cells, num_genes + 1)
         x[:num_genes,:num_genes].fill_diagonal_(1.)
