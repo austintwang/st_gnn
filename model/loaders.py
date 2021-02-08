@@ -2,10 +2,12 @@ import os
 import random
 import math
 import numpy as np
+from scipy import sparse
 import pandas as pd
 import scanpy as sc
 import torch
 from torch_geometric.data import Data, GraphSAINTRandomWalkSampler
+from torch_geometric.utils import from_scipy_sparse_matrix
 
 class Loader(object):
     def __init__(self, **kwargs):
@@ -75,22 +77,24 @@ class ZhuangBasic(SaintRWLoader):
         node_to_id = np.concatenate((genes, cells))
 
         expr = np.log(st_anndata.X + 1)
-        print(expr.size, np.count_nonzero(expr)) ####
-        edges_l = []
-        edge_features_l = []
-        threshold = self.params["st_exp_threshold"]
-        for index, x in np.ndenumerate(expr):
-            if x >= threshold:
-                cell, gene = index
-                a = cell + num_genes
-                b = gene
-                edges_l.append([a, b])
-                edges_l.append([b, a])
-                edge_features_l.append(x)
-                edge_features_l.append(x)
+        expr_sparse = sparse.coo_matrix(expr)
+        edges, edge_features = from_scipy_sparse_matrix(expr_sparse)
 
-        edges = torch.tensor(edges_l).transpose_(0, 1)
-        edge_features = torch.tensor(edge_features_l)
+        # edges_l = []
+        # edge_features_l = []
+        # threshold = self.params["st_exp_threshold"]
+        # for index, x in np.ndenumerate(expr):
+        #     if x >= threshold:
+        #         cell, gene = index
+        #         a = cell + num_genes
+        #         b = gene
+        #         edges_l.append([a, b])
+        #         edges_l.append([b, a])
+        #         edge_features_l.append(x)
+        #         edge_features_l.append(x)
+
+        # edges = torch.tensor(edges_l).transpose_(0, 1)
+        # edge_features = torch.tensor(edge_features_l)
 
         data = Data(x=x, edge_index=edges, edge_attr=edge_features, y=coords)
         maps = {
