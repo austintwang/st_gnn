@@ -1,5 +1,6 @@
 import os
 import random
+import math
 import numpy as np
 import pandas as pd
 import scanpy as sc
@@ -78,7 +79,7 @@ class ZhuangBasic(SaintRWLoader):
         edge_features_l = []
         threshold = self.params["st_exp_threshold"]
         for index, x in enumerate(expr):
-            x = log(x)
+            x = math.log(x)
             if x >= threshold:
                 cell, gene = index
                 a = cell + num_genes
