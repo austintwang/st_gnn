@@ -106,7 +106,7 @@ class ZhuangBasic(SaintRWLoader):
         # edges = torch.tensor(edges_l).transpose_(0, 1)
         # edge_features = torch.tensor(edge_features_l)
 
-        data = Data(x=x, edge_index=edges, edge_attr=edge_features, pos=coords_pad)
+        data = Data(x=x, edge_index=edges, edge_attr=edge_features, pos=coords_pad, cell_mask=cell_mask)
         print(data) ####
         maps = {
             "gene_to_node": gene_to_node,
@@ -133,7 +133,7 @@ if __name__ == '__main__':
         "st_organisms_path": orgs_path,
         "train_prop": 0.01,
         "st_exp_threshold": 0.001,
-        "num_workers": 16,
+        "num_workers": 8,
     }
     loader = ZhuangBasic(**params)
     for i in loader.train_sampler:
