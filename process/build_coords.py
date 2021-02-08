@@ -55,9 +55,9 @@ def load_file(coords, cells, in_path):
 def build_coords(in_paths, out_dir):
     coords = {}
     cells = {}
-    for org in in_paths:
+    for org, paths in in_paths.items():
         cells_org = cells.setdefault(org, [])
-        for p in org:
+        for p in paths:
             load_file(coords, cells_org, p)
 
     out_path_coords = os.path.join(out_dir, "cell_coords.pickle")
