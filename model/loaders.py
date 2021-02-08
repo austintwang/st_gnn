@@ -71,7 +71,7 @@ class ZhuangBasic(SaintRWLoader):
         cell_to_node = {val: ind + num_genes for ind, val in enumerate(cells)}
         num_cells = len(cells)
         coords = torch.tensor([st_coords[i] for i in cells])
-        print(num_cells) ####
+        print(cell_mask) ####
 
         x = torch.zeros(num_genes + num_cells, num_genes + 1)
         x[:num_genes,:num_genes].fill_diagonal_(1.)
