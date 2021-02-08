@@ -75,6 +75,7 @@ class ZhuangBasic(SaintRWLoader):
         node_to_id = np.concatenate((genes, cells))
 
         expr = np.log(st_anndata.X + 1)
+        print(expr.size, np.count_nonzero(expr)) ####
         edges_l = []
         edge_features_l = []
         threshold = self.params["st_exp_threshold"]
