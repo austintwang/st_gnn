@@ -51,9 +51,9 @@ class ZhuangBasic(SaintRWLoader):
         m1 = organisms["mouse1"]
         random.shuffle(m1)
         num_train = int(0.8 * self.params["train_prop"])
-        train = m1[:num_train]
-        val = m1[num_train:]
-        test = organisms["mouse2"]
+        train = set(m1[:num_train])
+        val = set(m1[num_train:])
+        test = set(organisms["mouse2"])
 
         in_data = (anndata, coords)
         partitions = (train, val, test)
@@ -71,7 +71,7 @@ class ZhuangBasic(SaintRWLoader):
         cell_to_node = {val: ind + num_genes for ind, val in enumerate(cells)}
         num_cells = len(cells)
         coords = torch.tensor([st_coords[i] for i in cells])
-        print(cell_mask) ####
+        print(partition) ####
 
         x = torch.zeros(num_genes + num_cells, num_genes + 1)
         x[:num_genes,:num_genes].fill_diagonal_(1.)
