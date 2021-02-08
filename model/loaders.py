@@ -50,7 +50,7 @@ class ZhuangBasic(SaintRWLoader):
 
         m1 = organisms["mouse1"]
         random.shuffle(m1)
-        num_train = int(0.8 * self.params["train_prop"])
+        num_train = int(self.params["train_prop"] * len(m1))
         train = set(m1[:num_train])
         val = set(m1[num_train:])
         test = set(organisms["mouse2"])
