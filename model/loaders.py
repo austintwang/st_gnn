@@ -66,17 +66,19 @@ class ZhuangBasic(SaintRWLoader):
         gene_to_node = {val: ind for ind, val in enumerate(genes)}
         num_genes = len(genes)
 
-        cells = np.array([i for i in st_anndata.obs_names if i in partition])
+        cell_mask = np.array([i in partition for i in st_anndata.obs_names])
+        cells = np.array(st_anndata.obs_names[cell_mask])
         cell_to_node = {val: ind + num_genes for ind, val in enumerate(cells)}
         num_cells = len(cells)
         coords = torch.tensor([st_coords[i] for i in cells])
+        print(num_cells) ####
 
         x = torch.zeros(num_genes + num_cells, num_genes + 1)
         x[:num_genes,:num_genes].fill_diagonal_(1.)
         x[num_genes:,-1].fill_(1.)
         node_to_id = np.concatenate((genes, cells))
 
-        expr = np.log(st_anndata.X + 1)
+        expr = np.log(st_anndata.X[cell_mask,:] + 1)
         expr_sparse = sparse.coo_matrix(expr)
         edges, edge_features = from_scipy_sparse_matrix(expr_sparse)
 
