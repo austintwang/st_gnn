@@ -77,7 +77,7 @@ class ZhuangBasic(SaintRWLoader):
         edges_l = []
         edge_features_l = []
         threshold = self.params["st_exp_threshold"]
-        for index, x in expr:
+        for index, x in enumerate(expr):
             x = log(x)
             if x >= threshold:
                 cell, gene = index
