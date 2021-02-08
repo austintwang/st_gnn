@@ -123,8 +123,10 @@ if __name__ == '__main__':
     orgs_path = os.path.join(data_path, "parsed", "cell_orgs.pickle")
     exp_path = "/dfs/user/atwang/data/spt_zhuang/source/processed_data/counts.h5ad"
 
+    cache_path = "/dfs/user/atwang/data/spt_zhuang/cache/test/loader.pickle"
+
     params = {
-        "batch_size": 500,
+        "batch_size": 50,
         "saint_walk_length": 2,
         "saint_num_steps": 5,
         "saint_sample_coverage": 100,
@@ -136,6 +138,16 @@ if __name__ == '__main__':
         "num_workers": 8,
     }
     loader = ZhuangBasic(**params)
+    for i in loader.train_sampler:
+        print(i)
+
+    with open(cache_path, "wb") as cache_file:
+        pickle.dump(loader, cache_file)
+
+    with open(cache_path, "rb") as cache_file:
+        loader = pickle.load(cache_file)
+
+    print(i.val_data)
     for i in loader.train_sampler:
         print(i)
 
