@@ -63,9 +63,9 @@ def build_coords(in_paths, out_dir):
     out_path_coords = os.path.join(out_dir, "cell_coords.pickle")
     out_path_coords = os.path.join(out_dir, "cell_orgs.pickle")
     with open(out_path_coords, "wb") as out_file:
-        pickle.dump(coords)
+        pickle.dump(coords, out_file)
     with open(out_path_cells, "wb") as out_file:
-        pickle.dump(cells)
+        pickle.dump(cells, out_file)
 
 if __name__ == '__main__':
 
