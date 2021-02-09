@@ -107,8 +107,7 @@ class ZhuangBasic(SaintRWLoader):
         edges = torch.cat(edges_cg, edges_gc, 1)
         edge_attr = torch.cat(edge_features_cg, edge_features_gc, 0)
         edge_type = torch.cat(
-            torch.zeros_like(edge_features_cg, dtype=torch.uint8), 
-            torch.ones_like(edge_features_gc, dtype=torch.uint8), 
+            (torch.zeros_like(edge_features_cg, dtype=torch.uint8), torch.ones_like(edge_features_gc, dtype=torch.uint8)), 
             0
         )
 
