@@ -23,14 +23,15 @@ class Loader(object):
 
         self.train_sampler = self._build_sampler()
 
-    # def _import_data(self):
-    #     pass
+    def _import_data(self):
+        raise NotImplementedError
 
-    # def _build_graph(self, in_data, partition):
-    #     pass
+    def _build_graph(self, in_data, partition):
+        raise NotImplementedError
 
-    # def _build_sampler(self):
-    #     pass
+    def _build_sampler(self):
+        raise NotImplementedError
+
 
 class SaintRWLoader(Loader):
     def _build_sampler(self):
@@ -43,6 +44,7 @@ class SaintRWLoader(Loader):
             num_workers=self.params["num_workers"]
         )
         return sampler
+
 
 class ZhuangBasic(SaintRWLoader):
     def _import_data(self):
@@ -149,7 +151,7 @@ if __name__ == '__main__':
     with open(cache_path, "rb") as cache_file:
         loader = pickle.load(cache_file)
 
-    print(i.val_data)
+    print(loader.val_data)
     for i in loader.train_sampler:
         print(i)
 
