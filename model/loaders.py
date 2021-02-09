@@ -98,7 +98,7 @@ class ZhuangBasic(SaintRWLoader):
         x[num_genes:,-1].fill_(1.)
         node_to_id = np.concatenate((genes, cells))
 
-        expr = np.vstack(np.zeros((num_genes, num_genes),), np.log(st_anndata.X[part_mask,:] + 1))
+        expr = np.vstack((np.zeros((num_genes, num_genes),), np.log(st_anndata.X[part_mask,:] + 1)),)
         expr_sparse_cg = sparse.coo_matrix(expr)
         edges_cg, edge_features_cg = from_scipy_sparse_matrix(expr_sparse_cg)
         expr_sparse_gc = sparse.coo_matrix(expr.T)
