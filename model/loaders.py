@@ -99,26 +99,20 @@ class ZhuangBasic(SaintRWLoader):
         node_to_id = np.concatenate((genes, cells))
 
         expr = np.log(st_anndata.X[part_mask,:] + 1)
-        expr_sparse = sparse.coo_matrix(expr)
-        edges, edge_features = from_scipy_sparse_matrix(expr_sparse)
+        expr_sparse_cg = sparse.coo_matrix(expr)
+        edges_cg, edge_features_cg = from_scipy_sparse_matrix(expr_sparse_cg)
+        expr_sparse_gc = sparse.coo_matrix(expr.T)
+        edges_gc, edge_features_gc = from_scipy_sparse_matrix(expr_sparse_gc)
 
-        # edges_l = []
-        # edge_features_l = []
-        # threshold = self.params["st_exp_threshold"]
-        # for index, x in np.ndenumerate(expr):
-        #     if x >= threshold:
-        #         cell, gene = index
-        #         a = cell + num_genes
-        #         b = gene
-        #         edges_l.append([a, b])
-        #         edges_l.append([b, a])
-        #         edge_features_l.append(x)
-        #         edge_features_l.append(x)
+        edges = torch.cat(edges_cg, edges_gc, 1)
+        edge_attr = torch.cat(edge_features_cg, edge_features_gc, 0)
+        edge_type = torch.cat(
+            torch.zeros_like(edge_features_cg, dtype=torch.uint8), 
+            torch.ones_like(edge_features_gc, dtype=torch.uint8), 
+            0
+        )
 
-        # edges = torch.tensor(edges_l).transpose_(0, 1)
-        # edge_features = torch.tensor(edge_features_l)
-
-        data = Data(x=x, edge_index=edges, edge_attr=edge_features, pos=coords_pad, cell_mask=cell_mask)
+        data = Data(x=x, edge_index=edges, edge_attr=edge_attr, edge_type=edge_type, pos=coords_pad, cell_mask=cell_mask)
         print(data) ####
         maps = {
             "gene_to_node": gene_to_node,
@@ -148,7 +142,7 @@ if __name__ == '__main__':
         "train_prop": 0.1,
         "st_exp_threshold": 0.001,
         "num_workers": 8,
-        # "clear_sampler_cache": True,
+        "clear_sampler_cache": True,
         "sampler_cache_dir": cache_dir
     }
 

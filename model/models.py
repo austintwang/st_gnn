@@ -3,7 +3,7 @@
 import torch
 import torch.nn.functional as F
 
-class Net(torch.nn.Module):
+class SupRCGN(torch.nn.Module):
     def __init__(self, hidden_channels):
         super(Net, self).__init__()
         in_channels = dataset.num_node_features
