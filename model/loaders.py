@@ -35,12 +35,16 @@ class Loader(object):
 
 class SaintRWLoader(Loader):
     def _build_sampler(self):
+        if self.params.get("clear_cache", False):
+            shutil.rmtree(self.params["cache_dir"])
+
         sampler = GraphSAINTRandomWalkSampler(
             self.train_data, 
             batch_size=self.params["batch_size"],
             walk_length=self.params["saint_walk_length"],
             num_steps=self.params["saint_num_steps"], 
             sample_coverage=self.params["saint_sample_coverage"],
+            save_dir=self.params.get("cache_dir"),
             num_workers=self.params["num_workers"]
         )
         return sampler
@@ -126,8 +130,7 @@ if __name__ == '__main__':
     orgs_path = os.path.join(data_path, "parsed", "cell_orgs.pickle")
     exp_path = "/dfs/user/atwang/data/spt_zhuang/source/processed_data/counts.h5ad"
 
-    cache_path = "/dfs/user/atwang/data/spt_zhuang/cache/test/loader.pickle"
-    os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+    cache_dir = "/dfs/user/atwang/data/spt_zhuang/cache/test"
 
     params = {
         "batch_size": 500,
@@ -140,18 +143,11 @@ if __name__ == '__main__':
         "train_prop": 0.1,
         "st_exp_threshold": 0.001,
         "num_workers": 8,
+        "clear_cache": True,
+        "cache_dir": cache_dir
     }
+
     loader = ZhuangBasic(**params)
-    for i in loader.train_sampler:
-        print(i)
-
-    with open(cache_path, "wb") as cache_file:
-        pickle.dump(loader, cache_file)
-
-    with open(cache_path, "rb") as cache_file:
-        loader = pickle.load(cache_file)
-
-    print(loader.val_data)
     for i in loader.train_sampler:
         print(i)
 
