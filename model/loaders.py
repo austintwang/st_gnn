@@ -124,7 +124,7 @@ if __name__ == '__main__':
     exp_path = "/dfs/user/atwang/data/spt_zhuang/source/processed_data/counts.h5ad"
 
     cache_path = "/dfs/user/atwang/data/spt_zhuang/cache/test/loader.pickle"
-    os.makedirs(cache_path, exist_ok=True)
+    os.makedirs(os.path.dirname(cache_path), exist_ok=True)
 
     params = {
         "batch_size": 500,
