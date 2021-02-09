@@ -36,8 +36,9 @@ class Loader(object):
 
 class SaintRWLoader(Loader):
     def _build_sampler(self):
-        if self.params.get("clear_cache", False):
-            shutil.rmtree(self.params["cache_dir"])
+        if self.params.get("clear_sampler_cache", False):
+            shutil.rmtree(self.params["sampler_cache_dir"])
+            os.makedirs(self.params["sampler_cache_dir"])
 
         sampler = GraphSAINTRandomWalkSampler(
             self.train_data, 
@@ -144,8 +145,8 @@ if __name__ == '__main__':
         "train_prop": 0.1,
         "st_exp_threshold": 0.001,
         "num_workers": 8,
-        "clear_cache": True,
-        "cache_dir": cache_dir
+        "clear_sampler_cache": True,
+        "sampler_cache_dir": cache_dir
     }
 
     loader = ZhuangBasic(**params)
