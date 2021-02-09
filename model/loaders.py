@@ -37,7 +37,10 @@ class Loader(object):
 class SaintRWLoader(Loader):
     def _build_sampler(self):
         if self.params.get("clear_sampler_cache", False):
-            shutil.rmtree(self.params["sampler_cache_dir"])
+            try:
+                shutil.rmtree(self.params["sampler_cache_dir"])
+            except FileNotFoundError:
+                pass
             os.makedirs(self.params["sampler_cache_dir"])
 
         sampler = GraphSAINTRandomWalkSampler(
