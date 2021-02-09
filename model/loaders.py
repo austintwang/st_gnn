@@ -148,7 +148,7 @@ if __name__ == '__main__':
         "train_prop": 0.1,
         "st_exp_threshold": 0.001,
         "num_workers": 8,
-        "clear_sampler_cache": True,
+        # "clear_sampler_cache": True,
         "sampler_cache_dir": cache_dir
     }
 
