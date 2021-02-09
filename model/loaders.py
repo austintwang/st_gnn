@@ -98,14 +98,14 @@ class ZhuangBasic(SaintRWLoader):
         x[num_genes:,-1].fill_(1.)
         node_to_id = np.concatenate((genes, cells))
 
-        expr = np.log(st_anndata.X[part_mask,:] + 1)
+        expr = np.vstack(np.zeros((num_genes, num_genes),), np.log(st_anndata.X[part_mask,:] + 1))
         expr_sparse_cg = sparse.coo_matrix(expr)
         edges_cg, edge_features_cg = from_scipy_sparse_matrix(expr_sparse_cg)
         expr_sparse_gc = sparse.coo_matrix(expr.T)
         edges_gc, edge_features_gc = from_scipy_sparse_matrix(expr_sparse_gc)
 
-        edges = torch.cat(edges_cg, edges_gc, 1)
-        edge_attr = torch.cat(edge_features_cg, edge_features_gc, 0)
+        edges = torch.cat((edges_cg, edges_gc), 1)
+        edge_attr = torch.cat((edge_features_cg, edge_features_gc), 0)
         edge_type = torch.cat(
             (torch.zeros_like(edge_features_cg, dtype=torch.uint8), torch.ones_like(edge_features_gc, dtype=torch.uint8)), 
             0
