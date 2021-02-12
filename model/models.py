@@ -31,6 +31,8 @@ class WRGCNConv(MessagePassing):
         return out
 
     def message(self, x_j, norm):
+        print(x_j.shape) ####
+        print(norm.shape) ####
         return x_j * norm
 
 
