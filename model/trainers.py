@@ -25,6 +25,7 @@ class Trainer(object):
         self.time_ref = None
 
         exp_dir = os.path.join(self.params["results_dir"], self.params["name"])
+        os.makedirs(exp_dir, exist_ok=True)
         prev_exps = [int(i) for i in os.listdir(exp_dir) if i.isdecimal()]
         if len(prev_exps) == 0:
             prev_exps = [-1]
