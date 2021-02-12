@@ -38,7 +38,7 @@ train_params = {
     "learning_rate": 0.001,
     "early_stop_min_delta": 0.001,
     "dropout_prop": 0.1,
-    "dist_layers_out_chnls": [128, 128]
+    "dist_layers_out_chnls": [128, 128],
     "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
 }
 
