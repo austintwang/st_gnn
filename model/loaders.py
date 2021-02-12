@@ -76,7 +76,7 @@ class ZhuangBasic(SaintRWLoader):
             in_data = (anndata, coords)
             partitions = (train, val, test)
 
-            with open(cache_path, "rb") as cache_file:
+            with open(cache_path, "wb") as cache_file:
                 pickle.dump((in_data, partitions), cache_file)
 
         else:
