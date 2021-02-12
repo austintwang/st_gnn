@@ -78,8 +78,8 @@ class SupNet(torch.nn.Module):
             prev = h
         dists = self.final_dist_layer(prev)
         # print(dists.shape) ####
-        dists.permute(0, 2, 3, 1).squeeze_(dim=0)
-        print(dists.shape) ####
+        dists = dists.permute(0, 2, 3, 1).squeeze_(dim=0)
+        # print(dists.shape) ####
 
         return {"dists": dists}
 

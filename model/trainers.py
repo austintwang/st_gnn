@@ -173,7 +173,7 @@ class SupTrainer(Trainer):
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
         ldists = torch.clamp((rtile - ctile).abs().log(), min=min_ldist)
 
-        print(means.shape, lvars.shape, ldists.shape) ####
+        # print(means.shape, lvars.shape, ldists.shape) ####
         nll = ((means - ldists) / lvars.exp())**2 / 2 + lvars
         w = data.node_norm.sqrt()
         weights = torch.outer(w, w)
