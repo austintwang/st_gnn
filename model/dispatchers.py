@@ -7,6 +7,7 @@ class Dispatcher(object):
     names = {}
     def __init__(self, name, paramlist, loader_cls, model_cls, trainer_cls):
         Dispatcher.names[name] = self
+        self.name = name
 
         self.params = {}
         for i in paramlist:
