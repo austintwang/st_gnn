@@ -1,3 +1,4 @@
+import os
 import model.models as models
 import model.loaders as loaders
 import model.trainers as trainers
