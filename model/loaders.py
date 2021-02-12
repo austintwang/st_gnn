@@ -37,8 +37,8 @@ class Loader(object):
 
 class SaintRWLoader(Loader):
     def _build_sampler(self, data, group):
+        cache_dir = os.path.join(self.params["loader_cache_dir"], group)
         if self.params.get("clear_cache", False):
-            cache_dir = os.path.join(self.params["loader_cache_dir"], group)
             try:
                 shutil.rmtree(cache_dir)
             except FileNotFoundError:
