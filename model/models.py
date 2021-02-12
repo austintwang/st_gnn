@@ -41,7 +41,7 @@ class SupNet(torch.nn.Module):
         dist_layers_out_chnls = self.params["dist_layers_out_chnls"]
         self.dropout_prop = self.params["dropout_prop"]
 
-        self.gnn_layers = self._get_gnn()
+        self.gnn_layers = self._get_gnn(in_channels)
 
         emb_dim = sum(gnn_layers_out_chnls) * 2
         self.dist_layers = torch.nn.ModuleList()
@@ -53,7 +53,7 @@ class SupNet(torch.nn.Module):
             prev = i
         self.final_dist_layer = torch.nn.Conv2d(in_channels=prev, out_channels=2, kernel_size=1)
 
-    def _get_gnn(self):
+    def _get_gnn(self, in_channels):
         raise NotImplementedError
 
     def forward(self, data):
@@ -78,7 +78,7 @@ class SupNet(torch.nn.Module):
 
 
 class SupRCGN(SupNet):
-    def _get_gnn(self):
+    def _get_gnn(self, in_channels):
         gnn_layers = torch.nn.ModuleList()
         prev = in_channels
         for i in gnn_layers_out_chnls:
