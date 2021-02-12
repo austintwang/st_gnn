@@ -25,10 +25,10 @@ class WRGCNConv(MessagePassing):
             mask = edge_type == i
             edges_masked = edge_index[:, mask]
             norm = edge_weight[mask].unsqueeze(1)
-            print(edges_masked.dtype, norm.dtype) ####
+            # print(edges_masked.dtype, norm.dtype) ####
             h = self.propagate(edges_masked, x=x, size=(num_nodes, num_nodes), norm=norm)
             print(out.dtype, h.dtype, self.weight[i].dtype) ####
-            print(out.shape, h.shape, self.weight[i].shape) ####
+            # print(out.shape, h.shape, self.weight[i].shape) ####
             # print((h.float() @ self.weight[i]).dtype) ####
             out += (h @ self.weight[i])
 
@@ -102,6 +102,7 @@ class SupRCGN(SupNet):
         edge_weight = data.edge_norm * data.edge_attr
         edge_type = data.edge_type
         cell_mask = data.cell_mask
+        print(edge_norm.dtype, edge_attr.dtype)
 
         embs = []
         prev = x
