@@ -22,7 +22,7 @@ class Dispatcher(object):
         return cls(name, paramlist, other.loader_cls, other.model_cls, other.trainer_cls)
 
     def dispatch(self, device, clear_cache):
-        self.params.update({"device": device, "clear_cache": clear_cache})
+        self.params.update({"name": self.name, "device": device, "clear_cache": clear_cache})
 
         loader = self.loader_cls(**self.params)
         model = self.model_cls(loader.node_in_channels, **self.params)
