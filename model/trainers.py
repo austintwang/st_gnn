@@ -32,7 +32,7 @@ class Trainer(object):
         self.exp_id = f"{(max(prev_exps) + 1):04}"
         self.output_dir = os.path.join(exp_dir, self.exp_id)
         os.makedirs(self.output_dir)
-        with open(os.path.join(self.output_dir, "params.pickle"), "rb") as f:
+        with open(os.path.join(self.output_dir, "params.pickle"), "wb") as f:
             pickle.dump(self.params, f)
 
     def _loss_fn(self, pred, data):
