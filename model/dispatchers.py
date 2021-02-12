@@ -8,7 +8,7 @@ class Dispatcher(object):
         Dispatcher.names[name] = self
 
         self.params = {}
-        for i in paramlist
+        for i in paramlist:
             self.params.update(i)
 
         self.loader_cls = loader_cls
