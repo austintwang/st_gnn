@@ -51,7 +51,7 @@ class SaintRWLoader(Loader):
             walk_length=self.params["saint_walk_length"],
             num_steps=self.params["saint_num_steps"], 
             sample_coverage=self.params["saint_sample_coverage"],
-            save_dir=self.params["loader_cache_dir"],
+            save_dir=cache_dir,
             num_workers=self.params["num_workers"]
         )
         return sampler
