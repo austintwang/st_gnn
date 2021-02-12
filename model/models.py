@@ -64,7 +64,7 @@ class SupNet(torch.nn.Module):
         raise NotImplementedError
 
     def forward(self, data):
-        z = self._gnn_fwd(data)
+        z = self._gnn_fwd(data)["locs"]
 
         rtile = z.unsqueeze(0).expand(num_cells, 1, 1)
         ctile = z.unsqueeze(1).expand(1, num_cells, 1)
