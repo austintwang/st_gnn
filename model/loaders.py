@@ -59,6 +59,7 @@ class SaintRWLoader(Loader):
 
 class ZhuangBasic(SaintRWLoader):
     def _import_data(self):
+        os.makedirs(self.params["loader_cache_dir"], exist_ok=True)
         cache_path = os.path.join(self.params["loader_cache_dir"], "imports.pickle")
         if self.params.get("clear_cache", False) or not os.path.exists(cache_path):
             anndata = self.params.get("st_anndata", sc.read(self.params["st_exp_path"]))
