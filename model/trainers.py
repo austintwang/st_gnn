@@ -166,8 +166,8 @@ class SupTrainer(Trainer):
 
         l = (data.pos[data.cell_mask])
         num_cells = l.shape[0]
-        rtile = l.unsqueeze(0).expand(num_cells, 1, 1)
-        ctile = l.unsqueeze(1).expand(1, num_cells, 1)
+        rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
+        ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
         ldists = torch.clamp((rtile - ctile).abs().log(), min=min_ldist)
 
         nll = ((means - ldists) / lvars.exp())**2 / 2 + lvars
