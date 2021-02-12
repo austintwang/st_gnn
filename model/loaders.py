@@ -80,7 +80,7 @@ class ZhuangBasic(SaintRWLoader):
                 pickle.dump((in_data, partitions), cache_file)
 
         else:
-            in_data, partitions = pd.load_pickle(cache_path)
+            in_data, partitions = pd.read_pickle(cache_path)
 
         return in_data, partitions
 
