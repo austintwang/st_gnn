@@ -163,9 +163,9 @@ class SupTrainer(Trainer):
     def _loss_fn(self, pred, data):
         min_ldist = self.params["min_ldist"]
 
-        plocs = pred["locs"]
-        means = plocs[:,:,0]
-        lvars = plocs[:,:,1]
+        pdists = pred["dists"]
+        means = pdists[:,:,0]
+        lvars = pdists[:,:,1]
 
         l = (data.pos[data.cell_mask])
         num_cells = l.shape[0]

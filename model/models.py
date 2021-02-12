@@ -64,7 +64,7 @@ class SupNet(torch.nn.Module):
         raise NotImplementedError
 
     def forward(self, data):
-        z = self._gnn_fwd(data)["locs"]
+        z = self._gnn_fwd(data)
         num_cells = z.shape[0]
 
         rtile = z.unsqueeze(0).expand(num_cells, -1, -1)
@@ -79,7 +79,7 @@ class SupNet(torch.nn.Module):
         dists = self.final_dist_layer(prev)
         dists.permute(0, 2, 3, 1).squeeze_(dim=0)
 
-        return dists
+        return {"dists": dists}
 
     def _gnn_fwd(self, data):
         raise NotImplementedError
@@ -115,4 +115,4 @@ class SupRCGN(SupNet):
 
         z = torch.cat(embs, dim=1)[cell_mask]
 
-        return {"locs": z}
+        return z
