@@ -77,6 +77,6 @@ test_params = {
     "saint_sample_coverage": 2, 
     "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/test"
 }
-Dispatcher.variant(sg, "sgt", [test_params])
+Dispatcher.variant(sg2, "sgt", [test_params])
 
 
