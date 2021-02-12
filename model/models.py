@@ -102,7 +102,7 @@ class SupRCGN(SupNet):
         edge_weight = data.edge_norm * data.edge_attr
         edge_type = data.edge_type
         cell_mask = data.cell_mask
-        print(edge_norm.dtype, edge_attr.dtype)
+        print(data.edge_norm.dtype, data.edge_attr.dtype) ####
 
         embs = []
         prev = x
