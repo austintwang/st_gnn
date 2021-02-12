@@ -99,7 +99,7 @@ class SupRCGN(SupNet):
         embs = []
         prev = x
         for i in self.gnn_layers:
-            h = F.relu(i(prev, edge_index, edge_norm, edge_type))
+            h = F.relu(i(prev, edge_index, edge_weight, edge_type))
             h = F.dropout(h, p=self.dropout_prop, training=self.training)
             embs.append(h)
             prev = h

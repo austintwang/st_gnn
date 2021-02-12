@@ -106,7 +106,7 @@ class Trainer(object):
             pickle.dump(self.stats, f)
 
         best_epoch_path = os.path.join(self.output_dir, "best_model_epoch.txt")
-        with open(best_model_epoch, "w") as f:
+        with open(best_epoch_path, "w") as f:
             f.write(f"{self.best_model_epoch:04}\n")
 
     def run(self):
