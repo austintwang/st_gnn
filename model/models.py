@@ -25,10 +25,11 @@ class WRGCNConv(MessagePassing):
             mask = edge_type == i
             edges_masked = edge_index[:, mask]
             norm = edge_weight[mask].unsqueeze(1)
+            print(edges_masked.dtype, norm.dtype) ####
             h = self.propagate(edges_masked, x=x, size=(num_nodes, num_nodes), norm=norm)
             print(out.dtype, h.dtype, self.weight[i].dtype) ####
             print(out.shape, h.shape, self.weight[i].shape) ####
-            print((h.float() @ self.weight[i]).dtype) ####
+            # print((h.float() @ self.weight[i]).dtype) ####
             out += (h @ self.weight[i])
 
         return out
