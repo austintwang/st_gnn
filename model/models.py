@@ -18,7 +18,7 @@ class WRGCNConv(MessagePassing):
     def forward(self, x, edge_index, edge_weight, edge_type):
         num_nodes = x.size(0)
 
-        out += x @ self.root + self.bias
+        out = x @ self.root + self.bias
 
         for i in range(self.num_relations):
             mask = edge_type == i
