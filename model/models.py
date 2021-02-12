@@ -1,30 +1,110 @@
 
-
 import torch
+from torch.nn import Parameter
 import torch.nn.functional as F
+from torch_geometric.nn.conv import MessagePassing
 
-class SupRCGN(torch.nn.Module):
-    def __init__(self, hidden_channels):
-        super(Net, self).__init__()
-        in_channels = dataset.num_node_features
-        out_channels = dataset.num_classes
-        self.conv1 = GraphConv(in_channels, hidden_channels)
-        self.conv2 = GraphConv(hidden_channels, hidden_channels)
-        self.conv3 = GraphConv(hidden_channels, hidden_channels)
-        self.lin = torch.nn.Linear(3 * hidden_channels, out_channels)
+class WRGCNConv(MessagePassing):
+    def __init__(self, in_channels, out_channels, num_relations, **kwargs):
+        super().__init__(aggr="add", node_dim=0, **kwargs)
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.num_relations = num_relations
 
-    def set_aggr(self, aggr):
-        self.conv1.aggr = aggr
-        self.conv2.aggr = aggr
-        self.conv3.aggr = aggr
+        self.weight = Parameter(torch.Tensor(num_relations, in_channels, out_channels))
+        self.root = Param(torch.Tensor(in_channels, out_channels))
+        self.bias = Param(torch.Tensor(out_channels))
 
-    def forward(self, x0, edge_index, edge_weight=None):
-        x1 = F.relu(self.conv1(x0, edge_index, edge_weight))
-        x1 = F.dropout(x1, p=0.2, training=self.training)
-        x2 = F.relu(self.conv2(x1, edge_index, edge_weight))
-        x2 = F.dropout(x2, p=0.2, training=self.training)
-        x3 = F.relu(self.conv3(x2, edge_index, edge_weight))
-        x3 = F.dropout(x3, p=0.2, training=self.training)
-        x = torch.cat([x1, x2, x3], dim=-1)
-        x = self.lin(x)
-        return x.log_softmax(dim=-1)
+    def forward(x, edge_index, edge_weight, edge_type):
+        num_nodes = x.size(0)
+
+        out += x @ self.root + self.bias
+
+        for i in range(self.num_relations):
+            mask = edge_type == i
+            edges_masked = edge_index[:, mask]
+            norm = edge_weight[mask]
+            h = self.propagate(edges_masked, x=x, size=(num_nodes, num_nodes), norm=norm)
+            out += (h @ self.weight[i])
+
+        return out
+
+    def message(self, x_j, norm):
+        return x_j * norm
+
+
+class SupNet(torch.nn.Module):
+    def __init__(self, in_channels, **kwargs):
+        super().__init__()
+        self.params = kwargs
+        gnn_layers_out_chnls = self.params["gnn_layers_out_chnls"]
+        dist_layers_out_chnls = self.params["dist_layers_out_chnls"]
+        self.dropout_prop = self.params["dropout_prop"]
+
+        self.gnn_layers = self._get_gnn()
+
+        emb_dim = sum(gnn_layers_out_chnls) * 2
+        self.dist_layers = torch.nn.ModuleList()
+        prev = emb_dim
+        for i in dist_layers_out_chnls:
+            self.dist_layers.append(
+                torch.nn.Conv2d(in_channels=prev, out_channels=i, kernel_size=1)
+            )
+            prev = i
+        self.final_dist_layer = torch.nn.Conv2d(in_channels=prev, out_channels=2, kernel_size=1)
+
+    def _get_gnn(self):
+        raise NotImplementedError
+
+    def forward(self, data):
+        z = self._gnn_fwd(data)
+
+        rtile = z.unsqueeze(0).expand(num_cells, 1, 1)
+        ctile = z.unsqueeze(1).expand(1, num_cells, 1)
+        pairs = torch.cat((rtile, ctile), dim=3)
+        pairs.unsqueeze_(0)
+
+        prev = pairs
+        for i in self.dist_layers:
+            h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
+            prev = h
+        dists = self.final_dist_layer(prev)
+        dists.squeeze_(dim=0)
+
+        return dists
+
+    def _gnn_fwd(self, data):
+        raise NotImplementedError
+
+
+class SupRCGN(SupNet):
+    def _get_gnn(self):
+        gnn_layers = torch.nn.ModuleList()
+        prev = in_channels
+        for i in gnn_layers_out_chnls:
+            gnn_layers.append(
+                WRGCNConv(in_channels=prev, out_channels=i, num_relations=2, aggr="add")
+            )
+            prev = i
+
+        return gnn_layers
+
+    def _gnn_fwd(self, data):
+        x = data.x
+        edge_index = data.edge_index
+        edge_weight = data.edge_norm * data.edge_attr
+        edge_type = data.edge_type
+        cell_mask = data.cell_mask
+
+        embs = []
+        prev = x
+        for i in self.gnn_layers:
+            h = F.relu(i(prev, edge_index, edge_norm, edge_type))
+            h = F.dropout(h, p=self.dropout_prop, training=self.training)
+            embs.append(h)
+            prev = h
+
+        z = torch.cat(embs, dim=1)[cell_mask]
+        num_cells = z.shape[0]
+
+        return {"locs": z}

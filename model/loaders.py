@@ -18,11 +18,12 @@ class Loader(object):
         in_data, partitions = self._import_data()
         self.train_part, self.val_part, self.test_part = partitions
 
-        self.train_data, self.train_maps = self._build_graph(in_data, self.train_part)
-        self.val_data, self.val_maps = self._build_graph(in_data, self.val_part)
-        self.test_data, self.test_maps = self._build_graph(in_data, self.test_part)
+        self.train_data, self.train_maps, self.node_in_channels = self._build_graph(in_data, self.train_part)
+        self.val_data, self.val_maps, _ = self._build_graph(in_data, self.val_part)
+        self.test_data, self.test_maps, _ = self._build_graph(in_data, self.test_part)
 
-        self.train_sampler = self._build_sampler()
+        self.train_sampler = self._build_sampler(self.train_data, "train")
+        self.val_sampler = self._build_sampler(self.val_data, "val")
 
     def _import_data(self):
         raise NotImplementedError
@@ -30,18 +31,19 @@ class Loader(object):
     def _build_graph(self, in_data, partition):
         raise NotImplementedError
 
-    def _build_sampler(self):
+    def _build_sampler(self, data, group):
         raise NotImplementedError
 
 
 class SaintRWLoader(Loader):
-    def _build_sampler(self):
-        if self.params.get("clear_sampler_cache", False):
+    def _build_sampler(self, data, group):
+        if self.params.get("clear_cache", False):
+            cache_dir = os.path.join(self.params["loader_cache_dir"], group)
             try:
-                shutil.rmtree(self.params["sampler_cache_dir"])
+                shutil.rmtree(cache_dir)
             except FileNotFoundError:
                 pass
-            os.makedirs(self.params["sampler_cache_dir"])
+            os.makedirs(cache_dir)
 
         sampler = GraphSAINTRandomWalkSampler(
             self.train_data, 
@@ -49,7 +51,7 @@ class SaintRWLoader(Loader):
             walk_length=self.params["saint_walk_length"],
             num_steps=self.params["saint_num_steps"], 
             sample_coverage=self.params["saint_sample_coverage"],
-            save_dir=self.params.get("sampler_cache_dir"),
+            save_dir=self.params["loader_cache_dir"],
             num_workers=self.params["num_workers"]
         )
         return sampler
@@ -57,19 +59,28 @@ class SaintRWLoader(Loader):
 
 class ZhuangBasic(SaintRWLoader):
     def _import_data(self):
-        anndata = self.params.get("st_anndata", sc.read(self.params["st_exp_path"]))
-        coords = self.params.get("st_coords", pd.read_pickle(self.params["st_coords_path"]))
-        organisms = self.params.get("st_organisms", pd.read_pickle(self.params["st_organisms_path"]))
+        cache_path = os.path.join(self.params["loader_cache_dir"], "imports.pickle")
+        if self.params.get("clear_cache", False) or not os.path.exists(cache_path):
+            anndata = self.params.get("st_anndata", sc.read(self.params["st_exp_path"]))
+            coords = self.params.get("st_coords", pd.read_pickle(self.params["st_coords_path"]))
+            organisms = self.params.get("st_organisms", pd.read_pickle(self.params["st_organisms_path"]))
 
-        m1 = organisms["mouse1"]
-        random.shuffle(m1)
-        num_train = int(self.params["train_prop"] * len(m1))
-        train = set(m1[:num_train])
-        val = set(m1[num_train:])
-        test = set(organisms["mouse2"])
+            m1 = organisms["mouse1"]
+            random.shuffle(m1)
+            num_train = int(self.params["train_prop"] * len(m1))
+            train = set(m1[:num_train])
+            val = set(m1[num_train:])
+            test = set(organisms["mouse2"])
 
-        in_data = (anndata, coords)
-        partitions = (train, val, test)
+            in_data = (anndata, coords)
+            partitions = (train, val, test)
+
+            with open(cache_path, "rb") as cache_file:
+                pickle.dump((in_data, partitions), cache_file)
+
+        else:
+            in_data, partitions = pd.load_pickle(cache_path)
+
         return in_data, partitions
 
     def _build_graph(self, in_data, partition):
@@ -88,26 +99,22 @@ class ZhuangBasic(SaintRWLoader):
         coords_pad = torch.cat((torch.full((num_genes, coords_dims), np.nan), coords), 0)
         cell_mask = torch.cat((torch.full((num_genes,), False), torch.full((num_cells,), True)), 0)
 
-        # print(partition) ####
-        # print(st_anndata.obs_names[:5]) ####
-        # print(partition.pop()) ####
-        # print(num_cells) ####
-
+        node_in_channels = num_genes + 1
         x = torch.zeros(num_genes + num_cells, num_genes + 1)
         x[:num_genes,:num_genes].fill_diagonal_(1.)
         x[num_genes:,-1].fill_(1.)
         node_to_id = np.concatenate((genes, cells))
 
         expr = np.vstack((np.zeros((num_genes, num_genes),), np.log(st_anndata.X[part_mask,:] + 1)),)
-        expr_sparse_cg = sparse.coo_matrix(expr)
+        expr_sparse_cg = sparse.coo_matrix(expr / expr.sum(axis=0, keepdims=1))
         edges_cg, edge_features_cg = from_scipy_sparse_matrix(expr_sparse_cg)
-        expr_sparse_gc = sparse.coo_matrix(expr.T)
+        expr_sparse_gc = sparse.coo_matrix((expr / expr.sum(axis=1, keepdims=1)).T)
         edges_gc, edge_features_gc = from_scipy_sparse_matrix(expr_sparse_gc)
 
         edges = torch.cat((edges_cg, edges_gc), 1)
         edge_attr = torch.cat((edge_features_cg, edge_features_gc), 0)
         edge_type = torch.cat(
-            (torch.zeros_like(edge_features_cg, dtype=torch.uint8), torch.ones_like(edge_features_gc, dtype=torch.uint8)), 
+            (torch.zeros_like(edge_features_cg, dtype=torch.long), torch.ones_like(edge_features_gc, dtype=torch.long)), 
             0
         )
 
@@ -119,7 +126,7 @@ class ZhuangBasic(SaintRWLoader):
             "node_to_id": node_to_id,
         }
 
-        return data, maps
+        return data, maps, node_in_channels
 
 
 if __name__ == '__main__':
@@ -131,9 +138,9 @@ if __name__ == '__main__':
     cache_dir = "/dfs/user/atwang/data/spt_zhuang/cache/test"
 
     params = {
-        "batch_size": 500,
+        "batch_size": 5000,
         "saint_walk_length": 2,
-        "saint_num_steps": 5,
+        "saint_num_steps": 50,
         "saint_sample_coverage": 10,
         "st_exp_path": exp_path,
         "st_coords_path": coords_path,
@@ -141,8 +148,8 @@ if __name__ == '__main__':
         "train_prop": 0.1,
         "st_exp_threshold": 0.001,
         "num_workers": 8,
-        "clear_sampler_cache": True,
-        "sampler_cache_dir": cache_dir
+        "clear_cache": True,
+        "loader_cache_dir": cache_dir
     }
 
     loader = ZhuangBasic(**params)
