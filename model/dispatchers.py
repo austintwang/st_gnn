@@ -49,7 +49,7 @@ gnn_params = {
 }
 
 loader_params = {
-    "batch_size": 1000,
+    "batch_size": 500,
     "train_prop": 0.8,
 }
 
@@ -66,7 +66,7 @@ zhuang_params = {
 
 saint_params = {
     "saint_walk_length": 2,
-    "saint_num_steps": 250,
+    "saint_num_steps": 500,
     "saint_sample_coverage": 100,
     "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/saint"
 }

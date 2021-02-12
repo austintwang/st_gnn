@@ -54,9 +54,9 @@ class Trainer(object):
         time_start = time.time() - self.time_ref
 
         for data in batches:
-            print(utils.torch_mem_usage()) ####
+            # print(utils.torch_mem_usage()) ####
             data.to(self.device)
-            print(utils.torch_mem_usage()) ####
+            # print(utils.torch_mem_usage()) ####
             pred = self.model(data)
             loss = self._loss_fn(pred, data)
 
