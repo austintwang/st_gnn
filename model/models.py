@@ -72,7 +72,7 @@ class SupNet(torch.nn.Module):
         pairs = torch.cat((rtile, ctile), dim=2)
         pairs.unsqueeze_(0)
 
-        prev = pairs
+        prev = pairs.permute(0, 3, 1, 2)
         for i in self.dist_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
