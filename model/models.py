@@ -83,7 +83,7 @@ class SupRCGN(SupNet):
         prev = in_channels
         for i in out_channels:
             gnn_layers.append(
-                WRGCNConv(in_channels=prev, out_channels=i, num_relations=2, aggr="add")
+                WRGCNConv(in_channels=prev, out_channels=i, num_relations=2)
             )
             prev = i
 
