@@ -65,6 +65,7 @@ class SupNet(torch.nn.Module):
 
     def forward(self, data):
         z = self._gnn_fwd(data)["locs"]
+        num_cells = z.shape[0]
 
         rtile = z.unsqueeze(0).expand(num_cells, 1, 1)
         ctile = z.unsqueeze(1).expand(1, num_cells, 1)
@@ -113,6 +114,5 @@ class SupRCGN(SupNet):
             prev = h
 
         z = torch.cat(embs, dim=1)[cell_mask]
-        num_cells = z.shape[0]
 
         return {"locs": z}
