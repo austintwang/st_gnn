@@ -65,7 +65,7 @@ class Trainer(object):
             for k, v in metrics.items():
                 batch_records.setdefault(k, []).append(v)
 
-            t_iter.set_description("\tLoss: %6.4f" % loss.item())
+            t_iter.set_description(f"\tLoss: {loss.item():6.4}")
 
         time_end = time.time() - self.time_ref
 
@@ -92,7 +92,7 @@ class Trainer(object):
             for k, v in metrics.items():
                 batch_records.setdefault(k, []).append(v)
 
-            t_iter.set_description("\tLoss: %6.4f" % loss.item())
+            t_iter.set_description(f"\tLoss: {loss.item():6.4}")
 
         records = {}
         for k, v in batch_records.items():
@@ -107,7 +107,10 @@ class Trainer(object):
 
         best_epoch_path = os.path.join(self.output_dir, "best_model_epoch.txt")
         with open(best_epoch_path, "w") as f:
-            f.write(f"{self.best_model_epoch:04}\n")
+            if self.best_model_epoch is None:
+                f.write(f"{self.best_model_epoch}\n")
+            else:
+                f.write(f"{self.best_model_epoch:04}\n")
 
     def run(self):
         val_epoch_loss_hist = []
