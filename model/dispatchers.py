@@ -41,7 +41,7 @@ train_params = {
     "early_stop_min_delta": 0.001,
     "dropout_prop": 0.1,
     "dist_layers_out_chnls": [128, 128],
-    "min_ldist": -3
+    "min_ldist": -3,
     "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
 }
 
