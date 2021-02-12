@@ -77,6 +77,7 @@ class SupNet(torch.nn.Module):
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
         dists = self.final_dist_layer(prev)
+        print(dists.shape) ####
         dists.permute(0, 2, 3, 1).squeeze_(dim=0)
 
         return {"dists": dists}
