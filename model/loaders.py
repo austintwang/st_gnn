@@ -113,7 +113,7 @@ class ZhuangBasic(SaintRWLoader):
         edges_gc, edge_features_gc = from_scipy_sparse_matrix(expr_sparse_gc)
 
         edges = torch.cat((edges_cg, edges_gc), 1)
-        edge_attr = torch.cat((edge_features_cg, edge_features_gc), 0)
+        edge_attr = torch.cat((edge_features_cg, edge_features_gc), 0).float()
         edge_type = torch.cat(
             (torch.zeros_like(edge_features_cg, dtype=torch.long), torch.ones_like(edge_features_gc, dtype=torch.long)), 
             0
