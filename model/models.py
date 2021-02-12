@@ -69,7 +69,7 @@ class SupNet(torch.nn.Module):
 
         rtile = z.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = z.unsqueeze(1).expand(-1, num_cells, -1)
-        pairs = torch.cat((rtile, ctile), dim=3)
+        pairs = torch.cat((rtile, ctile), dim=2)
         pairs.unsqueeze_(0)
 
         prev = pairs
