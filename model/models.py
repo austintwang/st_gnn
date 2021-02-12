@@ -16,7 +16,7 @@ class WRGCNConv(MessagePassing):
         self.bias = Parameter(torch.Tensor(out_channels))
 
     def forward(self, x, edge_index, edge_weight, edge_type):
-        print(x.shape) ####
+        # print(x.shape) ####
         num_nodes = x.size(0)
 
         out = x @ self.root + self.bias
@@ -26,13 +26,14 @@ class WRGCNConv(MessagePassing):
             edges_masked = edge_index[:, mask]
             norm = edge_weight[mask].unsqueeze(1)
             h = self.propagate(edges_masked, x=x, size=(num_nodes, num_nodes), norm=norm)
+            print(out.dtype h.dtype, self.weight.dtype) ####
             out += (h @ self.weight[i])
 
         return out
 
     def message(self, x_j, norm):
-        print(x_j.shape) ####
-        print(norm.shape) ####
+        # print(x_j.shape) ####
+        # print(norm.shape) ####
         return x_j * norm
 
 
