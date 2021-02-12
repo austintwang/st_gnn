@@ -7,6 +7,7 @@ import torch
 import tqdm
 import model.models as models
 import model.loaders as loaders
+import model.utils as utils
 
 class Trainer(object):
     def __init__(self, model, loader, **kwargs):
@@ -53,7 +54,9 @@ class Trainer(object):
         time_start = time.time() - self.time_ref
 
         for data in batches:
+            print(utils.torch_mem_usage()) ####
             data.to(self.device)
+            print(utils.torch_mem_usage()) ####
             pred = self.model(data)
             loss = self._loss_fn(pred, data)
 
@@ -135,7 +138,7 @@ class Trainer(object):
                 print(f"Validation epoch {epoch:04}: average loss = {val_epoch_loss:6.10}")
 
                 savepath = os.path.join(self.params["output_dir"], "model", f"ckpt_epoch_{epoch:04}.pt")
-                util.save_model(model, savepath)
+                utils.save_model(model, savepath)
 
                 if val_epoch_loss < best_val_epoch_loss:
                     self.best_val_epoch_loss = val_epoch_loss
