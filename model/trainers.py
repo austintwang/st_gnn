@@ -50,7 +50,7 @@ class Trainer(object):
         self.optimizer.zero_grad()
         batches = self.loader.train_sampler
         batch_records = {}
-        t_iter = tqdm.tqdm(batches, desc="\tLoss: ------", width=10)
+        t_iter = tqdm.tqdm(batches, desc="\tLoss: ------")
         time_start = time.time() - self.time_ref
 
         for data in t_iter:
