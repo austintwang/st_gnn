@@ -37,6 +37,9 @@ class Trainer(object):
         with open(os.path.join(self.output_dir, "params.pickle"), "wb") as f:
             pickle.dump(self.params, f)
 
+    def _calc_obs(self, data):
+        raise NotImplementedError
+
     def _loss_fn(self, pred, data):
         raise NotImplementedError
 
@@ -56,6 +59,7 @@ class Trainer(object):
         for data in t_iter:
             # print(utils.torch_mem_usage()) ####
             data.to(self.device)
+            self._calc_obs(data)
             # print(utils.torch_mem_usage()) ####
             pred = self.model(data)
             loss = self._loss_fn(pred, data)
@@ -88,6 +92,7 @@ class Trainer(object):
 
         for data in t_iter:
             data.to(self.device)
+            self._calc_obs(data)
             pred = self.model(data)
             loss = self._loss_fn(pred, data)
 
@@ -121,7 +126,7 @@ class Trainer(object):
         val_epoch_loss_hist = []
         self.time_ref = time.time()
         try:
-            for i in range(self.num_epochs):
+            for epoch in range(self.num_epochs):
                 if torch.cuda.is_available:
                     torch.cuda.empty_cache()
 
@@ -138,6 +143,9 @@ class Trainer(object):
                 self.stats["val"].append(records_val)
 
                 print(f"Validation epoch {epoch:04}: average loss = {val_epoch_loss:6.10}")
+                print(f"Validation Stats (Epoch {epoch:04}")
+                print("-------------")
+                print("".join(f"{k:>20}:  {v}\n" for k, v in records_val.items()))
 
                 savepath = os.path.join(self.params["output_dir"], "model", f"ckpt_epoch_{epoch:04}.pt")
                 utils.save_model(model, savepath)
@@ -162,6 +170,13 @@ class Trainer(object):
 
 
 class SupTrainer(Trainer):
+    def _calc_obs(self, data):
+        l = (data.pos[data.cell_mask])
+        num_cells = l.shape[0]
+        rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
+        ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
+        data.ldists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).log()
+
     def _loss_fn(self, pred, data):
         min_dist = self.params["min_dist"]
 
@@ -169,14 +184,14 @@ class SupTrainer(Trainer):
         means = pdists[:,:,0]
         lvars = pdists[:,:,1]
 
-        l = (data.pos[data.cell_mask])
-        num_cells = l.shape[0]
-        rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
-        ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
-        ldists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).log()
+        # l = (data.pos[data.cell_mask])
+        # num_cells = l.shape[0]
+        # rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
+        # ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
+        # ldists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).log()
 
         # print(means.shape, lvars.shape, ldists.shape) ####
-        nll = ((means - ldists) / lvars.exp())**2 / 2 + lvars
+        nll = ((means - data.ldists) / lvars.exp())**2 / 2 + lvars
         # print(means) ####
         w = data.node_norm[data.cell_mask].sqrt()
         weights = torch.outer(w, w)
@@ -185,6 +200,13 @@ class SupTrainer(Trainer):
         # print(loss) ####
 
         return loss
+
+    def _calc_metrics_eval(self, pred, data):
+        metrics = {
+            "gaussian_nll": metrics.gaussian_nll(pred, data, self.params),
+            "spearman": metrics.spearman(pred, data, self.params)
+        }
+        return metrics
 
 
 
