@@ -162,7 +162,7 @@ class Trainer(object):
 
 class SupTrainer(Trainer):
     def _loss_fn(self, pred, data):
-        min_ldist = self.params["min_ldist"]
+        min_dist = self.params["min_dist"]
 
         pdists = pred["dists"]
         means = pdists[:,:,0]
@@ -172,7 +172,7 @@ class SupTrainer(Trainer):
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
-        ldists = torch.clamp(((rtile - ctile)**2).mean(dim=2).log(), min=min_ldist)
+        ldists = ((torch.clamp(rtile - ctile, min=min_dist))**2).nanmean(dim=2).log()
 
         # print(means.shape, lvars.shape, ldists.shape) ####
         nll = ((means - ldists) / lvars.exp())**2 / 2 + lvars
