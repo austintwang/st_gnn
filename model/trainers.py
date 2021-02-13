@@ -40,7 +40,7 @@ class Trainer(object):
     def _loss_fn(self, pred, data):
         raise NotImplementedError
 
-    def _calc_metrics(self, pred, data):
+    def _calc_metrics_train(self, pred, data):
         return {}
 
     def _calc_metrics_eval(self, pred, data):
