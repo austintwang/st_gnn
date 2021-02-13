@@ -117,7 +117,7 @@ class SupRCGN(SupNet):
         edge_type = data.edge_type
         cell_mask = data.cell_mask
         # print(data.edge_norm.dtype, data.edge_attr.dtype) ####
-        print(torch.sum(edge_weight.isnan())) ####
+        # print(torch.sum(edge_weight.isnan())) ####
 
         embs = []
         prev = x
@@ -128,6 +128,7 @@ class SupRCGN(SupNet):
             prev = h
 
         z = torch.cat(embs, dim=1)[cell_mask]
+        print(torch.sum(z.isnan())) ####
         # print(embs[0]) ####
 
         return z
