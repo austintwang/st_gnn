@@ -53,7 +53,7 @@ class Trainer(object):
         t_iter = tqdm.tqdm(batches, desc="\tLoss: ---")
         time_start = time.time() - self.time_ref
 
-        for data in batches:
+        for data in t_iter:
             # print(utils.torch_mem_usage()) ####
             data.to(self.device)
             # print(utils.torch_mem_usage()) ####
@@ -86,7 +86,7 @@ class Trainer(object):
         batch_records = {}
         t_iter = tqdm.tqdm(batches, desc="\tLoss: ---")
 
-        for data in batches:
+        for data in t_iter:
             data.to(self.device)
             pred = self.model(data)
             loss = self._loss_fn(pred, data)
