@@ -171,6 +171,7 @@ class Trainer(object):
 
 class SupTrainer(Trainer):
     def _calc_obs(self, data):
+        min_dist = self.params["min_dist"]
         l = (data.pos[data.cell_mask])
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
@@ -178,8 +179,6 @@ class SupTrainer(Trainer):
         data.ldists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).log()
 
     def _loss_fn(self, pred, data):
-        min_dist = self.params["min_dist"]
-
         pdists = pred["dists"]
         means = pdists[:,:,0]
         lvars = pdists[:,:,1]
