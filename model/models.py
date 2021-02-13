@@ -15,9 +15,11 @@ class WRGCNConv(MessagePassing):
         self.root = Parameter(torch.Tensor(in_channels, out_channels))
         self.bias = Parameter(torch.Tensor(out_channels))
 
+        print(self.weight) ####
+
     def forward(self, x, edge_index, edge_weight, edge_type):
         # print(x.shape) ####
-        print(self.weight) ####
+        # print(self.weight) ####
         num_nodes = x.size(0)
 
         out = x @ self.root + self.bias
