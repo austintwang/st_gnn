@@ -3,6 +3,7 @@ import torch
 from torch.nn import Parameter
 import torch.nn.functional as F
 from torch_geometric.nn.conv import MessagePassing
+from torch_geometric.nn.inits import glorot, zeros
 
 class WRGCNConv(MessagePassing):
     def __init__(self, in_channels, out_channels, num_relations, **kwargs):
@@ -15,7 +16,12 @@ class WRGCNConv(MessagePassing):
         self.root = Parameter(torch.Tensor(in_channels, out_channels))
         self.bias = Parameter(torch.Tensor(out_channels))
 
-        print(self.weight) ####
+        # print(self.weight) ####
+
+    def reset_parameters(self):
+        glorot(self.weight)
+        glorot(self.root)
+        zeros(self.bias)
 
     def forward(self, x, edge_index, edge_weight, edge_type):
         # print(x.shape) ####
