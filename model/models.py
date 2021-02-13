@@ -17,6 +17,7 @@ class WRGCNConv(MessagePassing):
 
     def forward(self, x, edge_index, edge_weight, edge_type):
         # print(x.shape) ####
+        print(self.weight) ####
         num_nodes = x.size(0)
 
         out = x @ self.root + self.bias
@@ -30,7 +31,6 @@ class WRGCNConv(MessagePassing):
             # print(out.dtype, h.dtype, self.weight[i].dtype) ####
             # print(out.shape, h.shape, self.weight[i].shape) ####
             # print((h.float() @ self.weight[i]).dtype) ####
-            print(h) ####
             out += (h @ self.weight[i])
 
         # print(out) ####
