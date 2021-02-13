@@ -128,7 +128,7 @@ class SupRCGN(SupNet):
             prev = h
 
         z = torch.cat(embs, dim=1)[cell_mask]
-        print(torch.sum(z.isnan())) ####
+        # print(torch.sum(z.isnan())) ####
         # print(embs[0]) ####
 
         return z
