@@ -50,7 +50,7 @@ class Trainer(object):
         self.optimizer.zero_grad()
         batches = self.loader.train_sampler
         batch_records = {}
-        t_iter = tqdm.tqdm(batches, desc="\tLoss: ------")
+        t_iter = tqdm.tqdm(batches, desc="\tLoss: ------", ncols=5)
         time_start = time.time() - self.time_ref
 
         for data in t_iter:
@@ -76,7 +76,7 @@ class Trainer(object):
         for k, v in batch_records.items():
             records[k] = np.mean(v)
 
-        records.update[{"time_start": time_start, "time_end": time_end}]
+        records.update({"time_start": time_start, "time_end": time_end})
 
         return records
 
