@@ -46,7 +46,7 @@ class Trainer(object):
     def _calc_metrics_train(self, pred, data):
         return {}
 
-    def _calc_metrics_eval(self, pred, data):
+    def _calc_metrics_val(self, pred, data):
         return {}
     
     def _train(self):
@@ -200,7 +200,7 @@ class SupTrainer(Trainer):
 
         return loss
 
-    def _calc_metrics_eval(self, pred, data):
+    def _calc_metrics_val(self, pred, data):
         metrics = {
             "gaussian_nll": metrics.gaussian_nll(pred, data, self.params),
             "spearman": metrics.spearman(pred, data, self.params)

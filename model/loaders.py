@@ -147,17 +147,18 @@ class ZhuangBasicCellF(ZhuangBasic):
         coords_pad = torch.cat((torch.full((num_genes, coords_dims), np.nan), coords), 0)
         cell_mask = torch.cat((torch.full((num_genes,), False), torch.full((num_cells,), True)), 0)
 
-        node_in_channels = num_genes + num_cells
-        x = torch.zeros(num_genes + num_cells, num_genes + 1)
-        x[:num_genes,:num_genes].fill_diagonal_(1.)
-        x[num_genes:,num_genes:].fill_(1.)
-        node_to_id = np.concatenate((genes, cells))
-
-        expr = np.vstack((np.zeros((num_genes, num_genes),), np.log(st_anndata.X[part_mask,:] + 1)),)
+        expr_orig = np.log(st_anndata.X[part_mask,:] + 1)
+        expr = np.vstack((np.zeros((num_genes, num_genes),), expr_orig),)
         expr_sparse_cg = sparse.coo_matrix(np.nan_to_num(expr / expr.sum(axis=0, keepdims=1)))
         edges_cg, edge_features_cg = from_scipy_sparse_matrix(expr_sparse_cg)
         expr_sparse_gc = sparse.coo_matrix(np.nan_to_num((expr / expr.sum(axis=1, keepdims=1)).T))
         edges_gc, edge_features_gc = from_scipy_sparse_matrix(expr_sparse_gc)
+
+        node_in_channels = num_genes + num_cells
+        x = torch.zeros(num_genes + num_cells, num_genes + 1)
+        x[:num_genes,:num_genes].fill_diagonal_(1.)
+        x[num_genes:,num_genes:] = expr_orig
+        node_to_id = np.concatenate((genes, cells))
 
         edges = torch.cat((edges_cg, edges_gc), 1)
         edge_attr = torch.cat((edge_features_cg, edge_features_gc), 0).float()
