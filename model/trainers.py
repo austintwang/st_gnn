@@ -181,7 +181,7 @@ class SupTrainer(Trainer):
         weights = torch.outer(w, w)
 
         loss = torch.mean(nll * weights)
-        print(loss) ####
+        # print(loss) ####
 
         return loss
 
