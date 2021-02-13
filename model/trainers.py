@@ -131,14 +131,14 @@ class Trainer(object):
                     torch.cuda.empty_cache()
 
                 records_train = self._train()
-                records_train.update({"split": "train", "epoch": i, "experiment": self.exp_id})
+                records_train.update({"split": "train", "epoch": epoch, "experiment": self.exp_id})
                 self.stats["train"].append(records_train)
                 train_epoch_loss = records_train["loss"]
                 
                 print(f"Train epoch {epoch:04}: average loss = {train_epoch_loss:6.10}")
 
                 records_val = self._val()
-                records_val.update({"split": "val", "epoch": i, "experiment": self.exp_id})
+                records_val.update({"split": "val", "epoch": epoch, "experiment": self.exp_id})
                 val_epoch_loss = records_val["loss"]
                 self.stats["val"].append(records_val)
 
