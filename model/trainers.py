@@ -80,6 +80,7 @@ class Trainer(object):
 
         return records
 
+    @torch.no_grad
     def _val(self):
         batches = self.loader.train_sampler
         batch_records = {}
