@@ -171,7 +171,7 @@ class SupTrainer(Trainer):
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
-        ldists = torch.clamp((rtile - ctile).abs().log(), min=min_ldist)
+        ldists = torch.clamp(((rtile - ctile)**2).mean(dim=2).log(), min=min_ldist)
 
         print(means.shape, lvars.shape, ldists.shape) ####
         nll = ((means - ldists) / lvars.exp())**2 / 2 + lvars
