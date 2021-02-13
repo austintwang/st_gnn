@@ -30,7 +30,10 @@ class WRGCNConv(MessagePassing):
             # print(out.dtype, h.dtype, self.weight[i].dtype) ####
             # print(out.shape, h.shape, self.weight[i].shape) ####
             # print((h.float() @ self.weight[i]).dtype) ####
+            print(h) ####
             out += (h @ self.weight[i])
+
+        # print(out) ####
 
         return out
 
@@ -116,6 +119,6 @@ class SupRCGN(SupNet):
             prev = h
 
         z = torch.cat(embs, dim=1)[cell_mask]
-        print(z) ####
+        # print(z) ####
 
         return z
