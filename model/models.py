@@ -132,3 +132,34 @@ class SupRCGN(SupNet):
         # print(embs[0]) ####
 
         return z
+
+class SupMLP(SupNet):
+    def _get_gnn(self, in_channels, out_channels):
+        gnn_layers = torch.nn.ModuleList()
+        prev = in_channels
+        for i in out_channels:
+            gnn_layers.append(
+                torch.nn.Linear(prev, i)
+            )
+            prev = i
+
+        return gnn_layers
+
+    def _gnn_fwd(self, data):
+        x = data.x
+        edge_index = data.edge_index
+        edge_weight = data.edge_norm * data.edge_attr
+        edge_type = data.edge_type
+        cell_mask = data.cell_mask
+
+        embs = []
+        prev = x[cell_mask]
+        for i in self.gnn_layers:
+            h = F.relu(i(prev, edge_index, edge_weight, edge_type))
+            h = F.dropout(h, p=self.dropout_prop, training=self.training)
+            embs.append(h)
+            prev = h
+
+        z = torch.cat(embs, dim=1)
+
+        return z
