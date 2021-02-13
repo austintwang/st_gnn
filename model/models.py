@@ -127,6 +127,6 @@ class SupRCGN(SupNet):
             prev = h
 
         z = torch.cat(embs, dim=1)[cell_mask]
-        print(z) ####
+        print(embs[-1]) ####
 
         return z
