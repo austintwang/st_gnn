@@ -16,7 +16,7 @@ class WRGCNConv(MessagePassing):
         self.root = Parameter(torch.Tensor(in_channels, out_channels))
         self.bias = Parameter(torch.Tensor(out_channels))
 
-        # print(self.weight) ####
+        self.reset_parameters()
 
     def reset_parameters(self):
         glorot(self.weight)
