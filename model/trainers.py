@@ -8,7 +8,7 @@ import tqdm
 import model.models as models
 import model.loaders as loaders
 import model.utils as utils
-import model.metris as metrics
+import model.metrics as metrics
 
 class Trainer(object):
     def __init__(self, model, loader, **kwargs):
