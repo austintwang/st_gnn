@@ -50,7 +50,7 @@ class Trainer(object):
         self.optimizer.zero_grad()
         batches = self.loader.train_sampler
         batch_records = {}
-        t_iter = tqdm.tqdm(batches, desc="\tLoss: ---")
+        t_iter = tqdm.tqdm(batches, desc="\tLoss: ------")
         time_start = time.time() - self.time_ref
 
         for data in t_iter:
@@ -84,7 +84,7 @@ class Trainer(object):
     def _val(self):
         batches = self.loader.train_sampler
         batch_records = {}
-        t_iter = tqdm.tqdm(batches, desc="\tLoss: ---")
+        t_iter = tqdm.tqdm(batches, desc="\tLoss: ------")
 
         for data in t_iter:
             data.to(self.device)
@@ -95,6 +95,7 @@ class Trainer(object):
             metrics = self._calc_metrics_val(pred, data)
             for k, v in metrics.items():
                 batch_records.setdefault(k, []).append(v)
+
 
             t_iter.set_description(f"\tLoss: {loss.item():6.4f}")
 
