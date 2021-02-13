@@ -195,7 +195,7 @@ class SupTrainer(Trainer):
         w = data.node_norm[data.cell_mask].sqrt()
         weights = torch.outer(w, w)
 
-        loss = torch.mean(nll * weights)
+        loss = torch.sum(nll * weights)
         # print(loss) ####
 
         return loss
