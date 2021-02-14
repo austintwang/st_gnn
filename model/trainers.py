@@ -15,6 +15,7 @@ class Trainer(object):
         self.params = kwargs
         self.num_epochs = self.params["num_epochs"]
         self.early_stop_min_delta = self.params["early_stop_min_delta"]
+        self.early_stop_hist_len = self.params["early_stop_hist_len"]
         self.device = self.params["device"]
 
         self.model = model
@@ -155,7 +156,7 @@ class Trainer(object):
                 if np.isnan(train_epoch_loss) and np.isnan(val_epoch_loss):
                     break
 
-                if len(val_epoch_loss_hist) < early_stop_hist_len + 1:
+                if len(val_epoch_loss_hist) < self.early_stop_hist_len + 1:
                     val_epoch_loss_hist = [val_epoch_loss] + val_epoch_loss_hist
                 else:
                     val_epoch_loss_hist = [val_epoch_loss] + val_epoch_loss_hist[:-1]
