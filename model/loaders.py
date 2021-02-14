@@ -14,6 +14,8 @@ from torch_geometric.utils import from_scipy_sparse_matrix
 class Loader(object):
     def __init__(self, **kwargs):
         self.params = kwargs
+        self.cache_dir = os.path.join(self.params["loader_cache_dir"], self.__class__.__name__)
+        os.makedirs(self.cache_dir, exist_ok=True)
 
         in_data, partitions = self._import_data()
         self.train_part, self.val_part, self.test_part = partitions
@@ -37,13 +39,13 @@ class Loader(object):
 
 class SaintRWLoader(Loader):
     def _build_sampler(self, data, group):
-        cache_dir = os.path.join(self.params["loader_cache_dir"], group)
+        sampler_cache_dir = os.path.join(self.cache_dir, group)
         if self.params.get("clear_cache", False):
             try:
-                shutil.rmtree(cache_dir)
+                shutil.rmtree(sampler_cache_dir)
             except FileNotFoundError:
                 pass
-            os.makedirs(cache_dir)
+            os.makedirs(sampler_cache_dir)
 
         sampler = GraphSAINTRandomWalkSampler(
             self.train_data, 
@@ -51,7 +53,7 @@ class SaintRWLoader(Loader):
             walk_length=self.params["saint_walk_length"],
             num_steps=self.params["saint_num_steps"], 
             sample_coverage=self.params["saint_sample_coverage"],
-            save_dir=cache_dir,
+            save_dir=sampler_cache_dir,
             num_workers=self.params["num_workers"]
         )
         return sampler
@@ -59,8 +61,7 @@ class SaintRWLoader(Loader):
 
 class ZhuangBasic(SaintRWLoader):
     def _import_data(self):
-        os.makedirs(self.params["loader_cache_dir"], exist_ok=True)
-        cache_path = os.path.join(self.params["loader_cache_dir"], "imports.pickle")
+        cache_path = os.path.join(self.cache_dir, "imports.pickle")
         if self.params.get("clear_cache", False) or not os.path.exists(cache_path):
             anndata = self.params.get("st_anndata", sc.read(self.params["st_exp_path"]))
             coords = self.params.get("st_coords", pd.read_pickle(self.params["st_coords_path"]))

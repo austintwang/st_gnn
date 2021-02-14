@@ -72,13 +72,21 @@ saint_params = {
     "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/saint"
 }
 
-sg_params = [global_params, train_params, gnn_params, loader_params, zhuang_params, saint_params]
-sg2 = Dispatcher("sg2", sg_params, loaders.ZhuangBasic, models.SupRCGN, trainers.SupTrainer)
-
 test_params = {
     "saint_sample_coverage": 2, 
     "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/test"
 }
+
+sg_params = [global_params, train_params, gnn_params, loader_params, zhuang_params, saint_params]
+
+sg2 = Dispatcher("sg2", sg_params, loaders.ZhuangBasic, models.SupRCGN, trainers.SupTrainer)
 Dispatcher.variant(sg2, "sgt", [test_params])
 
+sgc2 = Dispatcher("sgc2", sg_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
+Dispatcher.variant(sgc2, "sgct", [test_params])
 
+sgc2 = Dispatcher("sgc2", sg_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
+Dispatcher.variant(sgc2, "sgct", [test_params])
+
+sb2 = Dispatcher("sb2", sg_params, loaders.ZhuangBasicCellF, models.SupMLP, trainers.SupTrainer)
+Dispatcher.variant(sb2, "sbt", [test_params])
