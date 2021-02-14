@@ -8,6 +8,8 @@ from scipy import sparse
 import pandas as pd
 import scanpy as sc
 import torch
+import torch.multiprocessing
+torch.multiprocessing.set_sharing_strategy('file_system')
 from torch_geometric.data import Data, GraphSAINTRandomWalkSampler
 from torch_geometric.utils import from_scipy_sparse_matrix
 
