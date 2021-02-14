@@ -144,12 +144,10 @@ class Trainer(object):
                 self.stats["val"].append(records_val)
 
                 print(f"Validation epoch {epoch:04}: average loss = {val_epoch_loss:6.10}")
-                print(f"Validation Stats (Epoch {epoch:04}")
-                print("-------------")
-                print("".join(f"{k:>20}:  {v}\n" for k, v in records_val.items()))
+                print("".join(f"{k:>15}:  {v}\n" for k, v in records_val.items()))
 
                 savepath = os.path.join(self.output_dir, "model", f"ckpt_epoch_{epoch:04}.pt")
-                utils.save_model(model, savepath)
+                utils.save_model(self.model, savepath)
 
                 if val_epoch_loss < best_val_epoch_loss:
                     self.best_val_epoch_loss = val_epoch_loss
