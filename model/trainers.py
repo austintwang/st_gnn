@@ -148,7 +148,7 @@ class Trainer(object):
                 savepath = os.path.join(self.output_dir, "model", f"ckpt_epoch_{epoch:04}.pt")
                 utils.save_model(self.model, savepath)
 
-                if val_epoch_loss < best_val_epoch_loss:
+                if val_epoch_loss < self.best_val_epoch_loss:
                     self.best_val_epoch_loss = val_epoch_loss
                     self.best_model_epoch = epoch
 
