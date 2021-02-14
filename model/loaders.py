@@ -158,7 +158,7 @@ class ZhuangBasicCellF(ZhuangBasic):
         edges_gc, edge_features_gc = from_scipy_sparse_matrix(expr_sparse_gc)
 
         node_in_channels = num_genes + num_cells
-        x = torch.zeros(num_genes + num_cells, num_genes + 1)
+        x = torch.zeros(num_genes + num_cells, num_genes + num_genes)
         x[:num_genes,:num_genes].fill_diagonal_(1.)
         x[num_genes:,num_genes:] = torch.tensor(expr_orig).float()
         node_to_id = np.concatenate((genes, cells))
