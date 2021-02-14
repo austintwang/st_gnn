@@ -69,8 +69,8 @@ class Trainer(object):
             self.optimizer.step()
             
             batch_records.setdefault("loss", []).append(loss.item())
-            metrics = self._calc_metrics_train(pred, data)
-            for k, v in metrics.items():
+            out_metrics = self._calc_metrics_train(pred, data)
+            for k, v in out_metrics.items():
                 batch_records.setdefault(k, []).append(v)
 
             t_iter.set_description(f"\tLoss: {loss.item():6.4f}")
@@ -98,8 +98,8 @@ class Trainer(object):
             loss = self._loss_fn(pred, data)
 
             batch_records.setdefault("loss", []).append(loss.item())
-            metrics = self._calc_metrics_val(pred, data)
-            for k, v in metrics.items():
+            out_metrics = self._calc_metrics_val(pred, data)
+            for k, v in out_metrics.items():
                 batch_records.setdefault(k, []).append(v)
 
 
@@ -202,11 +202,11 @@ class SupTrainer(Trainer):
         return loss
 
     def _calc_metrics_val(self, pred, data):
-        metrics = {
+        out_metrics = {
             "gaussian_nll": metrics.gaussian_nll(pred, data, self.params),
             "spearman": metrics.spearman(pred, data, self.params)
         }
-        return metrics
+        return out_metrics
 
 
 
