@@ -160,7 +160,7 @@ class ZhuangBasicCellF(ZhuangBasic):
         node_in_channels = num_genes + num_cells
         x = torch.zeros(num_genes + num_cells, num_genes + 1)
         x[:num_genes,:num_genes].fill_diagonal_(1.)
-        x[num_genes:,num_genes:] = torch.tensor(expr_orig)
+        x[num_genes:,num_genes:] = torch.tensor(expr_orig).float()
         node_to_id = np.concatenate((genes, cells))
 
         edges = torch.cat((edges_cg, edges_gc), 1)
