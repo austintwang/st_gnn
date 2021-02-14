@@ -1,6 +1,6 @@
 import torch
 
-@torch.no_grad
+@torch.no_grad()
 def gaussian_nll(pred, data, params):
     min_dist = params["min_dist"]
 
@@ -23,7 +23,7 @@ def _get_ranks(x):
         ranks[i,tmp[i,:]] = torch.arange(len(x))
     return ranks
 
-@torch.no_grad
+@torch.no_grad()
 def spearman(pred, data, params):
     min_dist = params["min_dist"]
 
