@@ -85,8 +85,5 @@ Dispatcher.variant(sg2, "sgt", [test_params])
 sgc2 = Dispatcher("sgc2", sg_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
 Dispatcher.variant(sgc2, "sgct", [test_params])
 
-sgc2 = Dispatcher("sgc2", sg_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
-Dispatcher.variant(sgc2, "sgct", [test_params])
-
 sb2 = Dispatcher("sb2", sg_params, loaders.ZhuangBasicCellF, models.SupMLP, trainers.SupTrainer)
 Dispatcher.variant(sb2, "sbt", [test_params])
