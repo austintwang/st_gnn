@@ -32,7 +32,7 @@ class Dispatcher(object):
 
 
 global_params = {
-    "num_workers": 8,
+    "num_workers": 6,
 }
         
 train_params = {
