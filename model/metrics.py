@@ -34,7 +34,7 @@ def spearman(pred, data, params):
     x_rank = _get_ranks(means, device)
     y_rank = _get_ranks(data.ldists, device)
 
-    n = num_cells
+    n = x_rank.shape[1]
     upper = 6 * torch.sum((x_rank - y_rank).pow(2), dim=1)
     down = n * (n ** 2 - 1.0)
     rs = 1.0 - (upper / down)
