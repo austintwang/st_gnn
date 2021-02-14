@@ -102,7 +102,6 @@ class Trainer(object):
             for k, v in out_metrics.items():
                 batch_records.setdefault(k, []).append(v)
 
-
             t_iter.set_description(f"\tLoss: {loss.item():6.4f}")
 
         records = {}
