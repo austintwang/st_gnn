@@ -157,7 +157,7 @@ class ZhuangBasicCellF(ZhuangBasic):
         expr_sparse_gc = sparse.coo_matrix(np.nan_to_num((expr / expr.sum(axis=1, keepdims=1)).T))
         edges_gc, edge_features_gc = from_scipy_sparse_matrix(expr_sparse_gc)
 
-        node_in_channels = num_genes + num_cells
+        node_in_channels = 2 * num_genes 
         x = torch.zeros(num_genes + num_cells, num_genes + num_genes)
         x[:num_genes,:num_genes].fill_diagonal_(1.)
         x[num_genes:,num_genes:] = torch.tensor(expr_orig).float()
