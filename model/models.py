@@ -156,7 +156,7 @@ class SupMLP(SupNet):
         embs = []
         prev = x[cell_mask]
         for i in self.gnn_layers:
-            h = F.relu(i(prev, edge_index, edge_weight, edge_type))
+            h = F.relu(i(prev))
             h = F.dropout(h, p=self.dropout_prop, training=self.training)
             embs.append(h)
             prev = h
