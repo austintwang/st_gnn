@@ -61,6 +61,7 @@ class SupNet(torch.nn.Module):
         self.dropout_prop = self.params["dropout_prop"]
 
         self.gnn_layers = self._get_gnn(in_channels, gnn_layers_out_chnls)
+        self.batch_norm_layers = torch.nn.ModuleList(torch.nn.BatchNorm1d(o) for o in gnn_layers_out_chnls)
 
         emb_dim = sum(gnn_layers_out_chnls) * 2
         self.dist_layers = torch.nn.ModuleList()
@@ -122,8 +123,8 @@ class SupRCGN(SupNet):
 
         embs = []
         prev = x
-        for i in self.gnn_layers:
-            h = F.relu(i(prev, edge_index, edge_weight, edge_type))
+        for i , j in zip(self.gnn_layers, self.batch_norm_layers):
+            h = F.relu(j(i(prev, edge_index, edge_weight, edge_type)))
             h = F.dropout(h, p=self.dropout_prop, training=self.training)
             embs.append(h)
             prev = h
