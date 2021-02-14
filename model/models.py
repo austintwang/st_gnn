@@ -54,6 +54,7 @@ class WRGCNConv(MessagePassing):
 class SupNet(torch.nn.Module):
     def __init__(self, in_channels, **kwargs):
         super().__init__()
+
         self.params = kwargs
         gnn_layers_out_chnls = self.params["gnn_layers_out_chnls"]
         dist_layers_out_chnls = self.params["dist_layers_out_chnls"]

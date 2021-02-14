@@ -2,17 +2,7 @@ import gc
 import torch
 
 def save_model(model, save_path):
-    """
-    Saves the given model at the given path. This saves the state of the model
-    (i.e. trained layers and parameters), and the arguments used to create the
-    model (i.e. a dictionary of the original arguments).
-    """
-    save_dict = {
-        "model_state": model.state_dict(),
-        "model_creation_args": model.creation_args
-    }
-    torch.save(save_dict, save_path)
-
+    torch.save(model.state_dict(), save_path)
 
 def restore_model(model_class, load_path, model_args_extras=None):
     """
