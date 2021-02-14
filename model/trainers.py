@@ -34,7 +34,7 @@ class Trainer(object):
             prev_exps = [-1]
         self.exp_id = f"{(max(prev_exps) + 1):04}"
         self.output_dir = os.path.join(exp_dir, self.exp_id)
-        os.makedirs(self.output_dir, "model")
+        os.makedirs(os.path.join(self.output_dir, "model"))
         with open(os.path.join(self.output_dir, "params.pickle"), "wb") as f:
             pickle.dump(self.params, f)
 
