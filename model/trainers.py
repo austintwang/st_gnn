@@ -89,7 +89,7 @@ class Trainer(object):
     def _val(self):
         batches = self.loader.train_sampler
         batch_records = {}
-        t_iter = tqdm.tqdm(batches, desc="\tLoss: ------")
+        t_iter = tqdm.tqdm(batches, desc="\tLoss: ------", ncols=150)
 
         for data in t_iter:
             data.to(self.device)
@@ -148,7 +148,7 @@ class Trainer(object):
                 print("-------------")
                 print("".join(f"{k:>20}:  {v}\n" for k, v in records_val.items()))
 
-                savepath = os.path.join(self.params["output_dir"], "model", f"ckpt_epoch_{epoch:04}.pt")
+                savepath = os.path.join(self.output_dir, "model", f"ckpt_epoch_{epoch:04}.pt")
                 utils.save_model(model, savepath)
 
                 if val_epoch_loss < best_val_epoch_loss:
