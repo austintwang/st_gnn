@@ -189,7 +189,7 @@ class SupTrainer(Trainer):
 
         # print(means.shape, lvars.shape, ldists.shape) ####
         nll = ((means - data.ldists) / lvars.exp())**2 / 2 + lvars
-        # print(means) ####
+        print(means.sum(), lvars.sum()) ####
         w = data.node_norm[data.cell_mask].sqrt()
         weights = torch.outer(w, w)
 
