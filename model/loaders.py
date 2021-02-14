@@ -42,6 +42,7 @@ class Loader(object):
 class SaintRWLoader(Loader):
     def _build_sampler(self, data, group):
         sampler_cache_dir = os.path.join(self.cache_dir, group)
+        os.makedirs(sampler_cache_dir, exist_ok=True)
         if self.params.get("clear_cache", False):
             try:
                 shutil.rmtree(sampler_cache_dir)
