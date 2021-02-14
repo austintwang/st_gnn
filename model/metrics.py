@@ -1,3 +1,5 @@
+import torch
+
 @torch.no_grad
 def gaussian_nll(pred, data, params):
     min_dist = params["min_dist"]
