@@ -20,7 +20,7 @@ def _get_ranks(x, device):
     tmp = x.argsort(dim=1)
     ranks = torch.zeros_like(tmp, device=device)
     for i in range(x.shape[0]):
-        ranks[i,tmp[i,:]] = torch.arange(len(x))
+        ranks[i,tmp[i,:]] = torch.arange(len(x), device=device)
     return ranks
 
 @torch.no_grad()
