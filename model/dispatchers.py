@@ -39,7 +39,7 @@ train_params = {
     "num_epochs": 500,
     "learning_rate": 1e-6,
     "early_stop_min_delta": 0.001,
-    "early_stop_hist_len": 3,
+    "early_stop_hist_len": 10,
     "dropout_prop": 0.1,
     "dist_layers_out_chnls": [128, 128],
     "min_dist": 1e-4,
