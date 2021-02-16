@@ -18,6 +18,7 @@ def load_data(data_dir, names):
     data_df = pd.DataFrame.from_records(data)
 
 def plot_training(df, metric, result_dir):
+    print(df.columns) ####
     sns.set()
     sns.lineplot(data=df, x="epoch", y=metric, hue="name")
     plt.title(f"Validation {metric}")
