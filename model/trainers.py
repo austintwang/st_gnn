@@ -177,7 +177,7 @@ class SupTrainer(Trainer):
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
-        data.dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2)
+        data.dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).sqrt()
         data.ldists = data.dists.log()
 
     def _loss_fn(self, pred, data):
