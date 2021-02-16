@@ -90,7 +90,7 @@ class Trainer(object):
 
     @torch.no_grad()
     def _val(self):
-        batches = self.loader.train_sampler
+        batches = self.loader.val_sampler
         batch_records = {}
         t_iter = tqdm.tqdm(batches, desc="\tLoss: ------", ncols=150)
 
