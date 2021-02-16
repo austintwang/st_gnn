@@ -69,7 +69,7 @@ zhuang_params = {
 
 saint_params = {
     "saint_walk_length": 2,
-    "saint_num_steps": {"train": 500, "val": 125},
+    "saint_num_steps": {"train": 1, "val": 125},
     "saint_sample_coverage": 100,
     "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/saint"
 }
