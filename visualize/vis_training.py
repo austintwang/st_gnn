@@ -7,8 +7,8 @@ import seaborn as sns
 
 def load_data(data_dir, names):
     data = []
-    for name in names:
-        data_path = os.path.join(data_dir, name, "stats.pickle")
+    for name, exp in names:
+        data_path = os.path.join(data_dir, name, exp, "stats.pickle")
         with open(data_path, "rb") as f:
             data_exp = pickle.load(f)
         data.append(data_exp["val"])
@@ -24,10 +24,17 @@ def plot_training(df, metric, result_dir):
 
 def vis_training(data_dir, result_dir, names, metrics):
     df = load_data(data_dir, names)
+    os.makedirs(result_dir, exist_ok=True)
     for metric in metrics:
         plot_training(df, metrics, result_dir)
 
 if __name__ == '__main__':
-    names = ["sg2", "sgc2", "sb2"]
+    data_dir = "/dfs/user/atwang/data/analyses/st_gnn"
+    result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup/training"
+    names = [
+        ("sg2", "0001"), 
+        ("sgc2", "0001"), 
+        ("sb2", "0001")
+    ]
     metrics = ["loss", "gaussian_nll", "spearman"]
     vis_training(data_dir, result_dir, names, metrics)
