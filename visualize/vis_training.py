@@ -15,7 +15,7 @@ def load_data(data_dir, names):
             data_exp = pickle.load(f)
         dv = data_exp["val"]
         for i in dv:
-            i.update({"name": name})
+            i.update({"name": name}0)
         data.extend(dv)
     
     data_df = pd.DataFrame.from_records(data)
@@ -33,7 +33,7 @@ def vis_training(data_dir, result_dir, names, metrics):
     df = load_data(data_dir, names)
     os.makedirs(result_dir, exist_ok=True)
     for metric in metrics:
-        plot_training(df, metrics, result_dir)
+        plot_training(df, metric, result_dir)
 
 if __name__ == '__main__':
     data_dir = "/dfs/user/atwang/data/analyses/st_gnn"
