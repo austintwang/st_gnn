@@ -52,7 +52,7 @@ def mse_log(pred, data, params):
     pdists = pred["dists"]
     means = pdists[:,:,0]
 
-    metric = torch.mean((emeans - data.ldists)**2)
+    metric = torch.mean((means - data.ldists)**2)
 
     return metric.item()
 
