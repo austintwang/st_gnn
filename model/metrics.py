@@ -63,7 +63,7 @@ def mean_chisq(pred, data, params):
     lvars = pdists[:,:,1]
     std = torch.exp(lvars / 2)
 
-    chisq = ((pdists - means) / std)**2
+    chisq = ((data.ldists - means) / std)**2
     metric = torch.mean(chisq)
 
     return metric.item()
