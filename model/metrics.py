@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 
 @torch.no_grad()
@@ -13,6 +14,57 @@ def gaussian_nll(pred, data, params):
     weights = torch.outer(w, w)
 
     metric = torch.mean(nll * weights)
+
+    return metric.item()
+
+@torch.no_grad()
+def mean_mean(pred, data, params):
+    pdists = pred["dists"]
+    means = pdists[:,:,0]
+    mean_mean = torch.mean(means)
+
+    return mean_mean.item()
+
+@torch.no_grad()
+def mean_std(pred, data, params):
+    pdists = pred["dists"]
+    lvars = pdists[:,:,1]
+    std = torch.exp(lvars / 2)
+    mean_std = torch.mean(std)
+
+    return mean_std.item()
+
+@torch.no_grad()
+def mse(pred, data, params, lbound=0., ubound=np.inf):
+    pdists = pred["dists"]
+    means = pdists[:,:,0]
+    emeans = torch.exp(means)
+
+    idx = (data.dists >= lbound) & (data.dists <= ubound)
+    err = ((emeans - data.dists)**2)[idx]
+
+    metric = torch.mean(err)
+
+    return metric.item()
+
+@torch.no_grad()
+def mse_log(pred, data, params):
+    pdists = pred["dists"]
+    means = pdists[:,:,0]
+
+    metric = torch.mean((emeans - data.ldists)**2)
+
+    return metric.item()
+
+@torch.no_grad()
+def mean_chisq(pred, data, params):
+    pdists = pred["dists"]
+    means = pdists[:,:,0]
+    lvars = pdists[:,:,1]
+    std = torch.exp(lvars / 2)
+
+    chisq = ((pdists - means) / std)**2
+    metric = torch.mean(chisq)
 
     return metric.item()
 

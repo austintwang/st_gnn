@@ -16,6 +16,7 @@ class Trainer(object):
         self.num_epochs = self.params["num_epochs"]
         self.early_stop_min_delta = self.params["early_stop_min_delta"]
         self.early_stop_hist_len = self.params["early_stop_hist_len"]
+        self.clip_norm = self.params["grad_clip_norm"]
         self.device = self.params["device"]
 
         self.model = model
@@ -67,6 +68,7 @@ class Trainer(object):
             loss = self._loss_fn(pred, data)
 
             loss.backward()  
+            torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=self.clip_norm)
             self.optimizer.step()
             
             batch_records.setdefault("loss", []).append(loss.item())
@@ -175,20 +177,14 @@ class SupTrainer(Trainer):
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
-        data.ldists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).log()
+        data.dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2)
+        data.ldists = data.dists.log()
 
     def _loss_fn(self, pred, data):
         pdists = pred["dists"]
         means = pdists[:,:,0]
         lvars = pdists[:,:,1]
 
-        # l = (data.pos[data.cell_mask])
-        # num_cells = l.shape[0]
-        # rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
-        # ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
-        # ldists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).log()
-
-        # print(means.shape, lvars.shape, ldists.shape) ####
         nll = ((means - data.ldists) / lvars.exp())**2 / 2 + lvars
         # print(means.sum(), lvars.sum()) ####
         # print(nll.sum()) ####
@@ -203,7 +199,15 @@ class SupTrainer(Trainer):
     def _calc_metrics_val(self, pred, data):
         out_metrics = {
             "gaussian_nll": metrics.gaussian_nll(pred, data, self.params),
-            "spearman": metrics.spearman(pred, data, self.params)
+            "mean_pred_mean": metrics.mean_mean(pred, data, self.params),
+            "mean_pred_std": metrics.mean_std(pred, data, self.params),
+            "mse": metrics.mse(pred, data, self.params),
+            "mse_lt_100": metrics.mse(pred, data, self.params, lbound=100.),
+            "mse_100_500":metrics.mse(pred, data, self.params, lbound=100., ubound=500.)
+            "mse_gt_500":metrics.mse(pred, data, self.params, lbound=500.)
+            "mse_log": metrics.mse_log(pred, data, self.params),
+            "mean_chisq": metrics.mean_chisq(pred, data, self.params),
+            "spearman": metrics.spearman(pred, data, self.params),
         }
         return out_metrics
 

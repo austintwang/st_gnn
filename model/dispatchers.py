@@ -37,12 +37,13 @@ global_params = {
         
 train_params = {
     "num_epochs": 500,
-    "learning_rate": 1e-5,
+    "learning_rate": 1e-3,
     "early_stop_min_delta": 0.001,
     "early_stop_hist_len": 10,
     "dropout_prop": 0.1,
     "dist_layers_out_chnls": [64],
     "min_dist": 1e-4,
+    "grad_clip_norm": 1.,
     "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
 }
 
@@ -68,7 +69,7 @@ zhuang_params = {
 
 saint_params = {
     "saint_walk_length": 2,
-    "saint_num_steps": 500,
+    "saint_num_steps": {"train": 500, "val": 125},
     "saint_sample_coverage": 100,
     "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/saint"
 }

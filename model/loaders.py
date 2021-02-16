@@ -54,7 +54,7 @@ class SaintRWLoader(Loader):
             self.train_data, 
             batch_size=self.params["batch_size"],
             walk_length=self.params["saint_walk_length"],
-            num_steps=self.params["saint_num_steps"], 
+            num_steps=self.params["saint_num_steps"][group], 
             sample_coverage=self.params["saint_sample_coverage"],
             save_dir=sampler_cache_dir,
             num_workers=self.params["num_workers"]
