@@ -37,17 +37,17 @@ global_params = {
         
 train_params = {
     "num_epochs": 500,
-    "learning_rate": 1e-6,
+    "learning_rate": 1e-3,
     "early_stop_min_delta": 0.001,
     "early_stop_hist_len": 10,
     "dropout_prop": 0.1,
-    "dist_layers_out_chnls": [128, 128],
+    "dist_layers_out_chnls": [64],
     "min_dist": 1e-4,
     "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
 }
 
 gnn_params = {
-    "gnn_layers_out_chnls": [512, 512]
+    "gnn_layers_out_chnls": [256, 256]
 }
 
 loader_params = {

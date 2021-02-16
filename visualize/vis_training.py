@@ -15,14 +15,13 @@ def load_data(data_dir, names):
             data_exp = pickle.load(f)
         dv = data_exp["val"]
         for i in dv:
-            i.update({"name": name})
+            i.setdefault("name", name)
         data.extend(dv)
     
     data_df = pd.DataFrame.from_records(data)
     return data_df
 
 def plot_training(df, metric, result_dir):
-    print(df) ####
     sns.set()
     sns.lineplot(data=df, x="epoch", y=metric, hue="name")
     plt.title(f"Validation {metric}")
