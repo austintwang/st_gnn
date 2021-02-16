@@ -15,7 +15,7 @@ def load_data(data_dir, names):
             data_exp = pickle.load(f)
         dv = data_exp["val"]
         for i in dv:
-            i.update({"name": name}0)
+            i.update({"name": name})
         data.extend(dv)
     
     data_df = pd.DataFrame.from_records(data)
