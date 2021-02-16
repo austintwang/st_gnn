@@ -19,7 +19,7 @@ def load_data(data_dir, names):
     return data_df
 
 def plot_training(df, metric, result_dir):
-    # print(df) ####
+    print(df) ####
     sns.set()
     sns.lineplot(data=df, x="epoch", y=metric, hue="name")
     plt.title(f"Validation {metric}")
