@@ -13,13 +13,13 @@ def load_data(data_dir, names):
         data_path = os.path.join(data_dir, name, exp, "stats.pickle")
         with open(data_path, "rb") as f:
             data_exp = pickle.load(f)
-        data.append(data_exp["val"])
+        data.extend(data_exp["val"])
     
     data_df = pd.DataFrame.from_records(data)
     return data_df
 
 def plot_training(df, metric, result_dir):
-    print(df) ####
+    # print(df) ####
     sns.set()
     sns.lineplot(data=df, x="epoch", y=metric, hue="name")
     plt.title(f"Validation {metric}")
