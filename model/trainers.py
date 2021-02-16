@@ -203,8 +203,8 @@ class SupTrainer(Trainer):
             "mean_pred_std": metrics.mean_std(pred, data, self.params),
             "mse": metrics.mse(pred, data, self.params),
             "mse_lt_100": metrics.mse(pred, data, self.params, lbound=100.),
-            "mse_100_500":metrics.mse(pred, data, self.params, lbound=100., ubound=500.)
-            "mse_gt_500":metrics.mse(pred, data, self.params, lbound=500.)
+            "mse_100_500": metrics.mse(pred, data, self.params, lbound=100., ubound=500.)
+            "mse_gt_500": metrics.mse(pred, data, self.params, lbound=500.),
             "mse_log": metrics.mse_log(pred, data, self.params),
             "mean_chisq": metrics.mean_chisq(pred, data, self.params),
             "spearman": metrics.spearman(pred, data, self.params),
