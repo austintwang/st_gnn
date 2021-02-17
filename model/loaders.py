@@ -50,7 +50,7 @@ class GraphSAINTTestSampler(GraphSAINTRandomWalkSampler):
 
         print(f"Implemented Sample Count: {num_samples}") ####
         print(f"Manual Sample Count: {true_num_samples}") ####
-        print(f"Corrected Sample Count: {true_num_samples}") ####
+        print(f"Corrected Sample Count: {corr_num_samples}") ####
 
         row, _, edge_idx = self.adj.coo()
         t = torch.empty_like(edge_count).scatter_(0, edge_idx, node_count[row])
