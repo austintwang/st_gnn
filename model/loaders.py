@@ -3,7 +3,7 @@ import random
 import math
 import pickle
 import shutil
-import tqdm
+from tqdm import tqdm
 import numpy as np
 from scipy import sparse
 import pandas as pd
