@@ -29,6 +29,7 @@ class GraphSAINTTestSampler(GraphSAINTRandomWalkSampler):
 
         num_samples = total_sampled_nodes = 0
         true_num_samples = 0 ####
+        corr_num_samples = 0 ####
         while total_sampled_nodes < self.N * self.sample_coverage:
             for data in loader:
                 for node_idx, adj in data:
@@ -42,12 +43,14 @@ class GraphSAINTTestSampler(GraphSAINTRandomWalkSampler):
                     if self.log:  # pragma: no cover
                         pbar.update(node_idx.size(0))
             num_samples += 200
-
+            corr_num_samples += self.num_steps ####
+ 
         if self.log:  # pragma: no cover
             pbar.close()
 
         print(f"Implemented Sample Count: {num_samples}") ####
         print(f"Manual Sample Count: {true_num_samples}") ####
+        print(f"Corrected Sample Count: {true_num_samples}") ####
 
         row, _, edge_idx = self.adj.coo()
         t = torch.empty_like(edge_count).scatter_(0, edge_idx, node_count[row])
