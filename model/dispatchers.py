@@ -93,5 +93,3 @@ Dispatcher.variant(sb2, "sbt", [test_params])
 lt_params = sg_params + [{"saint_num_steps": {"train": 500, "val": 1}}]
 sg2 = Dispatcher("lt", lt_params, loaders.ZhuangBasicTest, models.SupRCGN, trainers.SupTrainer)
 
-
-SaintRWTestLoader
