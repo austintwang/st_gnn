@@ -38,7 +38,7 @@ class GraphSAINTTestSampler(GraphSAINTRandomWalkSampler):
 
                     if self.log:  # pragma: no cover
                         pbar.update(node_idx.size(0))
-                        print(self.N * self.sample_coverage) ####
+                        print(total_sampled_nodes) ####
             num_samples += 200
 
         if self.log:  # pragma: no cover
