@@ -90,6 +90,6 @@ Dispatcher.variant(sgc2, "sgct", [test_params])
 sb2 = Dispatcher("sb2", sg_params, loaders.ZhuangBasicCellF, models.SupMLP, trainers.SupTrainer)
 Dispatcher.variant(sb2, "sbt", [test_params])
 
-lt_params = sg_params + [{"saint_num_steps": {"train": 500, "val": 1}}]
+lt_params = sg_params + [test_params, {"saint_num_steps": {"train": 500, "val": 1}}]
 sg2 = Dispatcher("lt", lt_params, loaders.ZhuangBasicTest, models.SupRCGN, trainers.SupTrainer)
 
