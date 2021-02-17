@@ -3,6 +3,7 @@ import random
 import math
 import pickle
 import shutil
+import tqdm
 import numpy as np
 from scipy import sparse
 import pandas as pd
@@ -12,6 +13,46 @@ import torch.multiprocessing
 torch.multiprocessing.set_sharing_strategy('file_system')
 from torch_geometric.data import Data, GraphSAINTRandomWalkSampler
 from torch_geometric.utils import from_scipy_sparse_matrix
+
+class GraphSAINTTestSampler(GraphSAINTRandomWalkSampler):
+    def __compute_norm__(self):
+        node_count = torch.zeros(self.N, dtype=torch.float)
+        edge_count = torch.zeros(self.E, dtype=torch.float)
+
+        loader = torch.utils.data.DataLoader(self, batch_size=200,
+                                             collate_fn=lambda x: x,
+                                             num_workers=self.num_workers)
+
+        if self.log:  # pragma: no cover
+            pbar = tqdm(total=self.N * self.sample_coverage)
+            pbar.set_description('Compute GraphSAINT normalization')
+
+        num_samples = total_sampled_nodes = 0
+        while total_sampled_nodes < self.N * self.sample_coverage:
+            for data in loader:
+                for node_idx, adj in data:
+                    edge_idx = adj.storage.value()
+                    node_count[node_idx] += 1
+                    edge_count[edge_idx] += 1
+                    total_sampled_nodes += node_idx.size(0)
+
+                    if self.log:  # pragma: no cover
+                        pbar.update(node_idx.size(0))
+                        print(self.N * self.sample_coverage) ####
+            num_samples += 200
+
+        if self.log:  # pragma: no cover
+            pbar.close()
+
+        row, _, edge_idx = self.adj.coo()
+        t = torch.empty_like(edge_count).scatter_(0, edge_idx, node_count[row])
+        edge_norm = (t / edge_count).clamp_(0, 1e4)
+        edge_norm[torch.isnan(edge_norm)] = 0.1
+
+        node_count[node_count == 0] = 0.1
+        node_norm = num_samples / node_count / self.N
+
+        return node_norm, edge_norm
 
 class Loader(object):
     def __init__(self, **kwargs):
@@ -51,6 +92,28 @@ class SaintRWLoader(Loader):
             os.makedirs(sampler_cache_dir)
 
         sampler = GraphSAINTRandomWalkSampler(
+            self.train_data, 
+            batch_size=self.params["batch_size"],
+            walk_length=self.params["saint_walk_length"],
+            num_steps=self.params["saint_num_steps"][group], 
+            sample_coverage=self.params["saint_sample_coverage"],
+            save_dir=sampler_cache_dir,
+            num_workers=self.params["num_workers"]
+        )
+        return sampler
+
+class SaintRWTestLoader(Loader):
+    def _build_sampler(self, data, group):
+        sampler_cache_dir = os.path.join(self.cache_dir, group)
+        os.makedirs(sampler_cache_dir, exist_ok=True)
+        if self.params.get("clear_cache", False):
+            try:
+                shutil.rmtree(sampler_cache_dir)
+            except FileNotFoundError:
+                pass
+            os.makedirs(sampler_cache_dir)
+
+        sampler = GraphSAINTTestSampler(
             self.train_data, 
             batch_size=self.params["batch_size"],
             walk_length=self.params["saint_walk_length"],
