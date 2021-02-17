@@ -60,6 +60,7 @@ class Trainer(object):
         time_start = time.time() - self.time_ref
 
         for data in t_iter:
+            print(data) ####
             # print(utils.torch_mem_usage()) ####
             data.to(self.device)
             self._calc_obs(data)
