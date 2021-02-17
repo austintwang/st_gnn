@@ -59,6 +59,7 @@ class SaintRWLoader(Loader):
             save_dir=sampler_cache_dir,
             num_workers=self.params["num_workers"]
         )
+        print(sampler.node_norm) ####
         return sampler
 
 
