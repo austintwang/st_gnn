@@ -43,7 +43,7 @@ class GraphSAINTTestSampler(GraphSAINTRandomWalkSampler):
                     if self.log:  # pragma: no cover
                         pbar.update(node_idx.size(0))
             num_samples += 200
-            corr_num_samples += self.num_steps ####
+            # corr_num_samples += self.num_steps ####
  
         if self.log:  # pragma: no cover
             pbar.close()
