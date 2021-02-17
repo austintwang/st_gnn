@@ -31,7 +31,7 @@ class GraphSAINTTestSampler(GraphSAINTRandomWalkSampler):
         while total_sampled_nodes < self.N * self.sample_coverage:
             for data in loader:
                 # print(data) ####
-                print(len([_ for i in data])) ####
+                print(len([0 for _ in data])) ####
                 print(len(data)) ####
                 for node_idx, adj in data:
                     edge_idx = adj.storage.value()
