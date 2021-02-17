@@ -23,14 +23,12 @@ class GraphSAINTTestSampler(GraphSAINTRandomWalkSampler):
                                              collate_fn=lambda x: x,
                                              num_workers=self.num_workers)
 
-        print(f"Num Batches: {len(loader)}")
-        print(f"Batch Sizes: {[len(i) for i in loader]}")
-
         if self.log:  # pragma: no cover
             pbar = tqdm(total=self.N * self.sample_coverage)
             pbar.set_description('Compute GraphSAINT normalization')
 
         num_samples = total_sampled_nodes = 0
+        true_num_samples = 0 ####
         while total_sampled_nodes < self.N * self.sample_coverage:
             for data in loader:
                 for node_idx, adj in data:
@@ -39,12 +37,17 @@ class GraphSAINTTestSampler(GraphSAINTRandomWalkSampler):
                     edge_count[edge_idx] += 1
                     total_sampled_nodes += node_idx.size(0)
 
+                    true_num_samples += 1 ####
+
                     if self.log:  # pragma: no cover
                         pbar.update(node_idx.size(0))
             num_samples += 200
 
         if self.log:  # pragma: no cover
             pbar.close()
+
+        print(num_samples) ####
+        print(true_num_samples) ####
 
         row, _, edge_idx = self.adj.coo()
         t = torch.empty_like(edge_count).scatter_(0, edge_idx, node_count[row])
