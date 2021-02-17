@@ -46,8 +46,8 @@ class GraphSAINTTestSampler(GraphSAINTRandomWalkSampler):
         if self.log:  # pragma: no cover
             pbar.close()
 
-        print(num_samples) ####
-        print(true_num_samples) ####
+        print(f"Implemented Sample Count: {num_samples}") ####
+        print(f"Manual Sample Count: {true_num_samples}") ####
 
         row, _, edge_idx = self.adj.coo()
         t = torch.empty_like(edge_count).scatter_(0, edge_idx, node_count[row])
