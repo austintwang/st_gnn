@@ -238,7 +238,7 @@ class SupBinTrainer(Trainer):
         w = data.node_norm[data.cell_mask].sqrt()
         weights = torch.outer(w, w).contiguous().view(-1, 1)
 
-        loss = F.binary_cross_entropy_with_logits(lflat, dflat, pos_weight=pweight, weight=weights)
+        loss = F.binary_cross_entropy_with_logits(lflat, dflat, pos_weight=pweight, weight=weights, reduction="sum")
 
         return loss
 

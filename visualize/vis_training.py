@@ -21,26 +21,40 @@ def load_data(data_dir, names):
     data_df = pd.DataFrame.from_records(data)
     return data_df
 
-def plot_training(df, metric, result_dir):
+def plot_training(df, metric, result_dir, max_epochs):
     sns.set()
     sns.lineplot(data=df, x="epoch", y=metric, hue="name")
     plt.title(f"Validation {metric}")
     plt.savefig(os.path.join(result_dir, f"{metric}_val.svg"), bbox_inches='tight')
     plt.clf()
 
-def vis_training(data_dir, result_dir, names, metrics):
+def vis_training(data_dir, result_dir, names, metrics, max_epochs=0):
     df = load_data(data_dir, names)
     os.makedirs(result_dir, exist_ok=True)
     for metric in metrics:
-        plot_training(df, metric, result_dir)
+        plot_training(df, metric, result_dir, max_epochs)
 
 if __name__ == '__main__':
     data_dir = "/dfs/user/atwang/data/analyses/st_gnn"
     result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup/training"
+
     names = [
-        ("sg2", "0001"), 
-        ("sgc2", "0001"), 
-        ("sb2", "0001")
+        ("sg2", "0002"), 
+        ("sgc2", "0002"), 
+        ("sb2", "0002")
     ]
-    metrics = ["loss", "gaussian_nll", "spearman"]
+    metrics = [
+        "loss", 
+        "gaussian_nll", 
+        "spearman", 
+        "mean_pred_mean", 
+        "mean_pred_std", 
+        "mse",
+        "mse_lt_100",
+        "mse_100_500",
+        "mse_gt_500",
+        "mse_log",
+        "mean_chisq",
+        "spearman"
+    ]
     vis_training(data_dir, result_dir, names, metrics)
