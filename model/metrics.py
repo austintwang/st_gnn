@@ -126,7 +126,7 @@ def mcc(pred, data, params):
     tn = (~(bin_preds | data.adjs)).float().sum()
     fp = (bin_preds & ~data.adjs).float().sum()
     fn = (~bin_preds & data.adjs).float().sum()
-    # print(tp, tn, fp, fn) ####
+    print(tp.item(), tn.item(), fp.item(), fn.item()) ####
 
     metric = (
         (tp * tn - fp * fn) 
