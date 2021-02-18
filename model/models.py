@@ -148,7 +148,7 @@ class SupNetBin(torch.nn.Module):
         raise NotImplementedError
 
 
-class MixinRGCN(Object):
+class MixinRGCN(object):
     def _get_gnn(self, in_channels, out_channels):
         gnn_layers = torch.nn.ModuleList()
         prev = in_channels
@@ -180,7 +180,7 @@ class MixinRGCN(Object):
         return z
 
 
-class MixinMLP(Object):
+class MixinMLP(object):
     def _get_gnn(self, in_channels, out_channels):
         gnn_layers = torch.nn.ModuleList()
         prev = in_channels
