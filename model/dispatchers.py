@@ -93,37 +93,37 @@ Dispatcher.variant(sb2, "sbt", [test_params])
 
 sgbin50_params = sg_params + [{"adj_thresh": 50}]
 
-sg2bin50 = Dispatcher("sg2bin50", sgbin50_params, loaders.ZhuangBasic, models.SupRCGN, trainers.SupTrainer)
+sg2bin50 = Dispatcher("sg2bin50", sgbin50_params, loaders.ZhuangBasic, models.SupBinRCGN, trainers.SupBinTrainer)
 Dispatcher.variant(sg2bin50, "sgtbin50", [test_params])
 
-sgc2bin50 = Dispatcher("sgc2bin50", sgbin50_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
+sgc2bin50 = Dispatcher("sgc2bin50", sgbin50_params, loaders.ZhuangBasicCellF, models.SupBinRCGN, trainers.SupBinTrainer)
 Dispatcher.variant(sgc2bin50, "sgctbin50", [test_params])
 
-sb2bin50 = Dispatcher("sb2bin50", sgbin50_params, loaders.ZhuangBasicCellF, models.SupMLP, trainers.SupTrainer)
+sb2bin50 = Dispatcher("sb2bin50", sgbin50_params, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
 Dispatcher.variant(sb2bin50, "sbtbin50", [test_params])
 
 
 sgbin100_params = sg_params + [{"adj_thresh": 100}]
 
-sg2bin100 = Dispatcher("sg2bin100", sgbin100_params, loaders.ZhuangBasic, models.SupRCGN, trainers.SupTrainer)
+sg2bin100 = Dispatcher("sg2bin100", sgbin100_params, loaders.ZhuangBasic, models.SupBinRCGN, trainers.SupBinTrainer)
 Dispatcher.variant(sg2bin100, "sgtbin100", [test_params])
 
-sgc2bin100 = Dispatcher("sgc2bin100", sgbin100_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
+sgc2bin100 = Dispatcher("sgc2bin100", sgbin100_params, loaders.ZhuangBasicCellF, models.SupBinRCGN, trainers.SupBinTrainer)
 Dispatcher.variant(sgc2bin100, "sgctbin100", [test_params])
 
-sb2bin100 = Dispatcher("sb2bin100", sgbin100_params, loaders.ZhuangBasicCellF, models.SupMLP, trainers.SupTrainer)
+sb2bin100 = Dispatcher("sb2bin100", sgbin100_params, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
 Dispatcher.variant(sb2bin100, "sbtbin100", [test_params])
 
 
 sgbin500_params = sg_params + [{"adj_thresh": 500}]
 
-sg2bin500 = Dispatcher("sg2bin500", sgbin500_params, loaders.ZhuangBasic, models.SupRCGN, trainers.SupTrainer)
+sg2bin500 = Dispatcher("sg2bin500", sgbin500_params, loaders.ZhuangBasic, models.SupBinRCGN, trainers.SupBinTrainer)
 Dispatcher.variant(sg2bin500, "sgtbin500", [test_params])
 
-sgc2bin500 = Dispatcher("sgc2bin500", sgbin500_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
+sgc2bin500 = Dispatcher("sgc2bin500", sgbin500_params, loaders.ZhuangBasicCellF, models.SupBinRCGN, trainers.SupBinTrainer)
 Dispatcher.variant(sgc2bin500, "sgctbin500", [test_params])
 
-sb2bin500 = Dispatcher("sb2bin500", sgbin500_params, loaders.ZhuangBasicCellF, models.SupMLP, trainers.SupTrainer)
+sb2bin500 = Dispatcher("sb2bin500", sgbin500_params, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
 Dispatcher.variant(sb2bin500, "sbtbin500", [test_params])
 
 # lt_params = sg_params + [test_params, {"saint_num_steps": {"train": 5, "val": 1}, "saint_sample_coverage": 500,}]

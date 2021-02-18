@@ -212,17 +212,17 @@ class MixinMLP(object):
         return z
 
 
-class SupRCGN(SupNet, MixinRGCN):
+class SupRCGN(MixinRGCN, SupNet):
     pass
 
 
-class SupMLP(SupNet, MixinMLP):
+class SupMLP(MixinMLP, SupNet):
     pass
 
 
-class SupBinRCGN(SupNetBin, MixinRGCN):
+class SupBinRCGN(MixinRGCN, SupNetBin):
     pass
 
 
-class SupBinMLP(SupNetBin, MixinMLP):
+class SupBinMLP(MixinMLP, SupNetBin):
     pass
