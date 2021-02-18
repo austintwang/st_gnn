@@ -25,6 +25,8 @@ def plot_training(df, metric, result_dir, max_epochs):
     sns.set()
     sns.lineplot(data=df, x="epoch", y=metric, hue="name")
     plt.title(f"Validation {metric}")
+    if max_epochs is not None:
+        plt.xlim(max=max_epochs)
     plt.savefig(os.path.join(result_dir, f"{metric}_val.svg"), bbox_inches='tight')
     plt.clf()
 
