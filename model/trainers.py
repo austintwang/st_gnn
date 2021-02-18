@@ -97,7 +97,6 @@ class Trainer(object):
         t_iter = tqdm.tqdm(batches, desc="\tLoss: ------", ncols=150)
 
         for data in t_iter:
-            print(data.node_norm) ####
             data.to(self.device)
             self._calc_obs(data)
             pred = self.model(data)
