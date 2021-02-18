@@ -28,7 +28,7 @@ def plot_training(df, metric, result_dir, constraints, max_epochs):
     if max_epochs is not None:
         plt.xlim(right=max_epochs)
     if metric in constraints:
-        plt.ylim(**constraints)
+        plt.ylim(**constraints[metric])
     plt.savefig(os.path.join(result_dir, f"{metric}_val.svg"), bbox_inches='tight')
     plt.clf()
 
