@@ -228,15 +228,15 @@ class SupBinTrainer(Trainer):
 
     def _loss_fn(self, pred, data):
         logits = pred["logits"]
-        lflat = logits.view(-1, 1)
-        print((logits >= 0).float().mean()) ####
+        lflat = logits..contiguous().view(-1, 1)
+        # print((logits >= 0).float().mean()) ####
 
-        dflat = data.adjs.float().view(-1, 1)
+        dflat = data.adjs.float()..contiguous().view(-1, 1)
         pweight = ((1 - data.padj) / data.padj).clamp(max=1e5)
-        print(pweight) ####
+        # print(pweight) ####
 
         w = data.node_norm[data.cell_mask].sqrt()
-        weights = torch.outer(w, w).view(-1, 1)
+        weights = torch.outer(w, w).contiguous().view(-1, 1)
 
         loss = F.binary_cross_entropy_with_logits(lflat, dflat, pos_weight=pweight, weight=weights)
 
