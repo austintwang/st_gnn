@@ -36,8 +36,6 @@ class GraphSAINTSamplerFixed(GraphSAINTRandomWalkSampler):
                     edge_count[edge_idx] += 1
                     total_sampled_nodes += node_idx.size(0)
 
-                    true_num_samples += 1 ####
-
                     if self.log:  # pragma: no cover
                         pbar.update(node_idx.size(0))
             num_samples += self.num_steps
@@ -197,7 +195,7 @@ class ZhuangBasic(SaintRWLoader):
         }
 
         return data, maps, node_in_channels
-        
+
 
 class ZhuangBasicCellF(ZhuangBasic):
     def _build_graph(self, in_data, partition):
