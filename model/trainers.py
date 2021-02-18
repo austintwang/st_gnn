@@ -233,6 +233,7 @@ class SupBinTrainer(Trainer):
         pweight = ((1 - data.padj) / data.padj).clamp(max=1e5)
 
         w = data.node_norm[data.cell_mask].view(-1)
+        print(w) ####
 
         loss = F.binary_cross_entropy_with_logits(lflat, dflat, pos_weight=pweight)
 
