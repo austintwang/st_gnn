@@ -30,7 +30,7 @@ def plot_training(df, metric, result_dir, max_epochs):
     plt.savefig(os.path.join(result_dir, f"{metric}_val.svg"), bbox_inches='tight')
     plt.clf()
 
-def vis_training(data_dir, result_dir, names, metrics, max_epochs=0):
+def vis_training(data_dir, result_dir, names, metrics, max_epochs=None):
     df = load_data(data_dir, names)
     os.makedirs(result_dir, exist_ok=True)
     for metric in metrics:
