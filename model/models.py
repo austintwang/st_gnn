@@ -220,9 +220,9 @@ class SupMLP(SupNet, MixinMLP):
     pass
 
 
-class SupBinRCGN(SupBinNet, MixinRGCN):
+class SupBinRCGN(SupNetBin, MixinRGCN):
     pass
 
 
-class SupBinMLP(SupBinNet, MixinMLP):
+class SupBinMLP(SupNetBin, MixinMLP):
     pass
