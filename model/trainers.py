@@ -243,7 +243,7 @@ class SupBinTrainer(Trainer):
         out_metrics = {
             "acc": metrics.acc(pred, data, self.params),
             "f1": metrics.f1(pred, data, self.params),
-            "mcc": metrics.mean_std(pred, data, self.params),
+            "mcc": metrics.mcc(pred, data, self.params),
         }
         return out_metrics
 
