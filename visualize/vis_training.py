@@ -65,4 +65,4 @@ if __name__ == '__main__':
         "loss": {"upper": 2000},
         "gaussian_nll": {"upper": 0.2}
     }
-    vis_training(data_dir, result_dir, names, metrics, max_epochs=400)
+    vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=400)
