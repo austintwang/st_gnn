@@ -110,7 +110,7 @@ def f1(pred, data, params):
     bin_preds = (logits >= 0)
 
     tp = (bin_preds & data.adjs).float().sum()
-    tn = ~(bin_preds | data.adjs).float().sum()
+    tn = (~(bin_preds | data.adjs)).float().sum()
     fn = (~bin_preds & data.adjs).float().sum()
 
     metric = tp / (tp + (fp + fn) / 2)
@@ -123,7 +123,7 @@ def mcc(pred, data, params):
     bin_preds = (logits >= 0)
 
     tp = (bin_preds & data.adjs).float().sum()
-    tn = ~(bin_preds | data.adjs).float().sum()
+    tn = (~(bin_preds | data.adjs)).float().sum()
     fp = (bin_preds & ~data.adjs).float().sum()
     fn = (~bin_preds & data.adjs).float().sum()
 
