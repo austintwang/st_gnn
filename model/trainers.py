@@ -224,7 +224,7 @@ class SupBinTrainer(Trainer):
         dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).sqrt()
         data.adjs = (dists <= self.params["adj_thresh"])
         data.padj = data.adjs.float().mean()
-        print(data.padj) ####
+        # print(data.padj) ####
 
     def _loss_fn(self, pred, data):
         logits = pred["logits"]

@@ -121,7 +121,7 @@ def f1(pred, data, params):
 def mcc(pred, data, params):
     logits = pred["logits"]
     bin_preds = (logits >= 0)
-    print(bin_preds.float.mean()) ####
+    print(bin_preds.float().mean()) ####
 
     tp = (bin_preds & data.adjs).float().sum()
     tn = (~(bin_preds | data.adjs)).float().sum()
