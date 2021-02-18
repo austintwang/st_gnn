@@ -83,7 +83,7 @@ if __name__ == '__main__':
         ("sb2bin50", "0001"),
     ]
     result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup_bin50/training"
-    vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=400)
+    vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=200)
 
     names = [
         ("sg2bin100", "0000"), 
@@ -91,7 +91,7 @@ if __name__ == '__main__':
         ("sb2bin100", "0001"),
     ]
     result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup_bin100/training"
-    vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=400)
+    vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=200)
 
     names = [
         ("sg2bin500", "0000"), 
@@ -99,4 +99,4 @@ if __name__ == '__main__':
         ("sb2bin500", "0000")
     ]
     result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup_bin500/training"
-    vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=400)
+    vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=200)
