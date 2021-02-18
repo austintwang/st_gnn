@@ -92,3 +92,44 @@ def spearman(pred, data, params):
     rs = 1.0 - (upper / down)
 
     return torch.mean(rs).item()
+
+@torch.no_grad()
+def acc(pred, data, params):
+    logits = pred["logits"]
+    bin_preds = (logits >= 0)
+
+    acc = (bin_preds == data.adjs)
+
+    metric = acc.float().mean()
+
+    return metric.item()
+
+@torch.no_grad()
+def f1(pred, data, params):
+    logits = pred["logits"]
+    bin_preds = (logits >= 0)
+
+    tp = (bin_preds & data.adjs).float().sum()
+    tn = ~(bin_preds | data.adjs).float().sum()
+    fn = (~bin_preds & data.adjs).float().sum()
+
+    metric = tp / (tp + (fp + fn) / 2)
+
+    return metric.item()
+
+@torch.no_grad()
+def mcc(pred, data, params):
+    logits = pred["logits"]
+    bin_preds = (logits >= 0)
+
+    tp = (bin_preds & data.adjs).float().sum()
+    tn = ~(bin_preds | data.adjs).float().sum()
+    fp = (bin_preds & ~data.adjs).float().sum()
+    fn = (~bin_preds & data.adjs).float().sum()
+
+    metric = (
+        (tp * tn - fp * fn) 
+        / torch.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))
+    )
+
+    return metric.item()

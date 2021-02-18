@@ -4,6 +4,7 @@ import time
 import pickle
 import numpy as np
 import torch
+import torch.nn.functional as F
 import tqdm
 import model.models as models
 import model.loaders as loaders
@@ -214,5 +215,36 @@ class SupTrainer(Trainer):
         return out_metrics
 
 
+class SupBinTrainer(Trainer):
+    def _calc_obs(self, data):
+        min_dist = self.params["min_dist"]
+        l = (data.pos[data.cell_mask])
+        num_cells = l.shape[0]
+        rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
+        ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
+        dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).sqrt()
+        data.adjs = (dists <= self.params["adj_thresh"])
+        data.padj = data.adjs.mean()
+
+    def _loss_fn(self, pred, data):
+        logits = pred["logits"]
+        lflat = logits.view(-1, 1)
+
+        dflat = data.adjs.float().view(-1, 1)
+        pweight = ((1 - data.padj) / data.padj).clamp(max=1e5)
+
+        w = data.node_norm[data.cell_mask].view(-1)
+
+        loss = F.binary_cross_entropy_with_logits(lflat, dflat, pos_weight=pweight)
+
+        return loss
+
+    def _calc_metrics_val(self, pred, data):
+        out_metrics = {
+            "acc": metrics.acc(pred, data, self.params),
+            "f1": metrics.f1(pred, data, self.params),
+            "mcc": metrics.mean_std(pred, data, self.params),
+        }
+        return out_metrics
 
 

@@ -100,7 +100,55 @@ class SupNet(torch.nn.Module):
         raise NotImplementedError
 
 
-class SupRCGN(SupNet):
+class SupNetBin(torch.nn.Module):
+    def __init__(self, in_channels, **kwargs):
+        super().__init__()
+
+        self.params = kwargs
+        gnn_layers_out_chnls = self.params["gnn_layers_out_chnls"]
+        dist_layers_out_chnls = self.params["dist_layers_out_chnls"]
+        self.dropout_prop = self.params["dropout_prop"]
+
+        self.gnn_layers = self._get_gnn(in_channels, gnn_layers_out_chnls)
+        self.batch_norm_layers = torch.nn.ModuleList(torch.nn.BatchNorm1d(o) for o in gnn_layers_out_chnls)
+
+        emb_dim = sum(gnn_layers_out_chnls) * 2
+        self.dist_layers = torch.nn.ModuleList()
+        prev = emb_dim
+        for i in dist_layers_out_chnls:
+            self.dist_layers.append(
+                torch.nn.Conv2d(in_channels=prev, out_channels=i, kernel_size=1)
+            )
+            prev = i
+        self.final_dist_layer = torch.nn.Conv2d(in_channels=prev, out_channels=1, kernel_size=1)
+
+    def _get_gnn(self, in_channels, out_channels):
+        raise NotImplementedError
+
+    def forward(self, data):
+        z = self._gnn_fwd(data)
+        num_cells = z.shape[0]
+
+        rtile = z.unsqueeze(0).expand(num_cells, -1, -1)
+        ctile = z.unsqueeze(1).expand(-1, num_cells, -1)
+        pairs = torch.cat((rtile, ctile), dim=2)
+        pairs.unsqueeze_(0)
+
+        prev = pairs.permute(0, 3, 1, 2)
+        for i in self.dist_layers:
+            h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
+            prev = h
+        dists = self.final_dist_layer(prev)
+        # print(dists.shape) ####
+        dists = dists.permute(0, 2, 3, 1).squeeze_(dim=0)
+
+        return {"logits": dists}
+
+    def _gnn_fwd(self, data):
+        raise NotImplementedError
+
+
+class MixinRGCN(Object):
     def _get_gnn(self, in_channels, out_channels):
         gnn_layers = torch.nn.ModuleList()
         prev = in_channels
@@ -118,8 +166,6 @@ class SupRCGN(SupNet):
         edge_weight = data.edge_norm * data.edge_attr
         edge_type = data.edge_type
         cell_mask = data.cell_mask
-        # print(data.edge_norm.dtype, data.edge_attr.dtype) ####
-        # print(torch.sum(edge_weight.isnan())) ####
 
         embs = []
         prev = x
@@ -130,12 +176,11 @@ class SupRCGN(SupNet):
             prev = h
 
         z = torch.cat(embs, dim=1)[cell_mask]
-        # print(torch.sum(z.isnan())) ####
-        # print(embs[0]) ####
 
         return z
 
-class SupMLP(SupNet):
+
+class MixinMLP(Object):
     def _get_gnn(self, in_channels, out_channels):
         gnn_layers = torch.nn.ModuleList()
         prev = in_channels
@@ -165,3 +210,19 @@ class SupMLP(SupNet):
         z = torch.cat(embs, dim=1)
 
         return z
+
+
+class SupRCGN(SupNet, MixinRGCN):
+    pass
+
+
+class SupMLP(SupNet, MixinMLP):
+    pass
+
+
+class SupBinRCGN(SupBinNet, MixinRGCN):
+    pass
+
+
+class SupBinMLP(SupBinNet, MixinMLP):
+    pass
