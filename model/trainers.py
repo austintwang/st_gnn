@@ -231,7 +231,7 @@ class SupBinTrainer(Trainer):
         lflat = logits.contiguous().view(-1, 1)
         # print((logits >= 0).float().mean()) ####
 
-        dflat = data.adjs.float()..contiguous().view(-1, 1)
+        dflat = data.adjs.float().contiguous().view(-1, 1)
         pweight = ((1 - data.padj) / data.padj).clamp(max=1e5)
         # print(pweight) ####
 
