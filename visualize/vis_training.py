@@ -21,20 +21,22 @@ def load_data(data_dir, names):
     data_df = pd.DataFrame.from_records(data)
     return data_df
 
-def plot_training(df, metric, result_dir, max_epochs):
+def plot_training(df, metric, result_dir, constraints, max_epochs):
     sns.set()
     sns.lineplot(data=df, x="epoch", y=metric, hue="name")
     plt.title(f"Validation {metric}")
     if max_epochs is not None:
         plt.xlim(right=max_epochs)
+    if metric in constraints:
+        plt.ylim(**constraints)
     plt.savefig(os.path.join(result_dir, f"{metric}_val.svg"), bbox_inches='tight')
     plt.clf()
 
-def vis_training(data_dir, result_dir, names, metrics, max_epochs=None):
+def vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=None):
     df = load_data(data_dir, names)
     os.makedirs(result_dir, exist_ok=True)
     for metric in metrics:
-        plot_training(df, metric, result_dir, max_epochs)
+        plot_training(df, metric, result_dir, constraints, max_epochs)
 
 if __name__ == '__main__':
     data_dir = "/dfs/user/atwang/data/analyses/st_gnn"
@@ -59,4 +61,8 @@ if __name__ == '__main__':
         "mean_chisq",
         "spearman"
     ]
-    vis_training(data_dir, result_dir, names, metrics)
+    constraints = {
+        "loss": {"upper": 2000},
+        "gaussian_nll": {"upper": 0.2}
+    }
+    vis_training(data_dir, result_dir, names, metrics, max_epochs=400)
