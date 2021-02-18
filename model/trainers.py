@@ -229,11 +229,11 @@ class SupBinTrainer(Trainer):
     def _loss_fn(self, pred, data):
         logits = pred["logits"]
         lflat = logits.view(-1, 1)
-        # print(lflat) ####
+        print((logits >= 0).float().mean()) ####
 
         dflat = data.adjs.float().view(-1, 1)
         pweight = ((1 - data.padj) / data.padj).clamp(max=1e5)
-        # print(pweight) ####
+        print(pweight) ####
 
         w = data.node_norm[data.cell_mask].sqrt()
         weights = torch.outer(w, w).view(-1, 1)
