@@ -65,4 +65,26 @@ if __name__ == '__main__':
         "loss": {"top": 2000},
         "gaussian_nll": {"top": 0.2}
     }
+    # vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=400)
+
+
+    names = [
+        ("sg2bin50", "0002"), 
+        ("sgc2bin50", "0002"), 
+        ("sb2bin50", "0002"),
+        ("sg2bin100", "0001"), 
+        ("sgc2bin100", "0001"), 
+        ("sb2bin100", "0002"),
+        ("sg2bin500", "0001"), 
+        ("sgc2bin500", "0001"), 
+        ("sb2bin500", "0001")
+    ]
+    metrics = [
+        "loss", 
+        "acc", 
+        "f1", 
+        "mcc", 
+    ]
+    constraints = {
+    }
     vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=400)
