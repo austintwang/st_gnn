@@ -62,7 +62,7 @@ if __name__ == '__main__':
         "spearman"
     ]
     constraints = {
-        "loss": {"upper": 2000},
-        "gaussian_nll": {"upper": 0.2}
+        "loss": {"top": 2000},
+        "gaussian_nll": {"top": 0.2}
     }
     vis_training(data_dir, result_dir, names, metrics, constraints, max_epochs=400)
