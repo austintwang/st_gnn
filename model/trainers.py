@@ -228,7 +228,7 @@ class SupBinTrainer(Trainer):
 
     def _loss_fn(self, pred, data):
         logits = pred["logits"]
-        lflat = logits..contiguous().view(-1, 1)
+        lflat = logits.contiguous().view(-1, 1)
         # print((logits >= 0).float().mean()) ####
 
         dflat = data.adjs.float()..contiguous().view(-1, 1)
