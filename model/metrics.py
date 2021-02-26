@@ -122,8 +122,8 @@ def spearman_l(pred, data, params):
     return torch.mean(rs).item()
 
 def _trilaterate3D(rad, pos):
-    # print(rad) ####
-    # print(pos) ####
+    print(rad) ####
+    print(pos) ####
     p1 = pos[0,:]
     p2 = pos[1,:]
     p3 = pos[2,:]
@@ -167,7 +167,7 @@ def tril_cons(pred, data, params, num_trials=20):
         rad = pdists[:,sel]
         pos = locs[sel,:]
         pred = _trilaterate3D_v(rad, pos)
-        print(pred) ####
+        # print(pred) ####
         preds.append(pred)
 
     preds = np.nan_to_num(np.array(preds))
