@@ -130,7 +130,7 @@ class Trainer(object):
                 f.write(f"{self.best_model_epoch:04}\n")
 
     def run(self):
-        torch.autograd.set_detect_anomaly(True) ####
+        # torch.autograd.set_detect_anomaly(True) ####
         val_epoch_loss_hist = []
         self.time_ref = time.time()
         try:

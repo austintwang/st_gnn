@@ -221,18 +221,19 @@ class SupNetLR(torch.nn.Module):
         raise NotImplementedError
 
     def forward(self, data):
-        z = self._gnn_fwd(data)
-        num_cells = z.shape[0]
+        with torch.autograd.set_detect_anomaly(True):
+            z = self._gnn_fwd(data)
+            num_cells = z.shape[0]
 
-        prev = z
-        for i in self.dist_layers:
-            h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
-            prev = h
-        coords = self.final_dist_layer(prev)
+            prev = z
+            for i in self.dist_layers:
+                h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
+                prev = h
+            coords = self.final_dist_layer(prev)
 
-        rtile = coords.unsqueeze(0).expand(num_cells, -1, -1)
-        ctile = coords.unsqueeze(1).expand(-1, num_cells, -1)
-        dists = ((rtile - ctile)**2).sum(dim=2).sqrt()
+            rtile = coords.unsqueeze(0).expand(num_cells, -1, -1)
+            ctile = coords.unsqueeze(1).expand(-1, num_cells, -1)
+            dists = ((rtile - ctile)**2).sum(dim=2).sqrt()
 
         # print(coords) ####
 
