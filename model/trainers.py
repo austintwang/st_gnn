@@ -65,9 +65,9 @@ class Trainer(object):
             self._calc_obs(data)
             with torch.autograd.set_detect_anomaly(True):
                 pred = self.model(data)
-            loss = self._loss_fn(pred, data)
+                loss = self._loss_fn(pred, data)
 
-            loss.backward()  
+                loss.backward()  
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=self.clip_norm)
 
             # print(self.model.final_dist_layer.weight.grad) ####
