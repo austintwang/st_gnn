@@ -169,8 +169,8 @@ def tril_cons(pred, data, params, num_trials=20):
         pred = _trilaterate3D_v(rad, pos)
         preds.append(pred)
 
-    preds = np.array(preds)
-    preds -= np.mean(preds, axis=0, keep_dims=True)
+    preds = np.nan_to_num(np.array(preds))
+    preds -= np.mean(preds, axis=0, keepdims=True)
 
     mnorms = (preds**2).sum(axis=2).sqrt().mean()
 
