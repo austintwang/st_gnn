@@ -235,7 +235,7 @@ class SupNetLR(torch.nn.Module):
         diffs = rtile - ctile
         diffs_sq = diffs**2
         dists_sq = diffs_sq.sum(dim=2)
-        dists = dists.sqrt()
+        dists = dists_sq.sqrt()
 
         # print(coords) ####
 
