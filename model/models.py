@@ -234,7 +234,7 @@ class SupNetLR(torch.nn.Module):
         ctile = coords.unsqueeze(1).expand(-1, num_cells, -1)
         dists = ((rtile - ctile)**2).sum(dim=2).sqrt()
 
-        print(dists) ####
+        print(coords) ####
 
         return {"dists": dists}
 
