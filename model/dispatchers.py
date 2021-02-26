@@ -131,7 +131,7 @@ Dispatcher.variant(sg2bin100, "sgtbin100", [test_params])
 sgc2bin100 = Dispatcher("sgc2bin100", sgbin100_params, loaders.ZhuangBasicCellF, models.SupBinRCGN, trainers.SupBinTrainer)
 Dispatcher.variant(sgc2bin100, "sgctbin100", [test_params])
 
-sb2bin100 = Dispatcher("sb2bin100", sgbin100_paramcs, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
+sb2bin100 = Dispatcher("sb2bin100", sgbin100_params, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
 Dispatcher.variant(sb2bin100, "sbtbin100", [test_params])
 
 
