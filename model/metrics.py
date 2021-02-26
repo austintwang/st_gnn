@@ -172,7 +172,7 @@ def tril_cons(pred, data, params, num_trials=20):
     preds = np.nan_to_num(np.array(preds))
     preds -= np.mean(preds, axis=0, keepdims=True)
 
-    mnorms = (preds**2).sum(axis=2).sqrt().mean()
+    mnorms = np.sqrt((preds**2).sum(axis=2)).mean()
 
     return mnorms
 
