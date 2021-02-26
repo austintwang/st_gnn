@@ -160,7 +160,7 @@ def tril_cons(pred, data, params, num_trials=20):
     locs = data.pos[data.cell_mask].cpu().detach().numpy()
     ncells = locs.shape[0]
     preds = []
-    for _ in num_trials:
+    for _ in len(num_trials):
         sel = np.random.choice(ncells, 4, replace=False)
         rad = pdists[:,sel]
         pos = locs[sel,:]
