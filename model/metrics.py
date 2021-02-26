@@ -122,15 +122,15 @@ def spearman_l(pred, data, params):
     return torch.mean(rs).item()
 
 def _trilaterate3D(rad, pos):
-    p1 = pos[0]
-    p2 = pos[1]
-    p3 = pos[2]
-    p4 = pos[3]
+    p1 = pos[0,:]
+    p2 = pos[1,:]
+    p3 = pos[2,:]
+    p4 = pos[3,:]
 
-    r1 = rad[0,:]
-    r2 = rad[1,:]
-    r3 = rad[2,:]
-    r4 = rad[3,:]
+    r1 = rad[0]
+    r2 = rad[1]
+    r3 = rad[2]
+    r4 = rad[3]
 
     e_x = (p2 - p1) / np.linalg.norm(p2 - p1)
     i = np.dot(e_x, (p3 - p1))
