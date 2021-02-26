@@ -61,11 +61,8 @@ class Trainer(object):
         time_start = time.time() - self.time_ref
 
         for data in t_iter:
-            # print(data.node_norm) ####
-            # print(utils.torch_mem_usage()) ####
             data.to(self.device)
             self._calc_obs(data)
-            # print(utils.torch_mem_usage()) ####
             pred = self.model(data)
             loss = self._loss_fn(pred, data)
 
@@ -179,7 +176,7 @@ class SupTrainer(Trainer):
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
-        data.dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).sqrt()
+        data.dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).sum(dim=2).sqrt()
         data.ldists = data.dists.log()
 
     def _loss_fn(self, pred, data):
@@ -200,16 +197,16 @@ class SupTrainer(Trainer):
 
     def _calc_metrics_val(self, pred, data):
         out_metrics = {
-            "gaussian_nll": metrics.gaussian_nll(pred, data, self.params),
-            "mean_pred_mean": metrics.mean_mean(pred, data, self.params),
-            "mean_pred_std": metrics.mean_std(pred, data, self.params),
-            "mse": metrics.mse(pred, data, self.params),
-            "mse_lt_100": metrics.mse(pred, data, self.params, lbound=100.),
-            "mse_100_500": metrics.mse(pred, data, self.params, lbound=100., ubound=500.),
-            "mse_gt_500": metrics.mse(pred, data, self.params, lbound=500.),
-            "mse_log": metrics.mse_log(pred, data, self.params),
-            "mean_chisq": metrics.mean_chisq(pred, data, self.params),
-            "spearman": metrics.spearman(pred, data, self.params),
+            "gaussian_nll": metrics.gaussian_nll_l(pred, data, self.params),
+            "mean_pred_mean": metrics.mean_mean_l(pred, data, self.params),
+            "mean_pred_std": metrics.mean_std_l(pred, data, self.params),
+            "mse": metrics.mse_l(pred, data, self.params),
+            "mse_lt_100": metrics.mse_l(pred, data, self.params, lbound=100.),
+            "mse_100_500": metrics.mse_l(pred, data, self.params, lbound=100., ubound=500.),
+            "mse_gt_500": metrics.mse_l(pred, data, self.params, lbound=500.),
+            "mse_log": metrics.mse_log_l(pred, data, self.params),
+            "mean_chisq": metrics.mean_chisq_l(pred, data, self.params),
+            "spearman": metrics.spearman_l(pred, data, self.params),
         }
         return out_metrics
 
@@ -221,7 +218,7 @@ class SupBinTrainer(Trainer):
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
-        dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).mean(dim=2).sqrt()
+        dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).sum(dim=2).sqrt()
         data.adjs = (dists <= self.params["adj_thresh"])
         data.padj = data.adjs.float().mean()
         # print(data.padj) ####
@@ -250,4 +247,33 @@ class SupBinTrainer(Trainer):
         }
         return out_metrics
 
+
+class SupMSETrainer(Trainer):
+    def _calc_obs(self, data):
+        min_dist = self.params["min_dist"]
+        l = (data.pos[data.cell_mask])
+        num_cells = l.shape[0]
+        rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
+        ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
+        dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).sum(dim=2).sqrt()
+        data.dists = dists
+
+    def _loss_fn(self, pred, data):
+        pdists = pred["dists"]
+        w = data.node_norm[data.cell_mask].sqrt()
+        loss = torch.sum(w * (pdists - data.dists)**2)
+
+        return loss
+
+    def _calc_metrics_val(self, pred, data):
+        out_metrics = {
+            "mse": metrics.mse(pred, data, self.params),
+            "mse_lt_100": metrics.mse(pred, data, self.params, lbound=100.),
+            "mse_100_500": metrics.mse(pred, data, self.params, lbound=100., ubound=500.),
+            "mse_gt_500_1000": metrics.mse(pred, data, self.params, lbound=500., ubound=1000.),
+            "mse_gt_1000": metrics.mse(pred, data, self.params, lbound=1000.),
+            "spearman": metrics.spearman(pred, data, self.params),
+            "tril_cons": metrics.tril_cons(pred, data, self.params)
+        }
+        return out_metrics
 

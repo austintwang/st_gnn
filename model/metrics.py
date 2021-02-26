@@ -2,7 +2,7 @@ import numpy as np
 import torch
 
 @torch.no_grad()
-def gaussian_nll(pred, data, params):
+def gaussian_nll_l(pred, data, params):
     min_dist = params["min_dist"]
 
     pdists = pred["dists"]
@@ -18,7 +18,7 @@ def gaussian_nll(pred, data, params):
     return metric.item()
 
 @torch.no_grad()
-def mean_mean(pred, data, params):
+def mean_mean_l(pred, data, params):
     pdists = pred["dists"]
     means = pdists[:,:,0]
     mean_mean = torch.mean(means)
@@ -26,7 +26,7 @@ def mean_mean(pred, data, params):
     return mean_mean.item()
 
 @torch.no_grad()
-def mean_std(pred, data, params):
+def mean_std_l(pred, data, params):
     pdists = pred["dists"]
     lvars = pdists[:,:,1]
     std = torch.exp(lvars / 2)
@@ -36,6 +36,17 @@ def mean_std(pred, data, params):
 
 @torch.no_grad()
 def mse(pred, data, params, lbound=0., ubound=np.inf):
+    pdists = pred["dists"]
+
+    idx = (data.dists >= lbound) & (data.dists <= ubound)
+    err = ((pdists - data.dists)**2)[idx]
+
+    metric = torch.mean(err)
+
+    return metric.item()
+
+@torch.no_grad()
+def mse_l(pred, data, params, lbound=0., ubound=np.inf):
     pdists = pred["dists"]
     means = pdists[:,:,0]
     emeans = torch.exp(means)
@@ -57,7 +68,7 @@ def mse_log(pred, data, params):
     return metric.item()
 
 @torch.no_grad()
-def mean_chisq(pred, data, params):
+def mean_chisq_l(pred, data, params):
     pdists = pred["dists"]
     means = pdists[:,:,0]
     lvars = pdists[:,:,1]
@@ -81,6 +92,23 @@ def spearman(pred, data, params):
     device = params["device"]
 
     pdists = pred["dists"]
+
+    x_rank = _get_ranks(pdists, device)
+    y_rank = _get_ranks(data.dists, device)
+
+    n = x_rank.shape[1]
+    upper = 6 * torch.sum((x_rank - y_rank).pow(2), dim=1)
+    down = n * (n ** 2 - 1.0)
+    rs = 1.0 - (upper / down)
+
+    return torch.mean(rs).item()
+
+@torch.no_grad()
+def spearman_l(pred, data, params):
+    min_dist = params["min_dist"]
+    device = params["device"]
+
+    pdists = pred["dists"]
     means = pdists[:,:,0]
 
     x_rank = _get_ranks(means, device)
@@ -92,6 +120,59 @@ def spearman(pred, data, params):
     rs = 1.0 - (upper / down)
 
     return torch.mean(rs).item()
+
+def _trilaterate3D(rad, pos):
+    p1 = pos[0,:]
+    p2 = pos[1,:]
+    p3 = pos[2,:]
+    p4 = pos[3,:]
+
+    r1 = rad[0,:]
+    r2 = rad[1,:]
+    r3 = rad[2,:]
+    r4 = rad[3,:]
+
+    e_x = (p2 - p1) / np.linalg.norm(p2 - p1)
+    i = np.dot(e_x, (p3 - p1))
+    e_y = (p3 - p1 - (i * e_x)) / (np.linalg.norm(p3 - p1 - (i * e_x)))
+    e_z = np.cross(e_x, e_y)
+    d = np.linalg.norm(p2 - p1)
+    j = np.dot(e_y, (p3 - p1))
+    x = (r1**2 - r2**2 + d**2) / (2 * d)
+    y = ((r1**2 - r3**2 + i**2 + j**2 ) / 2 * j) - ((i / j) * x)
+    z1 = np.sqrt(r1**2 - x**2 - y**2)
+    z2 = -z1
+    ans1 = p1 + (x * e_x) + (y * e_y) + (z1 * e_z)
+    ans2 = p1 + (x * e_x) + (y * e_y) + (z2 * e_z)
+    dist1 = np.linalg.norm(p4 - ans1)
+    dist2 = np.linalg.norm(p4 - ans2)
+
+    if np.abs(r4 - dist1) < np.abs(r4 - dist2):
+        return ans1
+    else: 
+        return ans2
+
+_trilaterate3D_v = np.vectorize(excluded=[1])
+
+@torch.no_grad()
+def tril_cons(pred, data, params, num_trials=20):
+    pdists = pred["dists"].cpu().detach().numpy() 
+    locs = data.pos[data.cell_mask].cpu().detach().numpy()
+    ncells = locs.shape[0]
+    preds = []
+    for _ in num_trials:
+        sel = np.random.choice(ncells, 4, replace=False)
+        rad = pdists[:,sel]
+        pos = locs[sel,:]
+        pred = _trilaterate3D_v(rad, pos)
+        preds.append(pred)
+
+    preds = np.array(preds)
+    preds -= np.mean(preds, axis=0, keep_dims=True)
+
+    mnorms = (preds**2).sum(axis=2).sqrt().mean()
+
+    return mnorms
 
 @torch.no_grad()
 def acc(pred, data, params):
