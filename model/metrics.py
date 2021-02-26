@@ -144,6 +144,7 @@ def _trilaterate3D(rad, pos):
     y = ((r1**2 - r3**2 + i**2 + j**2 ) / 2 * j) - ((i / j) * x)
     z1 = np.sqrt(r1**2 - x**2 - y**2)
     z2 = -z1
+    print(x, y, z1) ####
     ans1 = p1 + (x * e_x) + (y * e_y) + (z1 * e_z)
     ans2 = p1 + (x * e_x) + (y * e_y) + (z2 * e_z)
     dist1 = np.linalg.norm(p4 - ans1)
