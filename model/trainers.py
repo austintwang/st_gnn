@@ -68,6 +68,8 @@ class Trainer(object):
 
             loss.backward()  
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=self.clip_norm)
+
+            print(model.parameters())
             self.optimizer.step()
             
             batch_records.setdefault("loss", []).append(loss.item())
