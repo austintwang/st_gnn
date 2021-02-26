@@ -212,10 +212,10 @@ class SupNetLR(torch.nn.Module):
         prev = emb_dim
         for i in dist_layers_out_chnls:
             self.dist_layers.append(
-                torch.nn.Linear(in_channels=prev, out_channels=i)
+                torch.nn.Linear(in_features=prev, out_features=i)
             )
             prev = i
-        self.final_dist_layer = torch.nn.Linear(in_channels=prev, out_channels=3)
+        self.final_dist_layer = torch.nn.Linear(in_features=prev, out_features=3)
 
     def _get_gnn(self, in_channels, out_channels):
         raise NotImplementedError
