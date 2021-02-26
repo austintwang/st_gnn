@@ -122,8 +122,8 @@ def spearman_l(pred, data, params):
     return torch.mean(rs).item()
 
 def _trilaterate3D(rad, pos):
-    print(rad) ####
-    print(pos) ####
+    # print(rad) ####
+    # print(pos) ####
     p1 = pos[0,:]
     p2 = pos[1,:]
     p3 = pos[2,:]
@@ -144,7 +144,7 @@ def _trilaterate3D(rad, pos):
     y = ((r1**2 - r3**2 + i**2 + j**2 ) / 2 * j) - ((i / j) * x)
     z1 = np.sqrt(r1**2 - x**2 - y**2)
     z2 = -z1
-    print(x, y, z1) ####
+    # print(x, y, z1) ####
     ans1 = p1 + (x * e_x) + (y * e_y) + (z1 * e_z)
     ans2 = p1 + (x * e_x) + (y * e_y) + (z2 * e_z)
     dist1 = np.linalg.norm(p4 - ans1)
@@ -158,7 +158,7 @@ def _trilaterate3D(rad, pos):
 _trilaterate3D_v = np.vectorize(_trilaterate3D, excluded=[1], signature="(n)->(m)")
 
 @torch.no_grad()
-def tril_cons(pred, data, params, num_trials=20):
+def tril_cons(pred, data, params, num_trials=5):
     pdists = pred["dists"].cpu().detach().numpy() 
     locs = data.pos[data.cell_mask].cpu().detach().numpy()
     ncells = locs.shape[0]
@@ -171,10 +171,10 @@ def tril_cons(pred, data, params, num_trials=20):
         # print(pred) ####
         preds.append(pred)
 
-    preds = np.nan_to_num(np.array(preds))
-    preds -= np.mean(preds, axis=0, keepdims=True)
+    preds = np.array(preds)
+    preds -= np.nanmean(preds, axis=0, keepdims=True)
 
-    mnorms = np.sqrt((preds**2).sum(axis=2)).mean()
+    mnorms = np.sqrt((preds**2).sum(axis=2)).nanmean()
 
     return mnorms
 
