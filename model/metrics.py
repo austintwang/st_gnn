@@ -167,6 +167,7 @@ def tril_cons(pred, data, params, num_trials=20):
         rad = pdists[:,sel]
         pos = locs[sel,:]
         pred = _trilaterate3D_v(rad, pos)
+        print(pred) ####
         preds.append(pred)
 
     preds = np.nan_to_num(np.array(preds))
