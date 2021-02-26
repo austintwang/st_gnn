@@ -154,7 +154,7 @@ def _trilaterate3D(rad, pos):
     else: 
         return ans2
 
-_trilaterate3D_v = np.vectorize(_trilaterate3D, excluded=[1], signature="(m,n)->(m)")
+_trilaterate3D_v = np.vectorize(_trilaterate3D, excluded=[1], signature="(n)->(m)")
 
 @torch.no_grad()
 def tril_cons(pred, data, params, num_trials=20):
