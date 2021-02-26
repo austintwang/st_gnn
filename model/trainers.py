@@ -261,7 +261,8 @@ class SupMSETrainer(Trainer):
     def _loss_fn(self, pred, data):
         pdists = pred["dists"]
         w = data.node_norm[data.cell_mask].sqrt()
-        loss = torch.sum(w * (pdists - data.dists)**2)
+        weights = torch.outer(w, w).contiguous().view(-1, 1)
+        loss = torch.sum(weights * (pdists - data.dists)**2)
 
         return loss
 
