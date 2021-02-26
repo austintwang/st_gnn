@@ -102,13 +102,15 @@ sb2s = Dispatcher("sb2s", sg_params, loaders.ZhuangBasicCellF, models.SupSMLP, t
 Dispatcher.variant(sb2s, "sbts", [test_params])
 
 
-sg2lr = Dispatcher("sg2lr", sg_params, loaders.ZhuangBasic, models.SupLRRCGN, trainers.SupMSETrainer)
+sglr_params = sg_params + ["grad_clip_norm": 0.1,]
+
+sg2lr = Dispatcher("sg2lr", sglr_params, loaders.ZhuangBasic, models.SupLRRCGN, trainers.SupMSETrainer)
 Dispatcher.variant(sg2lr, "sgtlr", [test_params])
 
-sgc2lr = Dispatcher("sgc2lr", sg_params, loaders.ZhuangBasicCellF, models.SupLRRCGN, trainers.SupMSETrainer)
+sgc2lr = Dispatcher("sgc2lr", sglr_params, loaders.ZhuangBasicCellF, models.SupLRRCGN, trainers.SupMSETrainer)
 Dispatcher.variant(sgc2lr, "sgctlr", [test_params])
 
-sb2lr = Dispatcher("sb2lr", sg_params, loaders.ZhuangBasicCellF, models.SupLRMLP, trainers.SupMSETrainer)
+sb2lr = Dispatcher("sb2lr", sglr_params, loaders.ZhuangBasicCellF, models.SupLRMLP, trainers.SupMSETrainer)
 Dispatcher.variant(sb2lr, "sbtlr", [test_params])
 
 
