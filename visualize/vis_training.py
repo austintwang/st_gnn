@@ -78,7 +78,6 @@ if __name__ == '__main__':
         "mse_100_500",
         "mse_gt_500_1000",
         "mse_gt_1000",
-        "mean_chisq",
         "tril_cons"
     ]
     constraints = {
