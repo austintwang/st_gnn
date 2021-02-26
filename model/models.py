@@ -207,7 +207,7 @@ class SupNetLR(torch.nn.Module):
         self.gnn_layers = self._get_gnn(in_channels, gnn_layers_out_chnls)
         self.batch_norm_layers = torch.nn.ModuleList(torch.nn.BatchNorm1d(o) for o in gnn_layers_out_chnls)
 
-        emb_dim = sum(gnn_layers_out_chnls) * 2
+        emb_dim = sum(gnn_layers_out_chnls)
         self.dist_layers = torch.nn.ModuleList()
         prev = emb_dim
         for i in dist_layers_out_chnls:
