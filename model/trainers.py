@@ -72,6 +72,7 @@ class Trainer(object):
             # print(self.model.final_dist_layer.weight.grad) ####
             # print(self.model.final_dist_layer.bias.grad) ####
             print(pred["dists"].grad) ####
+            # print(loss.grad) ###
             self.optimizer.step()
             
             batch_records.setdefault("loss", []).append(loss.item())
