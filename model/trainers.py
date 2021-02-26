@@ -64,7 +64,8 @@ class Trainer(object):
             data.to(self.device)
             self._calc_obs(data)
             pred = self.model(data)
-            loss = self._loss_fn(pred, data)
+            with torch.autograd.set_detect_anomaly(True):
+                loss = self._loss_fn(pred, data)
 
             loss.backward()  
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=self.clip_norm)
@@ -72,7 +73,7 @@ class Trainer(object):
             # print(self.model.final_dist_layer.weight.grad) ####
             # print(self.model.final_dist_layer.bias.grad) ####
             # print(pred["dists"].grad) ####
-            print(loss.grad) ###
+            # print(loss.grad) ####
             self.optimizer.step()
             
             batch_records.setdefault("loss", []).append(loss.item())
