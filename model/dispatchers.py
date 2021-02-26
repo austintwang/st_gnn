@@ -102,7 +102,7 @@ sb2s = Dispatcher("sb2s", sg_params, loaders.ZhuangBasicCellF, models.SupSMLP, t
 Dispatcher.variant(sb2s, "sbts", [test_params])
 
 
-sglr_params = sg_params + ["grad_clip_norm": 0.1,]
+sglr_params = sg_params + [{"grad_clip_norm": 0.1}]
 
 sg2lr = Dispatcher("sg2lr", sglr_params, loaders.ZhuangBasic, models.SupLRRCGN, trainers.SupMSETrainer)
 Dispatcher.variant(sg2lr, "sgtlr", [test_params])
