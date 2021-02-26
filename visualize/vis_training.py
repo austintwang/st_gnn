@@ -70,6 +70,7 @@ if __name__ == '__main__':
     names = [
         ("sb2s", "0000"), 
     ]
+    result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup_s/training"
     metrics = [
         "loss", 
         "spearman", 
