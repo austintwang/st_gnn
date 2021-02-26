@@ -63,9 +63,9 @@ class Trainer(object):
         for data in t_iter:
             data.to(self.device)
             self._calc_obs(data)
-            pred = self.model(data)
             with torch.autograd.set_detect_anomaly(True):
-                loss = self._loss_fn(pred, data)
+                pred = self.model(data)
+            loss = self._loss_fn(pred, data)
 
             loss.backward()  
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=self.clip_norm)
