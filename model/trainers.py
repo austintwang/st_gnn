@@ -69,7 +69,8 @@ class Trainer(object):
             loss.backward()  
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=self.clip_norm)
 
-            print(dict(self.model.named_parameters()))
+            print(self.model.final_dist_layer.weight.grad) ####
+            print(self.model.final_dist_layer.bias.grad) ####
             self.optimizer.step()
             
             batch_records.setdefault("loss", []).append(loss.item())
