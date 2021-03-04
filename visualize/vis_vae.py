@@ -20,8 +20,8 @@ def load_state(data_dir, name, exp):
 
 	return params, model_state
 
-def load_model(model_cls, params, model_state):
-	m = model_cls(**params)
+def load_model(vae_model_cls, params, model_state):
+	m = vae_model_cls(**params)
 	m.load_state_dict(model_state)
 	return m
 
@@ -44,7 +44,7 @@ def sample_model(loader, vae_model, device):
 def vis_vae(loader_cls, vae_model_cls, dname, name, exp, data_dir):
 	device = dname if dname == "cpu" else f"cuda:{dname}" 
 	params, model_state = load_state(data_dir, name, exp)
-	model = load_model(model_cls, params, model_state)
+	vae_model = load_model(vae_model_cls, params, model_state)
 
 	sample_model(loader, vae_model, device)
 
