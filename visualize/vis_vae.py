@@ -3,6 +3,11 @@ import os
 import pickle
 import numpy as np 
 import torch
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
 import model.models as models
 from model.loaders import Synth3Layer
