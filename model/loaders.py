@@ -257,11 +257,12 @@ class Synth3Layer(ZhuangBasicCellF):
     def _import_data(self):
         cache_path = os.path.join(self.cache_dir, "imports.pickle")
         if self.params.get("clear_cache", False) or not os.path.exists(cache_path):
-            num_pts = self.params["synth_num_points"] * 2
+            num_pts = self.params["synth_num_points"]
+            num_pts_total = num_pts * 2
             num_train = int(self.params["train_prop"] * num_pts)
 
-            x = np.random.uniform(size=(num_pts),)
-            y = np.random.uniform(size=(num_pts),)
+            x = np.random.uniform(size=(num_pts_total),)
+            y = np.random.uniform(size=(num_pts_total),)
             z = np.zeros_like(x)
             coords_arr = np.stack([x, y, z], axis=1)
             coords = {str(ind): i for ind, i in enumerate(coords_arr)}
@@ -274,7 +275,7 @@ class Synth3Layer(ZhuangBasicCellF):
             # obs = np.arange(exp.shape[0])
             anndata = ad.AnnData(X=exp, var=None, obs=None)
 
-            shf = np.random.permutation(num_pts)
+            shf = np.random.permutation(num_pts_total)
             train = set(str(i) for i in shf[:num_train])
             val = set(str(i) for i in shf[num_train:num_pts])
             test = set(str(i) for i in shf[num_pts:])

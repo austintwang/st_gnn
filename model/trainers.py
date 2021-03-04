@@ -103,6 +103,7 @@ class Trainer(object):
             data.to(self.device)
             self._calc_obs(data)
             pred = self.model(data)
+            print(self.model.sample_coords(data)) ####
             loss = self._loss_fn(pred, data)
 
             batch_records.setdefault("loss", []).append(loss.item())
