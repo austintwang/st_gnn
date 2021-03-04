@@ -39,7 +39,7 @@ def sample_model(loader, vae_model, device):
         cell_mask = data.cell_mask.detach().cpu().numpy()
         exp = data.x.detach().cpu().numpy()[cell_mask]
         coords_true = data.pos.detach().cpu().numpy()[cell_mask]
-        coords_pred = out_coords.detach().cpu().numpy()[cell_mask]
+        coords_pred = out_coords.detach().cpu().numpy()
 
         num_samples = exp.shape[0]
         for ind in range(num_samples):
