@@ -4,7 +4,7 @@ import pickle
 import numpy as np 
 import torch
 
-from model.models import SupCVAE
+import model.models as models
 from model.loaders import Synth3Layer
 
 def load_state(data_dir, name, exp):
@@ -20,8 +20,8 @@ def load_state(data_dir, name, exp):
 
 	return params, model_state
 
-def load_model(vae_model_cls, params, model_state):
-	m = vae_model_cls(**params)
+def load_model(vae_model_cls, loader, components, params, model_state):
+	m = vae_model_cls(loader.node_in_channels, components, **params)
 	m.load_state_dict(model_state)
 	return m
 
@@ -41,10 +41,11 @@ def sample_model(loader, vae_model, device):
 			print(exp[i]) ####
 
 
-def vis_vae(loader_cls, vae_model_cls, dname, name, exp, data_dir):
+def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir):
 	device = dname if dname == "cpu" else f"cuda:{dname}" 
 	params, model_state = load_state(data_dir, name, exp)
-	vae_model = load_model(vae_model_cls, params, model_state)
+	loader = loader_cls(**params)
+	vae_model = load_model(vae_model_cls, loader, components, params, model_state)
 
 	sample_model(loader, vae_model, device)
 
@@ -53,11 +54,18 @@ if __name__ == '__main__':
     result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup/training"
 
     loader_cls = Synth3Layer
-    vae_model_cls = SupCVAE
+    vae_model_cls = models.SupCVAE
+
+    components = {
+	    "emb": models.EmbMLP,
+	    "struct": models.StructCoords,
+	    "struct_enc": models.AuxStructEncMLP,
+	    "exp_dec": models.AuxExpDecMLP,
+	}
 
     dname = sys.argv[1]
 
     name = "vs"
     exp = "0000"
 
-    vis_vae(loader_cls, vae_model_cls, dname, name, exp, data_dir)
+    vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir)
