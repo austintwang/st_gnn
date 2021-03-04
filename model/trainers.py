@@ -300,7 +300,7 @@ class CVAETrainer(Trainer):
             - 1
         ).sum(dim=1)
 
-        print(kl) ####
+        print(std_0, std_1) ####
 
         return kl
 
