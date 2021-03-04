@@ -256,7 +256,8 @@ class Synth3Layer(ZhuangBasicCellF):
             x = np.random.uniform(size=(num_pts),)
             y = np.random.uniform(size=(num_pts),)
             z = np.zeros_like(x)
-            coords = np.stack([x, y, z], axis=1)
+            coords_arr = np.stack([x, y, z], axis=1)
+            coords = {ind: i for ind, i in enumerate(coords_arr)}
 
             type1 = (x < 1/3).astype(float)
             type2 = ((1/3 < x) & (x < 2/3)).astype(float)
