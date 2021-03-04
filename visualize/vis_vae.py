@@ -100,6 +100,6 @@ if __name__ == '__main__':
 
     name = "vs"
 
-    exps = ["0000", "0001", "0005"]
+    exps = ["0001", "0006"]
     for exp in exps:
         vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir)

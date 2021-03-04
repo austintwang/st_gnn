@@ -244,14 +244,14 @@ def _kl(mean_0, std_0, lstd_0, mean_1, std_1, lstd_1):
     return kl
 
 @torch.no_grad()
-def kl_vae_struct(pred, data, params):
+def kl_vae_exp(pred, data, params):
     kl = _kl(pred["emb_mean"], pred["emb_std"], pred["emb_lstd"], 1., 1., 0.)
     metric = kl.mean()
 
     return metric.item()
 
 @torch.no_grad()
-def kl_vae_exp(pred, data, params):
+def kl_vae_struct(pred, data, params):
     kl = _kl(pred["aux_enc_mean"], pred["aux_enc_std"], pred["aux_enc_lstd"], pred["emb_mean"], pred["emb_std"], pred["emb_lstd"])
     metric = kl.mean()
     
