@@ -51,8 +51,8 @@ if __name__ == '__main__':
     data_dir = "/dfs/user/atwang/data/analyses/st_gnn"
     result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup/training"
 
-    loader = Synth3Layer
-    vae_model = SupCVAE
+    loader_cls = Synth3Layer
+    vae_model_cls = SupCVAE
 
     dname = sys.argv[1]
 
