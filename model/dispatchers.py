@@ -162,8 +162,8 @@ vae_train_params = {
     "early_stop_hist_len": 10,
     "dropout_prop": 0.1,
     "grad_clip_norm": 1.,
-    "vae_struct_nll_std": 10.,
-    "vae_exp_nll_std": 0.01,
+    "vae_struct_nll_std": 1.,
+    "vae_exp_nll_std": 10.,
     "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
 }
 
@@ -173,7 +173,7 @@ vae_model_params = {
     "aux_struct_enc_layers_out_chnls": [16, 16],
     "aux_exp_dec_layers_out_chnls": [16, 16],
     "vae_enc_add_chnls": [32],
-    "vae_latent_dim": 4,
+    "vae_latent_dim": 3,
 }
 
 vae_loader_params = {
