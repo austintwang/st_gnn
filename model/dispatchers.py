@@ -189,7 +189,7 @@ synth_saint_params = {
     "saint_num_steps": {"train": 200, "val": 40, "test": 200},
 }
 
-vae_params = [global_params, vae_train_params, vae_model_params, vae_loader_params, synth_params, synth_saint_params]
+vae_params = [global_params, vae_train_params, vae_model_params, vae_loader_params, synth_params, saint_params, synth_saint_params]
 
 vae_components = {
     "emb": models.EmbMLP,
