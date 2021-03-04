@@ -251,7 +251,7 @@ class Synth3Layer(ZhuangBasicCellF):
         cache_path = os.path.join(self.cache_dir, "imports.pickle")
         if self.params.get("clear_cache", False) or not os.path.exists(cache_path):
             num_pts = self.params["synth_num_points"]
-            num_train = int(self.params["train_prop"] * len(m1))
+            num_train = int(self.params["train_prop"] * num_pts)
 
             x = np.random.uniform(size=(num_pts),)
             y = np.random.uniform(size=(num_pts),)
