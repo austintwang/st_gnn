@@ -296,6 +296,13 @@ class CVAETrainer(Trainer):
         data.cell_pos = data.pos[data.cell_mask]
         data.cell_exp = data.x[data.cell_mask]
 
+        l = (data.pos[data.cell_mask])
+        num_cells = l.shape[0]
+        rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
+        ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
+        dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).sum(dim=2).sqrt()
+        data.dists = dists
+
     @staticmethod
     def _kl(mean_0, std_0, lstd_0, mean_1, std_1, lstd_1):
         kl = (
@@ -324,7 +331,15 @@ class CVAETrainer(Trainer):
 
     def _val_extras(self, pred, data):
         samples = self.model.sample_coords(data)
-        pred["coords_from_struct"] = samples["coords"]
+        l = samples["coords"]
+
+        num_cells = l.shape[0]
+        rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
+        ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
+        dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).sum(dim=2).sqrt()
+
+        pred["coords_from_struct"] = l
+        pred["dists"] = dists
 
     def _calc_metrics_val(self, pred, data):
         out_metrics = {
@@ -332,6 +347,12 @@ class CVAETrainer(Trainer):
             "nll_vae_exp": metrics.nll_vae_exp(pred, data, self.params),
             "kl_vae_struct": metrics.kl_vae_struct(pred, data, self.params),
             "kl_vae_exp": metrics.kl_vae_exp(pred, data, self.params),
+            "mse": metrics.mse(pred, data, self.params),
+            "mse_lt_100": metrics.mse(pred, data, self.params, lbound=100.),
+            "mse_100_500": metrics.mse(pred, data, self.params, lbound=100., ubound=500.),
+            "mse_500_1000": metrics.mse(pred, data, self.params, lbound=500., ubound=1000.),
+            "mse_gt_1000": metrics.mse(pred, data, self.params, lbound=1000.),
+            "spearman": metrics.spearman(pred, data, self.params),
         }
         return out_metrics
 
