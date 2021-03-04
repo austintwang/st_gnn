@@ -12,6 +12,7 @@ def load_state(data_dir, name, exp):
 	params_path = os.path.join(target_dir, "params.pickle")
 	with open(params_path, "rb") as f:
 		params = pickle.load(f)
+	params["clear_cache"] = False
 	best_path = os.path.join(target_dir, "best_model_epoch.txt")
 	with open(best_path, "r") as f:
 		best_epoch = f.read().strip()
@@ -26,6 +27,7 @@ def load_model(vae_model_cls, loader, components, params, model_state):
 	return m
 
 def sample_model(loader, vae_model, device):
+	vae_model.to(device)
 	for data in loader.test_sampler:
 		data.to(device)
 		num_samples = data.x.shape[0]
