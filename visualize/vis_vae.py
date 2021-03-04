@@ -40,7 +40,7 @@ def sample_model(loader, vae_model, device):
 		coords_pred = out_coords.detach().cpu().numpy()
 		num_samples = exp.shape[0]
 		for ind in range(num_samples):
-			print(exp[i]) ####
+			print(exp[ind]) ####
 
 
 def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir):
