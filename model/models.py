@@ -619,6 +619,7 @@ class SupCVAE(torch.nn.Module):
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
         dist = self.emb_add_final_layer(prev)
+        print(dist) ####
         emb_mean = dist[:self.vae_latent_dim]
         emb_lstd = dist[self.vae_latent_dim:]
         emb_std = torch.exp(emb_lstd)
