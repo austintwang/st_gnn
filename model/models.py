@@ -535,14 +535,14 @@ class AuxExpDecMLP(torch.nn.Module):
             )
             prev = i
 
-        self.final_dec_layer = torch.nn.Linear(in_features=prev, out_features=out_channels)
+        self.final_layer = torch.nn.Linear(in_features=prev, out_features=out_channels)
 
     def forward(self, z):
         prev = z
         for i in self.dec_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
-        exp = self.final_dist_layer(prev)
+        exp = self.final_layer(prev)
 
         return {"exp": exp}
 
@@ -563,14 +563,14 @@ class AuxStructEncMLP(torch.nn.Module):
             )
             prev = i
 
-        self.final_dec_layer = torch.nn.Linear(in_features=prev, out_features=3)
+        self.final_layer = torch.nn.Linear(in_features=prev, out_features=3)
 
     def forward(self, z):
         prev = z
         for i in self.enc_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
-        coords = self.final_dec_layer(prev)
+        coords = self.final_layer(prev)
 
         return {"coords": coords}
 
