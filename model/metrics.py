@@ -221,13 +221,15 @@ def mcc(pred, data, params):
 
 @torch.no_grad()
 def nll_vae_struct(pred, data, params):
-    metric = ((pred["coords"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_struct_nll_std"] / 2
+    nll = ((pred["coords"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_struct_nll_std"] / 2
+    metric = nll.mean()
 
     return metric.item()
 
 @torch.no_grad()
 def nll_vae_exp(pred, data, params):
-    metric = ((pred["exp"] - data.cell_exp)**2).sum(dim=1) / self.params["vae_exp_nll_std"] / 2
+    nll = ((pred["exp"] - data.cell_exp)**2).sum(dim=1) / self.params["vae_exp_nll_std"] / 2
+    metric = nll.mean()
 
     return metric.item()
 
@@ -243,12 +245,14 @@ def _kl(mean_0, std_0, lstd_0, mean_1, std_1, lstd_1):
 
 @torch.no_grad()
 def kl_vae_struct(pred, data, params):
-    metric = _kl(pred["emb_mean"], pred["emb_std"], pred["emb_lstd"], 1., 1., 0.)
+    kl = _kl(pred["emb_mean"], pred["emb_std"], pred["emb_lstd"], 1., 1., 0.)
+    metric = kl.mean()
 
     return metric.item()
 
 @torch.no_grad()
 def kl_vae_exp(pred, data, params):
-    metric = _kl(pred["aux_enc_mean"], pred["aux_enc_std"], pred["aux_enc_lstd"], pred["emb_mean"], pred["emb_std"], pred["emb_lstd"])
+    kl = _kl(pred["aux_enc_mean"], pred["aux_enc_std"], pred["aux_enc_lstd"], pred["emb_mean"], pred["emb_std"], pred["emb_lstd"])
+    metric = kl.mean()
     
     return metric.item()

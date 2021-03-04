@@ -299,7 +299,7 @@ class CVAETrainer(Trainer):
             - lstd_0 
             - 1
         ).sum(dim=1)
-        
+
         return kl
 
     def _loss_fn(self, pred, data):
@@ -317,13 +317,10 @@ class CVAETrainer(Trainer):
 
     def _calc_metrics_val(self, pred, data):
         out_metrics = {
-            "mse": metrics.mse(pred, data, self.params),
-            "mse_lt_100": metrics.mse(pred, data, self.params, lbound=100.),
-            "mse_100_500": metrics.mse(pred, data, self.params, lbound=100., ubound=500.),
-            "mse_500_1000": metrics.mse(pred, data, self.params, lbound=500., ubound=1000.),
-            "mse_gt_1000": metrics.mse(pred, data, self.params, lbound=1000.),
-            "spearman": metrics.spearman(pred, data, self.params),
-            "tril_cons": metrics.tril_cons(pred, data, self.params)
+            "nll_vae_struct": metrics.nll_vae_struct(pred, data, self.params),
+            "nll_vae_exp": metrics.nll_vae_exp(pred, data, self.params),
+            "kl_vae_struct": metrics.kl_vae_struct(pred, data, self.params),
+            "kl_vae_exp": metrics.kl_vae_exp(pred, data, self.params),
         }
         return out_metrics
 
