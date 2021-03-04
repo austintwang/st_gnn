@@ -211,6 +211,7 @@ class ZhuangBasicCellF(ZhuangBasic):
         cell_to_node = {val: ind + num_genes for ind, val in enumerate(cells)}
         num_cells = len(cells)
         coords = torch.tensor([st_coords[i] for i in cells])
+        print(coords) ####
         coords_dims = coords.shape[1]
         coords_pad = torch.cat((torch.full((num_genes, coords_dims), np.nan), coords), 0)
         cell_mask = torch.cat((torch.full((num_genes,), False), torch.full((num_cells,), True)), 0)
@@ -272,7 +273,7 @@ class Synth3Layer(ZhuangBasicCellF):
             val = set(shf[num_train:])
             test = set()
 
-            print(coords) ####
+            # print(coords) ####
             in_data = (anndata, coords)
             partitions = (train, val, test)
 
