@@ -88,7 +88,6 @@ def _get_ranks(x, device):
 
 @torch.no_grad()
 def spearman(pred, data, params):
-    min_dist = params["min_dist"]
     device = params["device"]
 
     pdists = pred["dists"]
@@ -105,7 +104,6 @@ def spearman(pred, data, params):
 
 @torch.no_grad()
 def spearman_l(pred, data, params):
-    min_dist = params["min_dist"]
     device = params["device"]
 
     pdists = pred["dists"]
