@@ -607,7 +607,7 @@ class SupCVAE(torch.nn.Module):
         self.aux_exp_dec = components["exp_dec"](vae_latent_dim, in_channels, **self.params)
 
     def _sample_sn(self, size):
-        return torch.normal(1, 1, size=size).to(self.device)
+        return torch.randn(size, device=self.device, requires_grad=True)
 
     def _sample_sn_like(self, tensor):
         return self._sample_sn(tensor.shape)
