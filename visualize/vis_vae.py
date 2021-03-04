@@ -27,6 +27,8 @@ def load_model(vae_model_cls, loader, components, params, model_state):
 	return m
 
 def sample_model(loader, vae_model, device):
+	data_lst = []
+
 	vae_model.to(device)
 	for data in loader.test_sampler:
 		data.to(device)
@@ -35,25 +37,47 @@ def sample_model(loader, vae_model, device):
 		out_coords = out["coords"]
 
 		cell_mask = data.cell_mask.detach().cpu().numpy()
-		exp = data.x.detach().cpu().numpy()
-		coords_true = data.pos.detach().cpu().numpy()
-		coords_pred = out_coords.detach().cpu().numpy()
+		exp = data.x.detach().cpu().numpy()[cell_mask]
+		coords_true = data.pos.detach().cpu().numpy()[cell_mask]
+		coords_pred = out_coords.detach().cpu().numpy()[cell_mask]
+
 		num_samples = exp.shape[0]
 		for ind in range(num_samples):
-			print(exp[ind]) ####
+			if exp[ind, 3] == 1:
+				ctype = "left"
+			elif exp[ind, 4] == 1:
+				ctype = "middle"
+			elif exp[ind, 5] == 1:
+				ctype = "right"
 
+			x, y, _ = coords_pred[ind]
 
-def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir):
+			entry = {"x": x, "y": y, "input": ctype}
+			data_lst.append(entry)
+
+	data_df = pd.DataFrame.from_records(data_lst)
+
+	return data_df
+
+def plt_scatter(df, name, exp, out_dir):
+	sns.set()
+    sns.scatterplot(data=df, x="x", y="y", hue="input")
+    plt.title(f"Latent Distribution Samples By Input")
+    plt.savefig(os.path.join(result_dir, name, "samples", f"{exp}_samples.svg"), bbox_inches='tight')
+    plt.clf()
+
+def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir):
 	device = dname if dname == "cpu" else f"cuda:{dname}" 
 	params, model_state = load_state(data_dir, name, exp)
 	loader = loader_cls(**params)
 	vae_model = load_model(vae_model_cls, loader, components, params, model_state)
 
-	sample_model(loader, vae_model, device)
+	df = sample_model(loader, vae_model, device)
+	plt_scatter(df, name, exp, out_dir)
 
 if __name__ == '__main__':
     data_dir = "/dfs/user/atwang/data/analyses/st_gnn"
-    result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup/training"
+    out_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup/results_vae/"
 
     loader_cls = Synth3Layer
     vae_model_cls = models.SupCVAE
@@ -68,6 +92,11 @@ if __name__ == '__main__':
     dname = sys.argv[1]
 
     name = "vs"
+
     exp = "0000"
 
-    vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir)
+    vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir)
+
+    exp = "0001"
+
+    vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir)
