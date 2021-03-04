@@ -82,38 +82,38 @@ test_params = {
     "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/test"
 }
 
-sg_params = [global_params, train_params, gnn_params, loader_params, zhuang_params, saint_params]
+# sg_params = [global_params, train_params, gnn_params, loader_params, zhuang_params, saint_params]
 
-sg2 = Dispatcher("sg2", sg_params, {"emb": models.EmbRGCN, "struct": models.StructPairwiseLN}, loaders.ZhuangBasic, models.SupRCGN, trainers.SupTrainer)
-Dispatcher.variant(sg2, "sgt", [test_params])
+# sg2 = Dispatcher("sg2", sg_params, {"emb": models.EmbRGCN, "struct": models.StructPairwiseLN}, loaders.ZhuangBasic, models.SupRCGN, trainers.SupTrainer)
+# Dispatcher.variant(sg2, "sgt", [test_params])
 
-sgc2 = Dispatcher("sgc2", sg_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
-Dispatcher.variant(sgc2, "sgct", [test_params])
+# sgc2 = Dispatcher("sgc2", sg_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
+# Dispatcher.variant(sgc2, "sgct", [test_params])
 
-sb2 = Dispatcher("sb2", sg_params, loaders.ZhuangBasicCellF, models.SupMLP, trainers.SupTrainer)
-Dispatcher.variant(sb2, "sbt", [test_params])
-
-
-sg2s = Dispatcher("sg2s", sg_params, loaders.ZhuangBasic, models.SupSRCGN, trainers.SupMSETrainer)
-Dispatcher.variant(sg2s, "sgts", [test_params])
-
-sgc2s = Dispatcher("sgc2s", sg_params, loaders.ZhuangBasicCellF, models.SupSRCGN, trainers.SupMSETrainer)
-Dispatcher.variant(sgc2s, "sgcts", [test_params])
-
-sb2s = Dispatcher("sb2s", sg_params, loaders.ZhuangBasicCellF, models.SupSMLP, trainers.SupMSETrainer)
-Dispatcher.variant(sb2s, "sbts", [test_params])
+# sb2 = Dispatcher("sb2", sg_params, loaders.ZhuangBasicCellF, models.SupMLP, trainers.SupTrainer)
+# Dispatcher.variant(sb2, "sbt", [test_params])
 
 
-sglr_params = sg_params + [{"grad_clip_norm": 0.0001, "learning_rate": 1e-100,}]
+# sg2s = Dispatcher("sg2s", sg_params, loaders.ZhuangBasic, models.SupSRCGN, trainers.SupMSETrainer)
+# Dispatcher.variant(sg2s, "sgts", [test_params])
 
-sg2lr = Dispatcher("sg2lr", sglr_params, loaders.ZhuangBasic, models.SupLRRCGN, trainers.SupMSETrainer)
-Dispatcher.variant(sg2lr, "sgtlr", [test_params])
+# sgc2s = Dispatcher("sgc2s", sg_params, loaders.ZhuangBasicCellF, models.SupSRCGN, trainers.SupMSETrainer)
+# Dispatcher.variant(sgc2s, "sgcts", [test_params])
 
-sgc2lr = Dispatcher("sgc2lr", sglr_params, loaders.ZhuangBasicCellF, models.SupLRRCGN, trainers.SupMSETrainer)
-Dispatcher.variant(sgc2lr, "sgctlr", [test_params])
+# sb2s = Dispatcher("sb2s", sg_params, loaders.ZhuangBasicCellF, models.SupSMLP, trainers.SupMSETrainer)
+# Dispatcher.variant(sb2s, "sbts", [test_params])
 
-sb2lr = Dispatcher("sb2lr", sglr_params, loaders.ZhuangBasicCellF, models.SupLRMLP, trainers.SupMSETrainer)
-Dispatcher.variant(sb2lr, "sbtlr", [test_params])
+
+# sglr_params = sg_params + [{"grad_clip_norm": 0.0001, "learning_rate": 1e-100,}]
+
+# sg2lr = Dispatcher("sg2lr", sglr_params, loaders.ZhuangBasic, models.SupLRRCGN, trainers.SupMSETrainer)
+# Dispatcher.variant(sg2lr, "sgtlr", [test_params])
+
+# sgc2lr = Dispatcher("sgc2lr", sglr_params, loaders.ZhuangBasicCellF, models.SupLRRCGN, trainers.SupMSETrainer)
+# Dispatcher.variant(sgc2lr, "sgctlr", [test_params])
+
+# sb2lr = Dispatcher("sb2lr", sglr_params, loaders.ZhuangBasicCellF, models.SupLRMLP, trainers.SupMSETrainer)
+# Dispatcher.variant(sb2lr, "sbtlr", [test_params])
 
 
 # sgbin50_params = sg_params + [{"adj_thresh": 50}]
