@@ -250,10 +250,14 @@ class ZhuangBasicCellF(ZhuangBasic):
 
 
 class Synth3Layer(ZhuangBasicCellF):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.test_sampler = self._build_sampler(self.test_data, "test")
+
     def _import_data(self):
         cache_path = os.path.join(self.cache_dir, "imports.pickle")
         if self.params.get("clear_cache", False) or not os.path.exists(cache_path):
-            num_pts = self.params["synth_num_points"]
+            num_pts = self.params["synth_num_points"] * 2
             num_train = int(self.params["train_prop"] * num_pts)
 
             x = np.random.uniform(size=(num_pts),)
@@ -265,15 +269,15 @@ class Synth3Layer(ZhuangBasicCellF):
             type1 = (x < 1/3).astype(float)
             type2 = ((1/3 < x) & (x < 2/3)).astype(float)
             type3 = (x >= 2/3).astype(float)
-            exp = np.stack([type1, type2, type3], axis=1)
+            exp = np.stack([type1, type2, type3], axis=1) * (np.e - 1)
             # var = np.arange(exp.shape[1])
             # obs = np.arange(exp.shape[0])
             anndata = ad.AnnData(X=exp, var=None, obs=None)
 
             shf = np.random.permutation(num_pts)
             train = set(str(i) for i in shf[:num_train])
-            val = set(str(i) for i in shf[num_train:])
-            test = set("0")
+            val = set(str(i) for i in shf[num_train:num_pts])
+            test = set(str(i) for i in shf[num_pts:])
 
             # print(coords) ####
             in_data = (anndata, coords)
