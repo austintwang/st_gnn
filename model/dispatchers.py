@@ -162,6 +162,8 @@ vae_train_params = {
     "early_stop_hist_len": 10,
     "dropout_prop": 0.1,
     "grad_clip_norm": 1.,
+    "vae_struct_nll_std": 10.,
+    "vae_exp_nll_std": 1.,
     "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
 }
 
