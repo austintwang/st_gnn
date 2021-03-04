@@ -5,13 +5,15 @@ import model.trainers as trainers
 
 class Dispatcher(object):
     names = {}
-    def __init__(self, name, paramlist, loader_cls, model_cls, trainer_cls):
+    def __init__(self, name, paramlist, model_cpnts, loader_cls, model_cls, trainer_cls):
         Dispatcher.names[name] = self
         self.name = name
 
         self.params = {}
         for i in paramlist:
             self.params.update(i)
+
+        self.model_cpnts = model_cpnts
 
         self.loader_cls = loader_cls
         self.model_cls = model_cls
@@ -20,13 +22,13 @@ class Dispatcher(object):
     @classmethod
     def variant(cls, other, name, paramlist):
         paramlist = [other.params] + paramlist
-        return cls(name, paramlist, other.loader_cls, other.model_cls, other.trainer_cls)
+        return cls(name, paramlist, other.model_cpnts, other.loader_cls, other.model_cls, other.trainer_cls)
 
     def dispatch(self, device, clear_cache):
         self.params.update({"name": self.name, "device": device, "clear_cache": clear_cache})
 
         loader = self.loader_cls(**self.params)
-        model = self.model_cls(loader.node_in_channels, **self.params)
+        model = self.model_cls(loader.node_in_channels, model_cpnts, **self.params)
         trainer = self.trainer_cls(model, loader, **self.params)
         trainer.run()
 
@@ -41,14 +43,14 @@ train_params = {
     "early_stop_min_delta": 0.001,
     "early_stop_hist_len": 10,
     "dropout_prop": 0.1,
-    "dist_layers_out_chnls": [64],
+    "struct_layers_out_chnls": [64],
     "min_dist": 1e-4,
     "grad_clip_norm": 1.,
     "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
 }
 
 gnn_params = {
-    "gnn_layers_out_chnls": [256, 256]
+    "emb_layers_out_chnls": [256, 256]
 }
 
 loader_params = {
@@ -82,7 +84,7 @@ test_params = {
 
 sg_params = [global_params, train_params, gnn_params, loader_params, zhuang_params, saint_params]
 
-sg2 = Dispatcher("sg2", sg_params, loaders.ZhuangBasic, models.SupRCGN, trainers.SupTrainer)
+sg2 = Dispatcher("sg2", sg_params, {"emb": models.EmbRGCN, "struct": models.StructPairwiseLN}, loaders.ZhuangBasic, models.SupRCGN, trainers.SupTrainer)
 Dispatcher.variant(sg2, "sgt", [test_params])
 
 sgc2 = Dispatcher("sgc2", sg_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
@@ -114,41 +116,84 @@ sb2lr = Dispatcher("sb2lr", sglr_params, loaders.ZhuangBasicCellF, models.SupLRM
 Dispatcher.variant(sb2lr, "sbtlr", [test_params])
 
 
-sgbin50_params = sg_params + [{"adj_thresh": 50}]
+# sgbin50_params = sg_params + [{"adj_thresh": 50}]
 
-sg2bin50 = Dispatcher("sg2bin50", sgbin50_params, loaders.ZhuangBasic, models.SupBinRCGN, trainers.SupBinTrainer)
-Dispatcher.variant(sg2bin50, "sgtbin50", [test_params])
+# sg2bin50 = Dispatcher("sg2bin50", sgbin50_params, loaders.ZhuangBasic, models.SupBinRCGN, trainers.SupBinTrainer)
+# Dispatcher.variant(sg2bin50, "sgtbin50", [test_params])
 
-sgc2bin50 = Dispatcher("sgc2bin50", sgbin50_params, loaders.ZhuangBasicCellF, models.SupBinRCGN, trainers.SupBinTrainer)
-Dispatcher.variant(sgc2bin50, "sgctbin50", [test_params])
+# sgc2bin50 = Dispatcher("sgc2bin50", sgbin50_params, loaders.ZhuangBasicCellF, models.SupBinRCGN, trainers.SupBinTrainer)
+# Dispatcher.variant(sgc2bin50, "sgctbin50", [test_params])
 
-sb2bin50 = Dispatcher("sb2bin50", sgbin50_params, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
-Dispatcher.variant(sb2bin50, "sbtbin50", [test_params])
-
-
-sgbin100_params = sg_params + [{"adj_thresh": 100}]
-
-sg2bin100 = Dispatcher("sg2bin100", sgbin100_params, loaders.ZhuangBasic, models.SupBinRCGN, trainers.SupBinTrainer)
-Dispatcher.variant(sg2bin100, "sgtbin100", [test_params])
-
-sgc2bin100 = Dispatcher("sgc2bin100", sgbin100_params, loaders.ZhuangBasicCellF, models.SupBinRCGN, trainers.SupBinTrainer)
-Dispatcher.variant(sgc2bin100, "sgctbin100", [test_params])
-
-sb2bin100 = Dispatcher("sb2bin100", sgbin100_params, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
-Dispatcher.variant(sb2bin100, "sbtbin100", [test_params])
+# sb2bin50 = Dispatcher("sb2bin50", sgbin50_params, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
+# Dispatcher.variant(sb2bin50, "sbtbin50", [test_params])
 
 
-sgbin500_params = sg_params + [{"adj_thresh": 500}]
+# sgbin100_params = sg_params + [{"adj_thresh": 100}]
 
-sg2bin500 = Dispatcher("sg2bin500", sgbin500_params, loaders.ZhuangBasic, models.SupBinRCGN, trainers.SupBinTrainer)
-Dispatcher.variant(sg2bin500, "sgtbin500", [test_params])
+# sg2bin100 = Dispatcher("sg2bin100", sgbin100_params, loaders.ZhuangBasic, models.SupBinRCGN, trainers.SupBinTrainer)
+# Dispatcher.variant(sg2bin100, "sgtbin100", [test_params])
 
-sgc2bin500 = Dispatcher("sgc2bin500", sgbin500_params, loaders.ZhuangBasicCellF, models.SupBinRCGN, trainers.SupBinTrainer)
-Dispatcher.variant(sgc2bin500, "sgctbin500", [test_params])
+# sgc2bin100 = Dispatcher("sgc2bin100", sgbin100_params, loaders.ZhuangBasicCellF, models.SupBinRCGN, trainers.SupBinTrainer)
+# Dispatcher.variant(sgc2bin100, "sgctbin100", [test_params])
 
-sb2bin500 = Dispatcher("sb2bin500", sgbin500_params, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
-Dispatcher.variant(sb2bin500, "sbtbin500", [test_params])
+# sb2bin100 = Dispatcher("sb2bin100", sgbin100_params, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
+# Dispatcher.variant(sb2bin100, "sbtbin100", [test_params])
+
+
+# sgbin500_params = sg_params + [{"adj_thresh": 500}]
+
+# sg2bin500 = Dispatcher("sg2bin500", sgbin500_params, loaders.ZhuangBasic, models.SupBinRCGN, trainers.SupBinTrainer)
+# Dispatcher.variant(sg2bin500, "sgtbin500", [test_params])
+
+# sgc2bin500 = Dispatcher("sgc2bin500", sgbin500_params, loaders.ZhuangBasicCellF, models.SupBinRCGN, trainers.SupBinTrainer)
+# Dispatcher.variant(sgc2bin500, "sgctbin500", [test_params])
+
+# sb2bin500 = Dispatcher("sb2bin500", sgbin500_params, loaders.ZhuangBasicCellF, models.SupBinMLP, trainers.SupBinTrainer)
+# Dispatcher.variant(sb2bin500, "sbtbin500", [test_params])
 
 # lt_params = sg_params + [test_params, {"saint_num_steps": {"train": 5, "val": 1}, "saint_sample_coverage": 500,}]
 # sg2 = Dispatcher("lt", lt_params, loaders.ZhuangBasicTest, models.SupRCGN, trainers.SupTrainer)
+
+
+vae_train_params = {
+    "num_epochs": 500,
+    "learning_rate": 1e-3,
+    "early_stop_min_delta": 0.001,
+    "early_stop_hist_len": 10,
+    "dropout_prop": 0.1,
+    "grad_clip_norm": 1.,
+    "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
+}
+
+vae_model_params = {
+    "emb_layers_out_chnls": [16, 16],
+    "struct_layers_out_chnls": [16, 16],
+    "aux_struct_enc_layers_out_chnls": [16, 16],
+    "aux_exp_dec_layers_out_chnls": [16, 16]
+}
+
+vae_loader_params = {
+    "batch_size": 50,
+    "train_prop": 0.8,
+}
+
+synth_params = {
+    "synth_num_points": 10000
+}
+
+synth_saint_params = {
+    "saint_num_steps": {"train": 200, "val": 40},
+}
+
+vae_params = [global_params, vae_train_params, vae_model_params, vae_loader_params, synth_params, saint_params]
+
+vae_components = {
+    "emb": models.EmbMLP,
+    "struct": models.StructCoords,
+    "struct_enc": models.AuxStructEncMLP,
+    "exp_dec": models.AuxExpDecMLP,
+}
+
+sg2 = Dispatcher("vs", vae_params, vae_components, loaders.Synth3Layer, models.SupCVAE, trainers.CVAETrainer)
+Dispatcher.variant(sg2, "vst", [test_params])
 

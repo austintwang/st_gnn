@@ -8,6 +8,7 @@ import numpy as np
 from scipy import sparse
 import pandas as pd
 import scanpy as sc
+import anndata
 import torch
 import torch.multiprocessing
 torch.multiprocessing.set_sharing_strategy('file_system')
@@ -243,6 +244,46 @@ class ZhuangBasicCellF(ZhuangBasic):
         }
 
         return data, maps, node_in_channels
+
+
+class Synth3Layer(ZhuangBasicCellF):
+    def _import_data(self):
+        cache_path = os.path.join(self.cache_dir, "imports.pickle")
+        if self.params.get("clear_cache", False) or not os.path.exists(cache_path):
+            num_pts = self.params["synth_num_points"]
+            num_train = int(self.params["train_prop"] * len(m1))
+
+            x = np.random.uniform(size=(num_pts),)
+            y = np.random.uniform(size=(num_pts),)
+            z = np.zeros_like(x)
+            coords = np.stack([x, y, z], axis=1)
+
+            type1 = (x < 1/3).astype(float)
+            type2 = (1/3 < x < 2/3).astype(float)
+            type3 = (x >= 2/3).astype(float)
+            exp = np.stack([type1, type2, type3], axis=1)
+            var = np.arange(exp.shape[0])
+            obs = np.arange(exp.shape[1])
+            anndata = anndata.AnnData(X=exp, var=var, obs=obs)
+
+            shf = np.random.shuffle(obs)
+            train = set(shf[:num_train])
+            val = set(shf[num_train:])
+            test = set()
+
+            exp = []
+            coords = [for i in ]
+
+            in_data = (anndata, coords)
+            partitions = (train, val, test)
+
+            with open(cache_path, "wb") as cache_file:
+                pickle.dump((in_data, partitions), cache_file)
+
+        else:
+            in_data, partitions = pd.read_pickle(cache_path)
+
+        return in_data, partitions
 
 
 if __name__ == '__main__':

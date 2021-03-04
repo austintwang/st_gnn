@@ -278,7 +278,49 @@ class SupMSETrainer(Trainer):
             "mse": metrics.mse(pred, data, self.params),
             "mse_lt_100": metrics.mse(pred, data, self.params, lbound=100.),
             "mse_100_500": metrics.mse(pred, data, self.params, lbound=100., ubound=500.),
-            "mse_gt_500_1000": metrics.mse(pred, data, self.params, lbound=500., ubound=1000.),
+            "mse_500_1000": metrics.mse(pred, data, self.params, lbound=500., ubound=1000.),
+            "mse_gt_1000": metrics.mse(pred, data, self.params, lbound=1000.),
+            "spearman": metrics.spearman(pred, data, self.params),
+            "tril_cons": metrics.tril_cons(pred, data, self.params)
+        }
+        return out_metrics
+
+
+class CVAETrainer(Trainer):
+    def _calc_obs(self, data):
+        data.cell_pos = data.pos[data.cell_mask]
+        data.cell_exp = data.x[data.cell_mask]
+
+    @staticmethod
+    def _kl(mean_0, std_0, lstd_0, mean_1, std_1, lstd_1):
+        kl = (
+            (std_0**2 + (mean_1 - mean_0)**2) / (2 * std_1**2) 
+            + lstd_1 
+            - lstd_0 
+            - 1
+        ).sum(dim=1)
+        
+        return kl
+
+    def _loss_fn(self, pred, data):
+        w = data.node_norm[data.cell_mask].sqrt()
+
+        nll_struct = ((pred["coords"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_struct_nll_std"] / 2
+        nll_exp = ((pred["exp"] - data.cell_exp)**2).sum(dim=1) / self.params["vae_exp_nll_std"] / 2
+
+        kl_struct = self._kl(pred["emb_mean"], pred["emb_std"], pred["emb_lstd"], 1., 1., 0.)
+        kl_exp = self._kl(pred["aux_enc_mean"], pred["aux_enc_std"], pred["aux_enc_lstd"], pred["emb_mean"], pred["emb_std"], pred["emb_lstd"])
+
+        loss = ((nll_struct + nll_exp + kl_struct + kl_exp) * w).mean(dim=0)
+
+        return loss
+
+    def _calc_metrics_val(self, pred, data):
+        out_metrics = {
+            "mse": metrics.mse(pred, data, self.params),
+            "mse_lt_100": metrics.mse(pred, data, self.params, lbound=100.),
+            "mse_100_500": metrics.mse(pred, data, self.params, lbound=100., ubound=500.),
+            "mse_500_1000": metrics.mse(pred, data, self.params, lbound=500., ubound=1000.),
             "mse_gt_1000": metrics.mse(pred, data, self.params, lbound=1000.),
             "spearman": metrics.spearman(pred, data, self.params),
             "tril_cons": metrics.tril_cons(pred, data, self.params)

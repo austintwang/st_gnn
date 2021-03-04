@@ -206,17 +206,49 @@ def f1(pred, data, params):
 def mcc(pred, data, params):
     logits = pred["logits"]
     bin_preds = (logits >= 0)
-    # print(bin_preds.float().mean()) ####
 
     tp = (bin_preds & data.adjs).float().sum()
     tn = (~(bin_preds | data.adjs)).float().sum()
     fp = (bin_preds & ~data.adjs).float().sum()
     fn = (~bin_preds & data.adjs).float().sum()
-    # print(tp.item(), tn.item(), fp.item(), fn.item()) ####
 
     metric = (
         (tp * tn - fp * fn) 
         / torch.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))
     )
 
+    return metric.item()
+
+@torch.no_grad()
+def nll_vae_struct(pred, data, params):
+    metric = ((pred["coords"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_struct_nll_std"] / 2
+
+    return metric.item()
+
+@torch.no_grad()
+def nll_vae_exp(pred, data, params):
+    metric = ((pred["exp"] - data.cell_exp)**2).sum(dim=1) / self.params["vae_exp_nll_std"] / 2
+
+    return metric.item()
+
+def _kl(mean_0, std_0, lstd_0, mean_1, std_1, lstd_1):
+    kl = (
+        (std_0**2 + (mean_1 - mean_0)**2) / (2 * std_1**2) 
+        + lstd_1 
+        - lstd_0 
+        - 1
+    ).sum(dim=1)
+
+    return kl
+
+@torch.no_grad()
+def kl_vae_struct(pred, data, params):
+    metric = _kl(pred["emb_mean"], pred["emb_std"], pred["emb_lstd"], 1., 1., 0.)
+
+    return metric.item()
+
+@torch.no_grad()
+def kl_vae_exp(pred, data, params):
+    metric = _kl(pred["aux_enc_mean"], pred["aux_enc_std"], pred["aux_enc_lstd"], pred["emb_mean"], pred["emb_std"], pred["emb_lstd"])
+    
     return metric.item()
