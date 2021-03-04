@@ -300,6 +300,8 @@ class CVAETrainer(Trainer):
             - 1
         ).sum(dim=1)
 
+        print(kl) ####
+
         return kl
 
     def _loss_fn(self, pred, data):
