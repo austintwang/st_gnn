@@ -47,6 +47,9 @@ class Trainer(object):
     def _loss_fn(self, pred, data):
         raise NotImplementedError
 
+    def _val_extras(self, pred, data):
+        pass
+
     def _calc_metrics_train(self, pred, data):
         return {}
 
@@ -105,6 +108,7 @@ class Trainer(object):
             pred = self.model(data)
             # print(self.model.sample_coords(data)) ####
             loss = self._loss_fn(pred, data)
+            self._val_extras(pred, data)
 
             batch_records.setdefault("loss", []).append(loss.item())
             out_metrics = self._calc_metrics_val(pred, data)
@@ -317,6 +321,10 @@ class CVAETrainer(Trainer):
         loss = ((nll_struct + nll_exp + kl_struct + kl_exp) * w).mean(dim=0)
 
         return loss
+
+    def _val_extras(self, pred, data):
+        samples = self.model.sample_coords(data)
+        pred["coords_from_struct"] = samples["coords"]
 
     def _calc_metrics_val(self, pred, data):
         out_metrics = {
