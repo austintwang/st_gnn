@@ -619,9 +619,9 @@ class SupCVAE(torch.nn.Module):
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
         dist = self.emb_add_final_layer(prev)
-        print(dist) ####
-        emb_mean = dist[:self.vae_latent_dim]
-        emb_lstd = dist[self.vae_latent_dim:]
+        # print(dist) ####
+        emb_mean = dist[:,:self.vae_latent_dim]
+        emb_lstd = dist[:,self.vae_latent_dim:]
         emb_std = torch.exp(emb_lstd)
         emb_sample = self._sample_sn_like(emb_std) * emb_std + emb_mean
 
@@ -631,8 +631,8 @@ class SupCVAE(torch.nn.Module):
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
         dist = self.aux_enc_add_final_layer(prev)
-        aux_enc_mean = dist[:self.vae_latent_dim]
-        aux_enc_lstd = dist[self.vae_latent_dim:]
+        aux_enc_mean = dist[:,:self.vae_latent_dim]
+        aux_enc_lstd = dist[:,self.vae_latent_dim:]
         aux_enc_std = torch.exp(aux_enc_lstd)
         aux_enc_sample = _sample_sn_like(aux_enc_std) * aux_enc_std + aux_enc_mean
 
@@ -659,8 +659,8 @@ class SupCVAE(torch.nn.Module):
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
         dist = self.emb_add_final_layer(prev)
-        emb_mean = dist[:self.vae_latent_dim]
-        emb_lstd = dist[self.vae_latent_dim:]
+        emb_mean = dist[:,:self.vae_latent_dim]
+        emb_lstd = dist[:,self.vae_latent_dim:]
         emb_std = torch.exp(emb_lstd)
         emb_sample = self._sample_sn_like(emb_std) * emb_std + emb_mean
 
