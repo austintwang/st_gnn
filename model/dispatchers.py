@@ -173,7 +173,7 @@ vae_model_params = {
     "aux_struct_enc_layers_out_chnls": [16, 16],
     "aux_exp_dec_layers_out_chnls": [16, 16],
     "vae_enc_add_chnls": [32],
-    "vae_latent_dim": 3,
+    "vae_latent_dim": 4,
 }
 
 vae_loader_params = {
