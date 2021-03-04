@@ -1,3 +1,7 @@
+import sys
+import numpy as np 
+import torch
+
 from model.models import SupCVAE
 from model.loaders import Synth3Layer
 
