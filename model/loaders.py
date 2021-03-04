@@ -212,6 +212,8 @@ class ZhuangBasicCellF(ZhuangBasic):
         num_cells = len(cells)
         coords = torch.tensor([st_coords[i] for i in cells])
         print(coords) ####
+        print(partition) ####
+        print(st_anndata.obs_names) ####
         coords_dims = coords.shape[1]
         coords_pad = torch.cat((torch.full((num_genes, coords_dims), np.nan), coords), 0)
         cell_mask = torch.cat((torch.full((num_genes,), False), torch.full((num_cells,), True)), 0)
