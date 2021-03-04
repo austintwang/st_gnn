@@ -570,7 +570,7 @@ class AuxStructEncMLP(torch.nn.Module):
         for i in self.enc_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
-        coords = self.final_dist_layer(prev)
+        coords = self.final_dec_layer(prev)
 
         return {"coords": coords}
 
