@@ -238,7 +238,7 @@ def _kl(mean_0, std_0, lstd_0, mean_1, std_1, lstd_1):
         (std_0**2 + (mean_1 - mean_0)**2) / (2 * std_1**2) 
         + lstd_1 
         - lstd_0 
-        - 1
+        - 0.5
     ).sum(dim=1)
 
     return kl
