@@ -608,7 +608,7 @@ class SupCVAE(torch.nn.Module):
 
     @staticmethod
     def _sample_sn(size):
-        return torch.normal(1, 0, size=size).to(self.device)
+        return torch.normal(1, 1, size=size).to(self.device)
 
     def _sample_sn_like(self, tensor):
         return self._sample_sn(tensor.shape)
