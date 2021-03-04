@@ -262,8 +262,8 @@ class Synth3Layer(ZhuangBasicCellF):
             type2 = ((1/3 < x) & (x < 2/3)).astype(float)
             type3 = (x >= 2/3).astype(float)
             exp = np.stack([type1, type2, type3], axis=1)
-            var = np.arange(exp.shape[0])
-            obs = np.arange(exp.shape[1])
+            var = np.arange(exp.shape[1])
+            obs = np.arange(exp.shape[0])
             anndata = ad.AnnData(X=exp, var=var, obs=obs)
 
             shf = np.random.shuffle(obs)
