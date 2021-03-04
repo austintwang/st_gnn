@@ -673,6 +673,8 @@ class SupCVAE(torch.nn.Module):
             "emb_lstd": emb_lstd,
         }
 
+        return out
+
 
 # class MixinRGCN(object):
 #     def _get_gnn(self, in_channels, out_channels):
