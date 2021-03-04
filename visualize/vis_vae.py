@@ -1,9 +1,23 @@
 import sys
+import pickle
 import numpy as np 
 import torch
 
 from model.models import SupCVAE
 from model.loaders import Synth3Layer
+
+def load_state(data_dir, name, exp):
+	target_dir = os.path.join(data_dir, name, exp)
+	params_path = os.path.join(target_dir, "params.pickle")
+	with open(params_path, "rb") as f:
+		params = pickle.load(f)
+	best_path = os.path.join(target_dir, "best_model_epoch.txt")
+	with open(best_path, "r") as f:
+		best_epoch = f.read().strip()
+	model_path = os.path.join(target_dir, "model", f"ckpt_epoch_{best_epoch}.pt")
+	model_state = torch.load(model_path)
+
+	return params, model_state
 
 def load_model(model_cls, params, model_state):
 	m = model_cls(**params)
@@ -14,7 +28,7 @@ def sample_model(loader, vae_model, device):
 	for data in loader.test_sampler:
 		data.to(device)
 		num_samples = data.x.shape[0]
-		out = model.sample_coords(data)
+		out = vae_model.sample_coords(data)
 		out_coords = out["coords"]
 
 		cell_mask = data.cell_mask.detach().cpu().numpy()
@@ -26,8 +40,11 @@ def sample_model(loader, vae_model, device):
 			print(exp[i]) ####
 
 
-def vis_vae(loader, vae_model, dname):
+def vis_vae(loader_cls, vae_model_cls, dname, name, exp, data_dir):
 	device = dname if dname == "cpu" else f"cuda:{dname}" 
+	params, model_state = load_state(data_dir, name, exp)
+	model = load_model(model_cls, params, model_state)
+
 	sample_model(loader, vae_model, device)
 
 if __name__ == '__main__':
@@ -39,4 +56,7 @@ if __name__ == '__main__':
 
     dname = sys.argv[1]
 
-    vis_vae(loader, vae_model, dname)
+    name = "vs"
+    exp = "0000"
+
+    vis_vae(loader_cls, vae_model_cls, dname, name, exp, data_dir)
