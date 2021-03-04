@@ -634,7 +634,7 @@ class SupCVAE(torch.nn.Module):
         aux_enc_mean = dist[:,:self.vae_latent_dim]
         aux_enc_lstd = dist[:,self.vae_latent_dim:]
         aux_enc_std = torch.exp(aux_enc_lstd)
-        aux_enc_sample = _sample_sn_like(aux_enc_std) * aux_enc_std + aux_enc_mean
+        aux_enc_sample = self._sample_sn_like(aux_enc_std) * aux_enc_std + aux_enc_mean
 
         out_coords = self.struct_module(aux_enc_sample)["coords"]
         out_exp = self.aux_exp_dec(emb_sample)["exp"]
