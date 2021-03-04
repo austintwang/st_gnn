@@ -84,7 +84,7 @@ def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, o
 
 if __name__ == '__main__':
     data_dir = "/dfs/user/atwang/data/analyses/st_gnn"
-    out_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/sup/results_vae/"
+    out_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/vae/"
 
     loader_cls = Synth3Layer
     vae_model_cls = models.SupCVAE
@@ -100,6 +100,6 @@ if __name__ == '__main__':
 
     name = "vs"
 
-    exps = ["0001", "0006"]
+    exps = ["0001", "0007"]
     for exp in exps:
         vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir)
