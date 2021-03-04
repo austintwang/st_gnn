@@ -603,7 +603,7 @@ class SupCVAE(torch.nn.Module):
         self.aux_enc_add_final_layer = torch.nn.Linear(in_features=prev, out_features=(2*vae_latent_dim))
 
         self.struct_module = components["struct"](vae_latent_dim, **self.params)
-        self.aux_exp_dec = components["exp_dec"](vae_latent_dim, **self.params)
+        self.aux_exp_dec = components["exp_dec"](vae_latent_dim, in_channels, **self.params)
 
     def _sample_sn(size):
         return torch.normal(1, 0, size=size).to(self.device)
