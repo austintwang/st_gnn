@@ -266,7 +266,7 @@ class Synth3Layer(ZhuangBasicCellF):
             obs = np.arange(exp.shape[0])
             anndata = ad.AnnData(X=exp, var=var, obs=obs)
 
-            shf = np.random.shuffle(obs)
+            shf = np.random.permutation(obs)
             train = set(shf[:num_train])
             val = set(shf[num_train:])
             test = set()
