@@ -266,13 +266,13 @@ class Synth3Layer(ZhuangBasicCellF):
             type2 = ((1/3 < x) & (x < 2/3)).astype(float)
             type3 = (x >= 2/3).astype(float)
             exp = np.stack([type1, type2, type3], axis=1)
-            var = np.arange(exp.shape[1])
-            obs = np.arange(exp.shape[0])
-            anndata = ad.AnnData(X=exp, var=var, obs=obs)
+            # var = np.arange(exp.shape[1])
+            # obs = np.arange(exp.shape[0])
+            anndata = ad.AnnData(X=exp, var=None, obs=None)
 
             shf = np.random.permutation(exp.shape[1])
-            train = set(shf[:num_train])
-            val = set(shf[num_train:])
+            train = set(str(i) for i in shf[:num_train])
+            val = set(str(i) for i in shf[num_train:])
             test = set()
 
             # print(coords) ####
