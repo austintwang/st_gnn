@@ -581,6 +581,7 @@ class SupCVAE(torch.nn.Module):
 
         self.params = kwargs
         self.device = self.params["device"]
+        self.dropout_prop = self.params["dropout_prop"]
         emb_layers_out_chnls = self.params["emb_layers_out_chnls"]
         aux_struct_enc_layers_out_chnls = self.params["aux_struct_enc_layers_out_chnls"]
         vae_enc_add_chnls = self.params["vae_enc_add_chnls"]
