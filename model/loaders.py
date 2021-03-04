@@ -259,7 +259,7 @@ class Synth3Layer(ZhuangBasicCellF):
             coords = np.stack([x, y, z], axis=1)
 
             type1 = (x < 1/3).astype(float)
-            type2 = (1/3 < x < 2/3).astype(float)
+            type2 = ((1/3 < x) & (x < 2/3)).astype(float)
             type3 = (x >= 2/3).astype(float)
             exp = np.stack([type1, type2, type3], axis=1)
             var = np.arange(exp.shape[0])
