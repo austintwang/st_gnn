@@ -606,11 +606,12 @@ class SupCVAE(torch.nn.Module):
         self.struct_module = components["struct"](vae_latent_dim, **self.params)
         self.aux_exp_dec = components["exp_dec"](vae_latent_dim, in_channels, **self.params)
 
+    @staticmethod
     def _sample_sn(size):
         return torch.normal(1, 0, size=size).to(self.device)
 
-    def _sample_sn_like(tensor):
-        return _sample_sn(tensor.shape)
+    def _sample_sn_like(self, tensor):
+        return self._sample_sn(tensor.shape)
 
     def forward(self, data):
         emb = self.embedder(data)
