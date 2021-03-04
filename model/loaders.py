@@ -211,9 +211,9 @@ class ZhuangBasicCellF(ZhuangBasic):
         cell_to_node = {val: ind + num_genes for ind, val in enumerate(cells)}
         num_cells = len(cells)
         coords = torch.tensor([st_coords[i] for i in cells])
-        print(coords) ####
-        print(partition) ####
-        print(st_anndata.obs_names) ####
+        # print(coords) ####
+        # print(partition) ####
+        # print(st_anndata.obs_names) ####
         coords_dims = coords.shape[1]
         coords_pad = torch.cat((torch.full((num_genes, coords_dims), np.nan), coords), 0)
         cell_mask = torch.cat((torch.full((num_genes,), False), torch.full((num_cells,), True)), 0)
@@ -239,7 +239,7 @@ class ZhuangBasicCellF(ZhuangBasic):
         )
 
         data = Data(x=x, edge_index=edges, edge_attr=edge_attr, edge_type=edge_type, pos=coords_pad, cell_mask=cell_mask)
-        print(data) ####
+        # print(data) ####
         maps = {
             "gene_to_node": gene_to_node,
             "cell_to_node": cell_to_node,
@@ -270,10 +270,10 @@ class Synth3Layer(ZhuangBasicCellF):
             # obs = np.arange(exp.shape[0])
             anndata = ad.AnnData(X=exp, var=None, obs=None)
 
-            shf = np.random.permutation(exp.shape[0])
+            shf = np.random.permutation(num_pts)
             train = set(str(i) for i in shf[:num_train])
             val = set(str(i) for i in shf[num_train:])
-            test = set()
+            test = set("0")
 
             # print(coords) ####
             in_data = (anndata, coords)
