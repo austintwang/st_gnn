@@ -271,9 +271,6 @@ class Synth3Layer(ZhuangBasicCellF):
             val = set(shf[num_train:])
             test = set()
 
-            exp = []
-            coords = [for i in ]
-
             in_data = (anndata, coords)
             partitions = (train, val, test)
 
