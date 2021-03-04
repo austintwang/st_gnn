@@ -300,7 +300,7 @@ class CVAETrainer(Trainer):
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
-        dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).sum(dim=2).sqrt()
+        dists = ((rtile - ctile)**2).sum(dim=2).sqrt()
         data.dists = dists
 
     @staticmethod
@@ -336,7 +336,7 @@ class CVAETrainer(Trainer):
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
-        dists = ((torch.clamp(rtile - ctile, min=min_dist))**2).sum(dim=2).sqrt()
+        dists = ((rtile - ctile)**2).sum(dim=2).sqrt()
 
         pred["coords_from_struct"] = l
         pred["dists"] = dists
