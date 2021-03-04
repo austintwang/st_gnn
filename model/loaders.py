@@ -8,7 +8,7 @@ import numpy as np
 from scipy import sparse
 import pandas as pd
 import scanpy as sc
-import anndata
+import anndata as ad
 import torch
 import torch.multiprocessing
 torch.multiprocessing.set_sharing_strategy('file_system')
@@ -264,7 +264,7 @@ class Synth3Layer(ZhuangBasicCellF):
             exp = np.stack([type1, type2, type3], axis=1)
             var = np.arange(exp.shape[0])
             obs = np.arange(exp.shape[1])
-            anndata = anndata.AnnData(X=exp, var=var, obs=obs)
+            anndata = ad.AnnData(X=exp, var=var, obs=obs)
 
             shf = np.random.shuffle(obs)
             train = set(shf[:num_train])
