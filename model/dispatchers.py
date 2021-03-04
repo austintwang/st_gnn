@@ -194,6 +194,6 @@ vae_components = {
     "exp_dec": models.AuxExpDecMLP,
 }
 
-sg2 = Dispatcher("vs", vae_params, vae_components, loaders.Synth3Layer, models.SupCVAE, trainers.CVAETrainer)
-Dispatcher.variant(sg2, "vst", [test_params])
+vs = Dispatcher("vs", vae_params, vae_components, loaders.Synth3Layer, models.SupCVAE, trainers.CVAETrainer)
+Dispatcher.variant(vs, "vst", [test_params])
 
