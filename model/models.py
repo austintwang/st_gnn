@@ -524,12 +524,12 @@ class AuxExpDecMLP(torch.nn.Module):
         super().__init__()
 
         self.params = kwargs
-        out_channels = self.params["aux_exp_dec_layers_out_chnls"]
+        dec_channels = self.params["aux_exp_dec_layers_out_chnls"]
         self.dropout_prop = self.params["dropout_prop"]
 
         self.dec_layers = torch.nn.ModuleList()
         prev = in_channels
-        for i in out_channels:
+        for i in dec_channels:
             self.dec_layers.append(
                 torch.nn.Linear(prev, i)
             )
