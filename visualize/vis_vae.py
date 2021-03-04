@@ -68,7 +68,7 @@ def plt_scatter(df, name, exp, out_dir):
     sns.set()
     sns.scatterplot(data=df, x="x", y="y", hue="input")
     plt.title(f"Latent Distribution Samples By Input")
-    plt.savefig(os.path.join(result_dir, name, "samples", f"{exp}_samples.svg"), bbox_inches='tight')
+    plt.savefig(os.path.join(out_dir, name, "samples", f"{exp}_samples.svg"), bbox_inches='tight')
     plt.clf()
 
 def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir):
