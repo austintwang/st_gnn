@@ -28,7 +28,7 @@ class Dispatcher(object):
         self.params.update({"name": self.name, "device": device, "clear_cache": clear_cache})
 
         loader = self.loader_cls(**self.params)
-        model = self.model_cls(loader.node_in_channels, model_cpnts, **self.params)
+        model = self.model_cls(loader.node_in_channels, self.model_cpnts, **self.params)
         trainer = self.trainer_cls(model, loader, **self.params)
         trainer.run()
 
