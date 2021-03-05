@@ -104,7 +104,7 @@ def sample_model(loader, vae_model, num_select, device):
     # print(data_df) ####
     # print(data_df.groupby("input").count()) ####
 
-    df_sampled = data_df.groupby("input").sample(n=num_select)
+    df_sampled = data_df.groupby("Input").sample(n=num_select)
     # print(df_sampled) ####
     df_sampled.sample(frac=1)
 
