@@ -335,6 +335,8 @@ class CVAETrainer(Trainer):
         # samples = self.model.sample_coords(data)
         # l = samples["coords"]
 
+        l = pred["coords_from_exp"]
+
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
