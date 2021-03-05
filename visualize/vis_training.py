@@ -94,7 +94,7 @@ if __name__ == '__main__':
     metrics = [
         "loss",
         "nll_vae_struct",
-        "nll_vae_sup",
+        # "nll_vae_sup",
         "nll_vae_exp",
         "kl_vae_struct",
         "kl_vae_exp",
