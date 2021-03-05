@@ -114,7 +114,7 @@ def plt_scatter(df, name, exp, out_dir):
     order = ['Left', 'Middle', 'Right']
 
     sns.set()
-    sns.scatterplot(data=df, x="x", y="y", hue="input", hue_order=order)
+    sns.scatterplot(data=df, x="x", y="y", hue="Input", hue_order=order)
     plt.title(f"Latent Distribution Samples By Input")
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -130,7 +130,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], hue="input", diag_kind="hist", hue_order=order)
+    g = sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], hue="Input", diag_kind="hist", hue_order=order)
     g.fig.suptitle(f"Expression Encoder Latent Means", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -138,7 +138,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], hue="input", diag_kind="hist", hue_order=order)
+    g = sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], hue="Input", diag_kind="hist", hue_order=order)
     g.fig.suptitle(f"Structure Encoder Latent Means", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -146,7 +146,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_esp", "h2_esp", "h3_esp"], hue="input", diag_kind="hist", hue_order=order)
+    g = sns.pairplot(data=df, vars=["h1_esp", "h2_esp", "h3_esp"], hue="Input", diag_kind="hist", hue_order=order)
     g.fig.suptitle(f"Expression Encoder Latent Samples", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -154,7 +154,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_ssp", "h2_ssp", "h3_ssp"], hue="input", diag_kind="hist", hue_order=order)
+    g = sns.pairplot(data=df, vars=["h1_ssp", "h2_ssp", "h3_ssp"], hue="Input", diag_kind="hist", hue_order=order)
     g.fig.suptitle(f"Structure Encoder Latent Samples", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
