@@ -601,7 +601,7 @@ class SupCVAE(torch.nn.Module):
 
         self.aux_struct_enc = components["struct_enc"](3, **self.params)
         self.aux_enc_add_chnls = torch.nn.ModuleList()
-        prev = sum(aux_struct_enc_layers_out_chnls)
+        prev = aux_struct_enc_layers_out_chnls[-1]
         for i in vae_enc_add_chnls:
             self.aux_enc_add_chnls.append(torch.nn.Linear(prev, i))
             prev = i
