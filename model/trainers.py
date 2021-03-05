@@ -297,6 +297,7 @@ class CVAETrainer(Trainer):
         data.cell_exp = data.x[data.cell_mask]
 
         l = (data.pos[data.cell_mask])
+        print(l) ####
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
