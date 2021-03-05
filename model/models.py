@@ -416,15 +416,16 @@ class StructCoords(torch.nn.Module):
 
     def forward(self, z):
         prev = z
-        print(prev.isinf().sum().item()) ####
+        # print(prev.isinf().sum().item()) ####
         # print(prev) ####
         for i in self.struct_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
-            print(prev.isinf().sum().item()) ####
+            # print(prev.isinf().sum().item()) ####
         coords = self.final_dist_layer(prev)
-        print(coords.isinf().sum().item()) ####
+        # print(coords.isinf().sum().item()) ####
 
+        print(coords) ####
         return {"coords": coords}
 
 
