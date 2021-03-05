@@ -214,5 +214,5 @@ vae_model_params = {
 
 vae_params = [global_params, vae_train_params, vae_model_params, loader_params, zhuang_params, saint_params]
 
-vb2 = Dispatcher("vb2", vae_params, vae_components, loaders.Synth3Layer, models.SupCVAE, trainers.CVAETrainer)
+vb2 = Dispatcher("vb2", vae_params, vae_components, loaders.ZhuangBasicCellF, models.SupCVAE, trainers.CVAETrainer)
 Dispatcher.variant(vb2, "vbt", [test_params])
