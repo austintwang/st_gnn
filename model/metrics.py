@@ -40,7 +40,7 @@ def mse(pred, data, params, lbound=0., ubound=np.inf):
 
     idx = (data.dists >= lbound) & (data.dists <= ubound)
     err = ((pdists - data.dists)**2)[idx]
-    print(err) ####
+    print(data.dists) ####
 
     metric = torch.mean(err)
 
