@@ -421,6 +421,7 @@ class StructCoords(torch.nn.Module):
         for i in self.struct_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
+            print(prev.isnan().sum().item()) ####
         coords = self.final_dist_layer(prev)
 
         return {"coords": coords}
