@@ -324,7 +324,7 @@ class CVAETrainer(Trainer):
 
         nll_sup = ((pred["coords_from_exp"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_sup_nll_std"] / 2
      
-        kl_struct = self._kl(pred["aux_enc_mean"], pred["aux_enc_std"], pred["aux_enc_lstd"], pred["emb_mean"], pred["emb_std"], pred["emb_lstd"])
+        kl_struct = 0.1 * self._kl(pred["aux_enc_mean"], pred["aux_enc_std"], pred["aux_enc_lstd"], pred["emb_mean"], pred["emb_std"], pred["emb_lstd"])
         kl_exp = self._kl(pred["emb_mean"], pred["emb_std"], pred["emb_lstd"], 1., 1., 0.)
 
         loss = ((nll_struct + nll_exp + nll_sup + kl_struct + kl_exp) * w).mean(dim=0)
