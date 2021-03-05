@@ -211,7 +211,7 @@ vae_model_params = {
     "aux_exp_dec_layers_out_chnls": [256, 256],
     "vae_enc_add_chnls": [128],
     "vae_latent_dim": 32,
-    "vae_lvar_shift": 1000,
+    "vae_lvar_scale": 0.1,
 }
 
 vae_params = [global_params, vae_train_params, vae_model_params, loader_params, zhuang_params, saint_params]
