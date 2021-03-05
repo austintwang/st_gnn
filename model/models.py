@@ -425,7 +425,7 @@ class StructCoords(torch.nn.Module):
         coords = self.final_dist_layer(prev)
         # print(coords.isinf().sum().item()) ####
 
-        print(coords) ####
+        # print(coords) ####
         return {"coords": coords}
 
 
@@ -662,8 +662,8 @@ class SupCVAE(torch.nn.Module):
             "aux_enc_sample": aux_enc_sample,
         }
 
-        print({k: v.isinf().sum().item() for k, v in out.items()}) ####
-        print({k: v.isnan().sum().item() for k, v in out.items()}) ####
+        # print({k: v.isinf().sum().item() for k, v in out.items()}) ####
+        # print({k: v.isnan().sum().item() for k, v in out.items()}) ####
 
         return out
 
