@@ -88,13 +88,13 @@ if __name__ == '__main__':
     # vis_training(data_dir, result_dir, names, metrics, constraints)
 
     names = [
-        ("vs", "0002")
+        ("vb2", "0002")
     ]
     result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/vae/training"
     metrics = [
         "loss",
         "nll_vae_struct",
-        # "nll_vae_sup",
+        "nll_vae_sup",
         "nll_vae_exp",
         "kl_vae_struct",
         "kl_vae_exp",
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     vis_training(data_dir, result_dir, names, metrics, constraints)
 
     names = [
-        ("vs", "0002")
+        ("vb2", "0002")
         ("sb2s", "0000"), 
     ]
     result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/vae/training_comp"
