@@ -565,7 +565,7 @@ class AuxStructEncMLP(torch.nn.Module):
 
         self.final_layer = torch.nn.Linear(in_features=prev, out_features=3)
 
-    def forward(self, z):
+    def forward(self, data):
         x = data.pos
         edge_index = data.edge_index
         edge_weight = data.edge_norm * data.edge_attr
