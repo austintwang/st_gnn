@@ -33,7 +33,7 @@ def load_model(vae_model_cls, loader, components, params, model_state):
     m.eval()
     return m
 
-def sample_model(loader, vae_model, device):
+def sample_model(loader, vae_model, num_samples, device):
     data_lst = []
 
     vae_model.to(device)
@@ -102,9 +102,13 @@ def sample_model(loader, vae_model, device):
 
     data_df = pd.DataFrame.from_records(data_lst)
 
-    return data_df
+    df_sampled = data_df.groupby("input").sample(n=num_samples)
+
+    return df_sampled
 
 def plt_scatter(df, name, exp, out_dir):
+    df = df[]
+
     sns.set()
     sns.scatterplot(data=df, x="x", y="y", hue="input")
     plt.title(f"Latent Distribution Samples By Input")
@@ -142,7 +146,7 @@ def plt_scatter(df, name, exp, out_dir):
     g.fig.suptitle(f"Expression Encoder Latent Samples", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
-    plt.savefig(os.path.join(res_dir, f"{exp}_latent_exp.svg"), bbox_inches='tight')
+    plt.savefig(os.path.join(res_dir, f"{exp}_latent_exp_samples.svg"), bbox_inches='tight')
     plt.clf()
 
     sns.set()
@@ -150,18 +154,18 @@ def plt_scatter(df, name, exp, out_dir):
     g.fig.suptitle(f"Structure Encoder Latent Samples", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
-    plt.savefig(os.path.join(res_dir, f"{exp}_latent_struct.svg"), bbox_inches='tight')
+    plt.savefig(os.path.join(res_dir, f"{exp}_latent_struct_samples.svg"), bbox_inches='tight')
     plt.clf()
 
     plt.close()
 
-def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir):
+def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, num_samples, data_dir, out_dir):
     device = dname if dname == "cpu" else f"cuda:{dname}" 
     params, model_state = load_state(data_dir, name, exp, device)
     loader = loader_cls(**params)
     vae_model = load_model(vae_model_cls, loader, components, params, model_state)
 
-    df = sample_model(loader, vae_model, device)
+    df = sample_model(loader, vae_model, num_samples, device)
     plt_scatter(df, name, exp, out_dir)
 
 if __name__ == '__main__':
@@ -178,10 +182,12 @@ if __name__ == '__main__':
         "exp_dec": models.AuxExpDecMLP,
     }
 
+    num_samples = 1000
+
     dname = sys.argv[1]
 
     name = "vs"
 
     exps = ["0022"]
     for exp in exps:
-        vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir)
+        vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, num_samples, data_dir, out_dir)
