@@ -107,16 +107,16 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], hue="input")
-    plt.title(f"Expression Encoder Latent Means")
+    g = sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], hue="input")
+    g.fig.suptitle(f"Expression Encoder Latent Means")
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
     plt.savefig(os.path.join(res_dir, f"{exp}_latent_exp.svg"), bbox_inches='tight')
     plt.clf()
 
     sns.set()
-    sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], hue="input")
-    plt.title(f"Structure Encoder Latent Means")
+    g = sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], hue="input")
+    g.fig.suptitle(f"Structure Encoder Latent Means")
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
     plt.savefig(os.path.join(res_dir, f"{exp}_latent_struct.svg"), bbox_inches='tight')
@@ -149,6 +149,6 @@ if __name__ == '__main__':
 
     name = "vs"
 
-    exps = ["0014", "0016"]
+    exps = ["0014"]
     for exp in exps:
         vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir)
