@@ -38,7 +38,7 @@ global_params = {
 }
         
 train_params = {
-    "num_epochs": 500,
+    "num_epochs": 1000,
     "learning_rate": 1e-3,
     "early_stop_min_delta": 0.001,
     "early_stop_hist_len": 10,
