@@ -566,7 +566,14 @@ class AuxStructEncMLP(torch.nn.Module):
         self.final_layer = torch.nn.Linear(in_features=prev, out_features=3)
 
     def forward(self, z):
-        prev = z
+        x = data.pos
+        edge_index = data.edge_index
+        edge_weight = data.edge_norm * data.edge_attr
+        edge_type = data.edge_type
+        cell_mask = data.cell_mask
+
+        embs = []
+        prev = x[cell_mask]
         for i in self.enc_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
@@ -625,7 +632,7 @@ class SupCVAE(torch.nn.Module):
         emb_std = torch.exp(emb_lstd)
         emb_sample = self._sample_sn_like(emb_std) * emb_std + emb_mean
 
-        aux_enc = self.embedder(data)
+        aux_enc = self.aux_struct_enc(data)
         prev = aux_enc
         for i in self.aux_enc_add_chnls:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
