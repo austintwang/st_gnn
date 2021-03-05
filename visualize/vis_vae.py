@@ -45,6 +45,8 @@ def sample_model(loader, vae_model, device):
         out_coords_ae = out["coords"]
         emb_mean = out["emb_mean"]
         aux_enc_mean = out["aux_enc_mean"]
+        emb_sample = out["emb_sample"]
+        aux_enc_sample = out["aux_enc_sample"]
 
 
         cell_mask = data.cell_mask.detach().cpu().numpy()
@@ -84,6 +86,12 @@ def sample_model(loader, vae_model, device):
                 "h1_s": h1_s,
                 "h2_s": h2_s,
                 "h3_s": h3_s,
+                "h1_esp": h1_esp,
+                "h2_esp": h2_esp,
+                "h3_esp": h3_esp,
+                "h1_ssp": h1_ssp,
+                "h2_ssp": h2_ssp,
+                "h3_ssp": h3_ssp,
                 "input": ctype
             }
             data_lst.append(entry)
@@ -125,6 +133,22 @@ def plt_scatter(df, name, exp, out_dir):
     plt.savefig(os.path.join(res_dir, f"{exp}_latent_struct.svg"), bbox_inches='tight')
     plt.clf()
 
+    sns.set()
+    g = sns.pairplot(data=df, vars=["h1_esp", "h2_esp", "h3_esp"], hue="input", diag_kind="hist")
+    g.fig.suptitle(f"Expression Encoder Latent Samples", y=1.08)
+    res_dir = os.path.join(out_dir, name, "samples")
+    os.makedirs(res_dir, exist_ok=True)
+    plt.savefig(os.path.join(res_dir, f"{exp}_latent_exp.svg"), bbox_inches='tight')
+    plt.clf()
+
+    sns.set()
+    g = sns.pairplot(data=df, vars=["h1_ssp", "h2_ssp", "h3_ssp"], hue="input", diag_kind="hist")
+    g.fig.suptitle(f"Structure Encoder Latent Samples", y=1.08)
+    res_dir = os.path.join(out_dir, name, "samples")
+    os.makedirs(res_dir, exist_ok=True)
+    plt.savefig(os.path.join(res_dir, f"{exp}_latent_struct.svg"), bbox_inches='tight')
+    plt.clf()
+
     plt.close()
 
 def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir):
@@ -154,6 +178,6 @@ if __name__ == '__main__':
 
     name = "vs"
 
-    exps = ["0018"]
+    exps = ["0022"]
     for exp in exps:
         vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir)
