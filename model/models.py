@@ -415,10 +415,9 @@ class StructCoords(torch.nn.Module):
         self.final_dist_layer = torch.nn.Linear(in_features=prev, out_features=3)
 
     def forward(self, z):
-        num_cells = z.shape[0]
-
         prev = z
         print(prev.isnan().sum().item()) ####
+        print(prev) ####
         for i in self.struct_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
