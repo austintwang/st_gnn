@@ -656,6 +656,8 @@ class SupCVAE(torch.nn.Module):
             "aux_enc_lstd": aux_enc_lstd,
         }
 
+        print({k: v.isnan().sum() for k, v in out.items()}) ####
+
         return out
 
     def sample_coords(self, data):
