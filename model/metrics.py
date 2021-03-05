@@ -225,6 +225,13 @@ def nll_vae_struct(pred, data, params):
     return metric.item()
 
 @torch.no_grad()
+def nll_vae_sup(pred, data, params):
+    nll = ((pred["coords_from_exp"] - data.cell_pos)**2).sum(dim=1) / params["vae_struct_nll_std"] / 2
+    metric = nll.mean()
+
+    return metric.item()
+
+@torch.no_grad()
 def nll_vae_exp(pred, data, params):
     nll = ((pred["exp"] - data.cell_exp)**2).sum(dim=1) / params["vae_exp_nll_std"] / 2
     metric = nll.mean()

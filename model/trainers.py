@@ -348,6 +348,7 @@ class CVAETrainer(Trainer):
     def _calc_metrics_val(self, pred, data):
         out_metrics = {
             "nll_vae_struct": metrics.nll_vae_struct(pred, data, self.params),
+            "nll_vae_sup": metrics.nll_vae_sup(pred, data, self.params),
             "nll_vae_exp": metrics.nll_vae_exp(pred, data, self.params),
             "kl_vae_struct": metrics.kl_vae_struct(pred, data, self.params),
             "kl_vae_exp": metrics.kl_vae_exp(pred, data, self.params),
