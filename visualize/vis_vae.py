@@ -108,20 +108,22 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], hue="input")
-    g.fig.suptitle(f"Expression Encoder Latent Means")
+    g = sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], hue="input", diag_kind="hist")
+    g.fig.suptitle(f"Expression Encoder Latent Means", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
     plt.savefig(os.path.join(res_dir, f"{exp}_latent_exp.svg"), bbox_inches='tight')
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], hue="input")
-    g.fig.suptitle(f"Structure Encoder Latent Means")
+    g = sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], hue="input", diag_kind="hist")
+    g.fig.suptitle(f"Structure Encoder Latent Means", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
     plt.savefig(os.path.join(res_dir, f"{exp}_latent_struct.svg"), bbox_inches='tight')
     plt.clf()
+
+    plt.close()
 
 def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir):
     device = dname if dname == "cpu" else f"cuda:{dname}" 
