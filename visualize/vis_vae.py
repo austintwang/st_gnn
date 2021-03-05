@@ -181,7 +181,7 @@ if __name__ == '__main__':
         "exp_dec": models.AuxExpDecMLP,
     }
 
-    num_samples = 5000
+    num_samples = 10000
 
     dname = sys.argv[1]
 
