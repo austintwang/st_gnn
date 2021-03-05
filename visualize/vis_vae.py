@@ -114,7 +114,7 @@ def plt_scatter(df, name, exp, out_dir):
 
     sns.set()
     sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"])
-    plt.title(f"Structure Encoder Latent Means")v
+    plt.title(f"Structure Encoder Latent Means")
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
     plt.savefig(os.path.join(res_dir, f"{exp}_latent_struct.svg"), bbox_inches='tight')
