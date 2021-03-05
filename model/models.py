@@ -563,8 +563,6 @@ class AuxStructEncMLP(torch.nn.Module):
             )
             prev = i
 
-        self.final_layer = torch.nn.Linear(in_features=prev, out_features=3)
-
     def forward(self, data):
         x = data.pos
         edge_index = data.edge_index
@@ -577,9 +575,8 @@ class AuxStructEncMLP(torch.nn.Module):
         for i in self.enc_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
-        coords = self.final_layer(prev)
 
-        return {"coords": coords}
+        return h
 
 
 class SupCVAE(torch.nn.Module):
