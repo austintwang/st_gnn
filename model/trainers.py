@@ -321,24 +321,26 @@ class CVAETrainer(Trainer):
 
         nll_struct = ((pred["coords"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_struct_nll_std"] / 2
         nll_exp = ((pred["exp"] - data.cell_exp)**2).sum(dim=1) / self.params["vae_exp_nll_std"] / 2
+
+        nll_sup = ((pred["coords_from_exp"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_sup_nll_std"] / 2
      
         kl_struct = self._kl(pred["aux_enc_mean"], pred["aux_enc_std"], pred["aux_enc_lstd"], pred["emb_mean"], pred["emb_std"], pred["emb_lstd"])
         kl_exp = self._kl(pred["emb_mean"], pred["emb_std"], pred["emb_lstd"], 1., 1., 0.)
 
-        loss = ((nll_struct + nll_exp + kl_struct + kl_exp) * w).mean(dim=0)
+        loss = ((nll_struct + nll_exp + nll_sup + kl_struct + kl_exp) * w).mean(dim=0)
 
         return loss
 
     def _val_extras(self, pred, data):
-        samples = self.model.sample_coords(data)
-        l = samples["coords"]
+        # samples = self.model.sample_coords(data)
+        # l = samples["coords"]
 
         num_cells = l.shape[0]
         rtile = l.unsqueeze(0).expand(num_cells, -1, -1)
         ctile = l.unsqueeze(1).expand(-1, num_cells, -1)
         dists = ((rtile - ctile)**2).sum(dim=2).sqrt()
 
-        pred["coords_from_struct"] = l
+        # pred["coords_from_exp"] = l
         pred["dists"] = dists
 
     def _calc_metrics_val(self, pred, data):

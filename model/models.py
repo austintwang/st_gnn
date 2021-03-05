@@ -638,10 +638,12 @@ class SupCVAE(torch.nn.Module):
 
         out_coords = self.struct_module(aux_enc_sample)["coords"]
         out_exp = self.aux_exp_dec(emb_sample)["exp"]
+        coords_from_exp = self.struct_module(emb_sample)["coords"]
 
         out = {
             "coords": out_coords,
             "exp": out_exp,
+            "coords_from_exp": coords_from_exp,
             "emb_mean": emb_mean,
             "emb_std": emb_std,
             "emb_lstd": emb_lstd,
