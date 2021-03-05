@@ -62,13 +62,13 @@ class Trainer(object):
         batch_records = {}
         t_iter = tqdm.tqdm(batches, desc="\tLoss: ------", ncols=150)
         time_start = time.time() - self.time_ref
+        torch.autograd.set_detect_anomaly(True) ####
 
         for data in t_iter:
             data.to(self.device)
             self._calc_obs(data)
-            with torch.autograd.set_detect_anomaly(True):
-                pred = self.model(data)
-                loss = self._loss_fn(pred, data)
+            pred = self.model(data)
+            loss = self._loss_fn(pred, data)
 
             loss.backward()  
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=self.clip_norm)
