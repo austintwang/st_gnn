@@ -19,7 +19,7 @@ class Trainer(object):
         self.early_stop_hist_len = self.params["early_stop_hist_len"]
         self.clip_norm = self.params["grad_clip_norm"]
         self.device = self.params["device"]
-        self.debug = self.params["debug"]
+        self.debug = self.params.get("debug", False)
 
         self.model = model
         self.model.to(self.device)
