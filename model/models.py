@@ -416,8 +416,8 @@ class StructCoords(torch.nn.Module):
 
     def forward(self, z):
         prev = z
-        print(prev.isnan().sum().item()) ####
-        print(prev) ####
+        # print(prev.isnan().sum().item()) ####
+        # print(prev) ####
         for i in self.struct_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
@@ -660,7 +660,7 @@ class SupCVAE(torch.nn.Module):
             "aux_enc_sample": aux_enc_sample,
         }
 
-        print({k: v.isnan().sum().item() for k, v in out.items()}) ####
+        print({k: v.isinf().sum().item() for k, v in out.items()}) ####
 
         return out
 
