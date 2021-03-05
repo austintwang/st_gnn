@@ -321,11 +321,11 @@ class CVAETrainer(Trainer):
     def _loss_fn(self, pred, data):
         w = data.node_norm[data.cell_mask].sqrt()
 
-        print((~(data.cell_pos == data.cell_pos)).sum()) ####
+        print((~(data.edge_attr == data.edge_attr)).sum()) ####
         print((~(pred["coords"] == pred["coords"])).sum()) ####
 
         nll_struct = ((pred["coords"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_struct_nll_std"] / 2
-        nll_struct = 0 ####
+        # nll_struct = 0 ####
         nll_exp = ((pred["exp"] - data.cell_exp)**2).sum(dim=1) / self.params["vae_exp_nll_std"] / 2
 
         nll_sup = ((pred["coords_from_exp"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_sup_nll_std"] / 2
