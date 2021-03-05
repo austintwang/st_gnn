@@ -107,7 +107,6 @@ def sample_model(loader, vae_model, num_samples, device):
     return df_sampled
 
 def plt_scatter(df, name, exp, out_dir):
-    df = df[]
 
     sns.set()
     sns.scatterplot(data=df, x="x", y="y", hue="input")
