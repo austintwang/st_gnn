@@ -54,8 +54,6 @@ def sample_model(loader, vae_model, device):
         latent_exp = emb_mean.detach().cpu().numpy()
         latent_struct = aux_enc_mean.detach().cpu().numpy()
 
-        print(latent_exp) ####
-
         num_samples = exp.shape[0]
         for ind in range(num_samples):
             if exp[ind, 3] == 1:
@@ -67,8 +65,8 @@ def sample_model(loader, vae_model, device):
 
             x, y, z = coords_pred[ind]
             x_ae, y_ae, z_ae = coords_pred_ae[ind]
-            h1_e, h2_e, h3_e = latent_exp
-            h1_s, h2_s, h3_s = latent_struct
+            h1_e, h2_e, h3_e = latent_exp[ind]
+            h1_s, h2_s, h3_s = latent_struct[ind]
 
             entry = {
                 "x": x, 
