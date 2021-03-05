@@ -62,7 +62,7 @@ class Trainer(object):
         batch_records = {}
         t_iter = tqdm.tqdm(batches, desc="\tLoss: ------", ncols=150)
         time_start = time.time() - self.time_ref
-        torch.autograd.set_detect_anomaly(True) ####
+        # torch.autograd.set_detect_anomaly(True) ####
 
         for data in t_iter:
             data.to(self.device)
