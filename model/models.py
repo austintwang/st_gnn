@@ -651,12 +651,14 @@ class SupCVAE(torch.nn.Module):
             "emb_mean": emb_mean,
             "emb_std": emb_std,
             "emb_lstd": emb_lstd,
+            "emb_sample": emb_sample,
             "aux_enc_mean": aux_enc_mean,
             "aux_enc_std": aux_enc_std,
             "aux_enc_lstd": aux_enc_lstd,
+            "aux_enc_sample": aux_enc_sample,
         }
 
-        print({k: v.isnan().sum() for k, v in out.items()}) ####
+        print({k: v.isnan().sum().item() for k, v in out.items()}) ####
 
         return out
 
