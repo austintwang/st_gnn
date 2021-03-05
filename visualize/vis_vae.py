@@ -103,6 +103,7 @@ def sample_model(loader, vae_model, num_samples, device):
     data_df = pd.DataFrame.from_records(data_lst)
 
     df_sampled = data_df.groupby("input").sample(n=num_samples)
+    print(df_sampled) ####
 
     return df_sampled
 
