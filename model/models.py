@@ -421,9 +421,9 @@ class StructCoords(torch.nn.Module):
         for i in self.struct_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
-            print(prev.isnan().sum().item()) ####
+            # print(prev.isnan().sum().item()) ####
         coords = self.final_dist_layer(prev)
-        print(coords.isnan().sum().item()) ####
+        # print(coords.isnan().sum().item()) ####
 
         return {"coords": coords}
 
@@ -662,6 +662,7 @@ class SupCVAE(torch.nn.Module):
         }
 
         print({k: v.isinf().sum().item() for k, v in out.items()}) ####
+        print({k: v.isnan().sum().item() for k, v in out.items()}) ####
 
         return out
 
@@ -673,7 +674,7 @@ class SupCVAE(torch.nn.Module):
             prev = h
         dist = self.emb_add_final_layer(prev)
         emb_mean = dist[:,:self.vae_latent_dim]
-        emb_lstd = dist[:,self.vae_latent_dim:]
+        emb_lstd = dist[:,self.vae_latent_dim:] - self.lvar_shift
         emb_std = torch.exp(emb_lstd)
         emb_sample = self._sample_sn_like(emb_std) * emb_std + emb_mean
 
