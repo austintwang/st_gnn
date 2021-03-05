@@ -107,7 +107,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"])
+    sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], hue="input")
     plt.title(f"Expression Encoder Latent Means")
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -115,7 +115,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"])
+    sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], hue="input")
     plt.title(f"Structure Encoder Latent Means")
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -149,6 +149,6 @@ if __name__ == '__main__':
 
     name = "vs"
 
-    exps = ["0014"]
+    exps = ["0014", "0016"]
     for exp in exps:
         vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, data_dir, out_dir)
