@@ -33,7 +33,7 @@ def load_model(vae_model_cls, loader, components, params, model_state):
     m.eval()
     return m
 
-def sample_model(loader, vae_model, num_samples, device):
+def sample_model(loader, vae_model, num_select, device):
     data_lst = []
 
     vae_model.to(device)
@@ -101,9 +101,10 @@ def sample_model(loader, vae_model, num_samples, device):
             data_lst.append(entry)
 
     data_df = pd.DataFrame.from_records(data_lst)
-    print(data_df.groupby("input").count()) ####
+    # print(data_df) ####
+    # print(data_df.groupby("input").count()) ####
 
-    df_sampled = data_df.groupby("input").sample(n=num_samples)
+    df_sampled = data_df.groupby("input").sample(n=num_select)
     # print(df_sampled) ####
 
     return df_sampled
@@ -183,7 +184,7 @@ if __name__ == '__main__':
         "exp_dec": models.AuxExpDecMLP,
     }
 
-    num_samples = 10000
+    num_samples = 1000
 
     dname = sys.argv[1]
 
