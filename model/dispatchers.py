@@ -79,7 +79,8 @@ saint_params = {
 test_params = {
     "saint_sample_coverage": 2, 
     "saint_num_steps": {"train": 10, "val": 10, "test": 10},
-    "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/test"
+    "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/test",
+    "debug": True
 }
 
 # sg_params = [global_params, train_params, gnn_params, loader_params, zhuang_params, saint_params]

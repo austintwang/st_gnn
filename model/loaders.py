@@ -165,7 +165,7 @@ class ZhuangBasic(SaintRWLoader):
         num_cells = len(cells)
         coords = torch.tensor([st_coords[i] for i in cells])
         coords_dims = coords.shape[1]
-        coords_pad = torch.cat((torch.full((num_genes, coords_dims), np.nan), coords), 0)
+        coords_pad = torch.cat((torch.full((num_genes, coords_dims), 0), coords), 0)
         cell_mask = torch.cat((torch.full((num_genes,), False), torch.full((num_cells,), True)), 0)
 
         node_in_channels = num_genes + 1

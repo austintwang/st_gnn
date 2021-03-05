@@ -19,6 +19,7 @@ class Trainer(object):
         self.early_stop_hist_len = self.params["early_stop_hist_len"]
         self.clip_norm = self.params["grad_clip_norm"]
         self.device = self.params["device"]
+        self.debug = self.params["debug"]
 
         self.model = model
         self.model.to(self.device)
@@ -62,7 +63,7 @@ class Trainer(object):
         batch_records = {}
         t_iter = tqdm.tqdm(batches, desc="\tLoss: ------", ncols=150)
         time_start = time.time() - self.time_ref
-        # torch.autograd.set_detect_anomaly(True) ####
+        torch.autograd.set_detect_anomaly(self.debug)
 
         for data in t_iter:
             data.to(self.device)
@@ -320,7 +321,8 @@ class CVAETrainer(Trainer):
     def _loss_fn(self, pred, data):
         w = data.node_norm[data.cell_mask].sqrt()
 
-        nll_struct = ((pred["coords"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_struct_nll_std"] / 2
+        # nll_struct = ((pred["coords"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_struct_nll_std"] / 2
+        nll_struct = 0 ####
         nll_exp = ((pred["exp"] - data.cell_exp)**2).sum(dim=1) / self.params["vae_exp_nll_std"] / 2
 
         nll_sup = ((pred["coords_from_exp"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_sup_nll_std"] / 2
