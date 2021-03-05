@@ -42,6 +42,8 @@ def sample_model(loader, vae_model, device):
         out = vae_model(data)
         out_coords = out["coords_from_exp"]
         out_coords_ae = out["coords"]
+        emb_mean = out["emb_mean"]
+        aux_enc_mean = out["aux_enc_mean"]
 
 
         cell_mask = data.cell_mask.detach().cpu().numpy()
