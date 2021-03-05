@@ -64,11 +64,11 @@ def sample_model(loader, vae_model, num_select, device):
         num_samples = exp.shape[0]
         for ind in range(num_samples):
             if exp[ind, 3] == 1:
-                ctype = "left"
+                ctype = "Left"
             elif exp[ind, 4] == 1:
-                ctype = "middle"
+                ctype = "Middle"
             elif exp[ind, 5] == 1:
-                ctype = "right"
+                ctype = "Right"
 
             x, y, z = coords_pred[ind]
             x_ae, y_ae, z_ae = coords_pred_ae[ind]
@@ -96,7 +96,7 @@ def sample_model(loader, vae_model, num_select, device):
                 "h1_ssp": h1_ssp,
                 "h2_ssp": h2_ssp,
                 "h3_ssp": h3_ssp,
-                "input": ctype
+                "Input": ctype
             }
             data_lst.append(entry)
 
@@ -106,13 +106,15 @@ def sample_model(loader, vae_model, num_select, device):
 
     df_sampled = data_df.groupby("input").sample(n=num_select)
     # print(df_sampled) ####
+    df_sampled.sample(frac=1)
 
     return df_sampled
 
 def plt_scatter(df, name, exp, out_dir):
+    order = ['Left', 'Middle', 'Right']
 
     sns.set()
-    sns.scatterplot(data=df, x="x", y="y", hue="input")
+    sns.scatterplot(data=df, x="x", y="y", hue="input", hue_order=order)
     plt.title(f"Latent Distribution Samples By Input")
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -128,7 +130,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], hue="input", diag_kind="hist")
+    g = sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], hue="input", diag_kind="hist", hue_order=order)
     g.fig.suptitle(f"Expression Encoder Latent Means", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -136,7 +138,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], hue="input", diag_kind="hist")
+    g = sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], hue="input", diag_kind="hist", hue_order=order)
     g.fig.suptitle(f"Structure Encoder Latent Means", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -144,7 +146,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_esp", "h2_esp", "h3_esp"], hue="input", diag_kind="hist")
+    g = sns.pairplot(data=df, vars=["h1_esp", "h2_esp", "h3_esp"], hue="input", diag_kind="hist", hue_order=order)
     g.fig.suptitle(f"Expression Encoder Latent Samples", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -152,7 +154,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_ssp", "h2_ssp", "h3_ssp"], hue="input", diag_kind="hist")
+    g = sns.pairplot(data=df, vars=["h1_ssp", "h2_ssp", "h3_ssp"], hue="input", diag_kind="hist", hue_order=order)
     g.fig.suptitle(f"Structure Encoder Latent Samples", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
