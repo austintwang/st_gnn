@@ -55,6 +55,8 @@ def sample_model(loader, vae_model, device):
         latent_exp = emb_mean.detach().cpu().numpy()
         latent_struct = aux_enc_mean.detach().cpu().numpy()
 
+        # print(latent_exp) ####
+
         num_samples = exp.shape[0]
         for ind in range(num_samples):
             if exp[ind, 3] == 1:
@@ -108,7 +110,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], diag_kind="hist")
+    g = sns.pairplot(data=df, vars=["h1_e", "h2_e", "h3_e"], hue="input", diag_kind="hist")
     g.fig.suptitle(f"Expression Encoder Latent Means", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
@@ -116,7 +118,7 @@ def plt_scatter(df, name, exp, out_dir):
     plt.clf()
 
     sns.set()
-    g = sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], diag_kind="hist")
+    g = sns.pairplot(data=df, vars=["h1_s", "h2_s", "h3_s"], hue="input", diag_kind="hist")
     g.fig.suptitle(f"Structure Encoder Latent Means", y=1.08)
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
