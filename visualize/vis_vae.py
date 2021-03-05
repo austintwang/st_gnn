@@ -30,6 +30,7 @@ def load_state(data_dir, name, exp, device):
 def load_model(vae_model_cls, loader, components, params, model_state):
     m = vae_model_cls(loader.node_in_channels, components, **params)
     m.load_state_dict(model_state)
+    m.eval()
     return m
 
 def sample_model(loader, vae_model, device):
