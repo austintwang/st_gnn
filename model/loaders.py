@@ -215,7 +215,7 @@ class ZhuangBasicCellF(ZhuangBasic):
         # print(partition) ####
         # print(st_anndata.obs_names) ####
         coords_dims = coords.shape[1]
-        coords_pad = torch.cat((torch.full((num_genes, coords_dims), np.nan), coords), 0).float()
+        coords_pad = torch.cat((torch.full((num_genes, coords_dims), 0), coords), 0).float()
         cell_mask = torch.cat((torch.full((num_genes,), False), torch.full((num_cells,), True)), 0)
 
         expr_orig = np.log(st_anndata.X[part_mask,:] + 1)
