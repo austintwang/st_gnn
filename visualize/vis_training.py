@@ -85,6 +85,47 @@ if __name__ == '__main__':
         # "loss": {"top": 2000},
         # "gaussian_nll": {"top": 0.2}
     }
+    # vis_training(data_dir, result_dir, names, metrics, constraints)
+
+    names = [
+        ("vs", "")
+    ]
+    result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/vae/training"
+    metrics = [
+        "loss",
+        "nll_vae_struct",
+        "nll_vae_sup",
+        "nll_vae_exp",
+        "kl_vae_struct",
+        "kl_vae_exp",
+        "spearman", 
+        "mse",
+        "mse_lt_100",
+        "mse_100_500",
+        "mse_500_1000",
+        "mse_gt_1000",
+    ]
+    constraints = {
+        # "gaussian_nll": {"top": 0.2}
+    }
+    vis_training(data_dir, result_dir, names, metrics, constraints)
+
+    names = [
+        ("vs", "")
+        ("sb2s", "0002"), 
+    ]
+    result_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/vae/training_comp"
+    metrics = [
+        "spearman", 
+        "mse",
+        "mse_lt_100",
+        "mse_100_500",
+        # "mse_500_1000",
+        "mse_gt_1000",
+    ]
+    constraints = {
+        # "gaussian_nll": {"top": 0.2}
+    }
     vis_training(data_dir, result_dir, names, metrics, constraints)
 
 
