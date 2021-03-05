@@ -418,11 +418,13 @@ class StructCoords(torch.nn.Module):
         num_cells = z.shape[0]
 
         prev = z
+        print(prev.isnan().sum().item()) ####
         for i in self.struct_layers:
             h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
             prev = h
             print(prev.isnan().sum().item()) ####
         coords = self.final_dist_layer(prev)
+        print(coords.isnan().sum().item()) ####
 
         return {"coords": coords}
 
