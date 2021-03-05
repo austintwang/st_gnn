@@ -115,7 +115,7 @@ def plt_scatter(df, name, exp, out_dir):
 
     sns.set()
     sns.scatterplot(data=df, x="x", y="y", hue="Input", hue_order=order)
-    plt.title(f"Latent Distribution Samples By Input")
+    plt.title(f"Output Distribution Samples By Input")
     res_dir = os.path.join(out_dir, name, "samples")
     os.makedirs(res_dir, exist_ok=True)
     plt.savefig(os.path.join(res_dir, f"{exp}_samples.svg"), bbox_inches='tight')
