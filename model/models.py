@@ -592,6 +592,7 @@ class SupCVAE(torch.nn.Module):
         aux_struct_enc_layers_out_chnls = self.params["aux_struct_enc_layers_out_chnls"]
         vae_enc_add_chnls = self.params["vae_enc_add_chnls"]
         self.vae_latent_dim = vae_latent_dim = self.params["vae_latent_dim"]
+        self.lvar_shift = self.params.get("vae_lvar_shift", 0.)
 
         self.embedder = components["emb"](in_channels, **self.params)
         self.emb_add_chnls = torch.nn.ModuleList()
@@ -627,7 +628,7 @@ class SupCVAE(torch.nn.Module):
         dist = self.emb_add_final_layer(prev)
         # print(dist) ####
         emb_mean = dist[:,:self.vae_latent_dim]
-        emb_lstd = dist[:,self.vae_latent_dim:]
+        emb_lstd = dist[:,self.vae_latent_dim:] - self.lvar_shift
         emb_std = torch.exp(emb_lstd)
         emb_sample = self._sample_sn_like(emb_std) * emb_std + emb_mean
 
@@ -638,7 +639,7 @@ class SupCVAE(torch.nn.Module):
             prev = h
         dist = self.aux_enc_add_final_layer(prev)
         aux_enc_mean = dist[:,:self.vae_latent_dim]
-        aux_enc_lstd = dist[:,self.vae_latent_dim:]
+        aux_enc_lstd = dist[:,self.vae_latent_dim:] - self.lvar_shift
         aux_enc_std = torch.exp(aux_enc_lstd)
         aux_enc_sample = self._sample_sn_like(aux_enc_std) * aux_enc_std + aux_enc_mean
 
