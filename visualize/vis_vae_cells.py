@@ -121,6 +121,10 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
         ax.set_ylabel('Y (Microns)')
         ax.set_zlabel('Z (Microns)')
 
+        ax.set_xlim(-10000, 10000)
+        ax.set_ylim(-10000, 10000)
+        ax.set_zlim(-1000, 10000)
+
         plt.title(f"Cluster {name}, {num_cells} Cells")
         res_dir = os.path.join(out_dir, model_name, exp, mode)
         os.makedirs(res_dir, exist_ok=True)
@@ -157,7 +161,7 @@ if __name__ == '__main__':
     }
 
     num_samples = 100
-    num_total = 500000
+    num_total = 1000000
     cells_per_cluster = 20
 
     dname = sys.argv[1]
