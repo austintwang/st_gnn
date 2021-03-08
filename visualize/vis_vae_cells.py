@@ -79,7 +79,7 @@ def sample_model(loader, vae_model, num_select, num_total, device, mode):
             num_samples = coords_pred.shape[0]
             for ind in range(num_samples):
                 x, y, z = coords_pred[ind]
-                cell = node_map["node_to_id"][cell_indices[ind]]
+                cell = node_map[cell_indices[ind]]
                 cluster = clusters_df.loc[cell, "label"]
 
                 entry = {
