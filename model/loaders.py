@@ -294,7 +294,7 @@ class ZhuangBasicCellFFiltered(ZhuangBasicCellF):
         anndata = self.params.get("st_anndata", sc.read(self.params["st_exp_path"]))
         coords = self.params.get("st_coords", pd.read_pickle(self.params["st_coords_path"]))
         organisms = self.params.get("st_organisms", pd.read_pickle(self.params["st_organisms_path"]))
-        clusters = self.cluster_data = self.params.get("st_clusters", pd.read_csv(self.params["st_clusters_path"]))
+        clusters = self.cluster_data = self.params.get("st_clusters", pd.read_csv(self.params["st_clusters_path"], index_col=0))
 
         num_cells_per_cluster = self.params["num_cells_per_cluster"]
 
