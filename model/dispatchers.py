@@ -101,8 +101,8 @@ sb2_components = {
     "struct": models.StructCoords,
 }
 
-sb2 = Dispatcher("sb2", sg_params, sb2_components, loaders.ZhuangBasicCellF, models.SupFF, trainers.SupTrainer)
-Dispatcher.variant(sb2, "sbt", [test_params])
+# sb2 = Dispatcher("sb2", sg_params, sb2_components, loaders.ZhuangBasicCellF, models.SupFF, trainers.SupTrainer)
+# Dispatcher.variant(sb2, "sbt", [test_params])
 
 
 # sg2s = Dispatcher("sg2s", sg_params, loaders.ZhuangBasic, models.SupSRCGN, trainers.SupMSETrainer)
@@ -111,8 +111,13 @@ Dispatcher.variant(sb2, "sbt", [test_params])
 # sgc2s = Dispatcher("sgc2s", sg_params, loaders.ZhuangBasicCellF, models.SupSRCGN, trainers.SupMSETrainer)
 # Dispatcher.variant(sgc2s, "sgcts", [test_params])
 
-# sb2s = Dispatcher("sb2s", sg_params, loaders.ZhuangBasicCellF, models.SupSMLP, trainers.SupMSETrainer)
-# Dispatcher.variant(sb2s, "sbts", [test_params])
+sb2s_components = {
+    "emb": models.EmbMLP,
+    "struct": models.StructPairwiseN,
+}
+
+sb2s = Dispatcher("sb2s", sg_params, sb2s_components, loaders.ZhuangBasicCellF, models.SupSMLP, trainers.SupMSETrainer)
+Dispatcher.variant(sb2s, "sbts", [test_params])
 
 
 # sglr_params = sg_params + [{"grad_clip_norm": 0.0001, "learning_rate": 1e-100,}]
