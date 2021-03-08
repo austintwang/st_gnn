@@ -116,7 +116,7 @@ sb2s_components = {
     "struct": models.StructPairwiseN,
 }
 
-sb2s = Dispatcher("sb2s", sg_params, sb2s_components, loaders.ZhuangBasicCellF, models.SupSMLP, trainers.SupMSETrainer)
+sb2s = Dispatcher("sb2s", sg_params, sb2s_components, loaders.ZhuangBasicCellF, models.SupFF, trainers.SupMSETrainer)
 Dispatcher.variant(sb2s, "sbts", [test_params])
 
 
