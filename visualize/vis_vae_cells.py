@@ -137,7 +137,7 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
         ax.set_zlim(0, 2000)
 
         plt.title(f"Cluster {name}, {num_cells} Cells")
-        for ii in xrange(0,360,30):
+        for ii in range(0, 360, 30):
             res_dir = os.path.join(out_dir, model_name, exp, mode, str(ii))
             ax.view_init(azim=ii)
             os.makedirs(res_dir, exist_ok=True)
