@@ -143,6 +143,11 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
             os.makedirs(res_dir, exist_ok=True)
             plt.savefig(os.path.join(res_dir, f"samples_{name}.svg"), bbox_inches='tight')
 
+        res_dir = os.path.join(out_dir, model_name, exp, mode, "top")
+        ax.view_init(azim=0, elev=90)
+        os.makedirs(res_dir, exist_ok=True)
+        plt.savefig(os.path.join(res_dir, f"samples_{name}.svg"), bbox_inches='tight')
+
         plt.clf()
         plt.close()
 
