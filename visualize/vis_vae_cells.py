@@ -49,12 +49,15 @@ def sample_model(loader, vae_model, num_select, num_total, device, mode):
     data_lst = []
     count = 0
 
-    print(len(loader.val_part), len(loader.test_part))
+    # print(len(loader.val_part), len(loader.test_part))
+    print((loader.val_part & loader.test_part))
 
     if mode == "val":
         sampler = loader.val_sampler
+        node_map = loader.val_map
     elif mode == "test":
         sampler = loader.test_sampler
+        node_map = loader.test_map
     
     vae_model.to(device)
     enough = False
@@ -129,7 +132,7 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
         ax.set_ylabel('Y (Microns)')
         ax.set_zlabel('Z (Microns)')
 
-        ax.set_xlim(-8500, 2500)
+        ax.set_xlim(-8500, 5000)
         ax.set_ylim(-2000, 4000)
         ax.set_zlim(0, 2000)
 

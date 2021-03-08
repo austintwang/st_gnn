@@ -243,7 +243,7 @@ class ZhuangBasicCellF(ZhuangBasic):
         node_index_orig = torch.arange(x.shape[0])
 
         data = Data(x=x, edge_index=edges, edge_attr=edge_attr, edge_type=edge_type, pos=coords_pad, cell_mask=cell_mask, node_index_orig=node_index_orig)
-        # print(data) ####
+        print(data) ####
         maps = {
             "gene_to_node": gene_to_node,
             "cell_to_node": cell_to_node,
