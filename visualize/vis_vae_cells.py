@@ -100,6 +100,7 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
 
     clusters = df.groupby("cluster")
     for name, cluster in clusters:
+        print(cluster) ####
         fig = plt.figure()
         ax = fig.add_subplot(111, projection = '3d')
 
