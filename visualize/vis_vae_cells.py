@@ -186,6 +186,6 @@ if __name__ == '__main__':
     name = "vb2"
 
     # exps = ["0005"]
-    exps = ["0009"]
+    exps = ["0010"]
     for exp in exps:
         vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, cells_per_cluster, num_samples, num_total, data_dir, out_dir, clusters_path)
