@@ -300,7 +300,7 @@ class ZhuangBasicCellFFiltered(ZhuangBasic):
 
         m = clusters["slice_id"].str.split("_", n=1, expand=True) 
         mouse, _ = m 
-        print(mouse) ####
+        print(m) ####
 
         clusters_m1 = clusters[mouse == "mouse1"]
         select_m1_df = clusters_m1.groupby("label").sample(n=num_cells_per_cluster)
