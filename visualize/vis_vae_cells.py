@@ -124,7 +124,7 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
 
     plt.close()
 
-def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, num_samples, num_total, data_dir, out_dir):
+def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, num_samples, num_total, data_dir, out_dir, clusters_path):
     device = dname if dname == "cpu" else f"cuda:{dname}" 
     params, model_state = load_state(data_dir, name, exp, device)
     loader = load_loader(loader_cls, params, clusters_path, cells_per_cluster)
@@ -139,6 +139,7 @@ def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, num_samples
 if __name__ == '__main__':
     data_dir = "/dfs/user/atwang/data/analyses/st_gnn"
     out_dir = "/dfs/user/atwang/results/st_gnn_results/spt_zhuang/vae/"
+    clusters_path = "/dfs/user/atwang/data/spt_zhuang/parsed/cell_labels.csv"
 
     loader_cls = ZhuangBasicCellFFiltered
     vae_model_cls = models.SupCVAE
@@ -159,4 +160,4 @@ if __name__ == '__main__':
 
     exps = ["0005"]
     for exp in exps:
-        vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, num_samples, data_dir, out_dir)
+        vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, num_samples, num_total, data_dir, out_dir, clusters_path)
