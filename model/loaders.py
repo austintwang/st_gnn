@@ -298,7 +298,8 @@ class ZhuangBasicCellFFiltered(ZhuangBasic):
 
         num_cells_per_cluster = self.params["num_cells_per_cluster"]
 
-        mouse, _ = clusters["slice_id"].str.split("_", n=1, expand=True) 
+        m = clusters["slice_id"].str.split("_", n=1, expand=True) 
+        mouse, _ = m 
         print(mouse) ####
 
         clusters_m1 = clusters[mouse == "mouse1"]
