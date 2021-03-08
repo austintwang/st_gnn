@@ -62,11 +62,14 @@ class Loader(object):
 
         cache_path = os.path.join(self.cache_dir, "imports.pickle")
         if self.params.get("clear_cache", False) or not os.path.exists(cache_path):
-            in_data, partitions = self._import_data()
+            imports = self._import_data()
             with open(cache_path, "wb") as cache_file:
-                pickle.dump((in_data, partitions), cache_file)
+                pickle.dump(imports, cache_file)
         else:
-            in_data, partitions = pd.read_pickle(cache_path)
+            imports = pd.read_pickle(cache_path)
+
+        in_data, partitions = imports[:2]
+        self.aux_data = imports[2:]
 
         self.train_part, self.val_part, self.test_part = partitions
 
@@ -314,9 +317,7 @@ class ZhuangBasicCellFFiltered(ZhuangBasicCellF):
         in_data = (anndata, coords)
         partitions = (train, val, test)
 
-        # print(clusters_m1) ####
-
-        return in_data, partitions
+        return in_data, partitions, clusters
 
 
 if __name__ == '__main__':

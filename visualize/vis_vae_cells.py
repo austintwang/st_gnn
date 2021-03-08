@@ -39,7 +39,7 @@ def load_loader(loader_cls, params, clusters_path, cells_per_cluster):
     loader_params["num_cells_per_cluster"] = cells_per_cluster
     loader_params["batch_size"] = 400
     loader_params["saint_num_steps"] = {"train": 500, "val": 500, "test": 500}
-    # loader_params["clear_cache"] = True ####
+    loader_params["clear_cache"] = True ####
 
     loader = loader_cls(**loader_params)
     return loader
@@ -66,13 +66,13 @@ def sample_model(loader, vae_model, num_select, num_total, device, mode):
         cell_indices = data.node_index_orig.detach().cpu().numpy()[cell_mask]
         coords_pred = out_coords.detach().cpu().numpy()
 
-        # print(latent_exp) ####
+        clusters_df = loader.aux_data[0]
 
         num_samples = coords_pred.shape[0]
         for ind in range(num_samples):
             x, y, z = coords_pred[ind]
             cell = loader.val_maps["node_to_id"][cell_indices[ind]]
-            cluster = loader.clusters[cell, "label"]
+            cluster = clusters_df.loc[cell, "label"]
 
             entry = {
                 "x": x, 
