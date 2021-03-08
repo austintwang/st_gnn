@@ -55,38 +55,44 @@ def sample_model(loader, vae_model, num_select, num_total, device, mode):
         sampler = loader.test_sampler
     
     vae_model.to(device)
-    for data in sampler:
-        data.to(device)
-        num_samples = data.x.shape[0]
-        out = vae_model.sample_coords(data)
-        out_coords = out["coords"]
+    enough = False
+    while True:
+        for data in sampler:
+            data.to(device)
+            num_samples = data.x.shape[0]
+            out = vae_model.sample_coords(data)
+            out_coords = out["coords"]
 
-        cell_mask = data.cell_mask.detach().cpu().numpy()
-        # exp = data.x.detach().cpu().numpy()[cell_mask]
-        # coords_true = data.pos.detach().cpu().numpy()[cell_mask]
-        cell_indices = data.node_index_orig.detach().cpu().numpy()[cell_mask]
-        coords_pred = out_coords.detach().cpu().numpy()
+            cell_mask = data.cell_mask.detach().cpu().numpy()
+            # exp = data.x.detach().cpu().numpy()[cell_mask]
+            # coords_true = data.pos.detach().cpu().numpy()[cell_mask]
+            cell_indices = data.node_index_orig.detach().cpu().numpy()[cell_mask]
+            coords_pred = out_coords.detach().cpu().numpy()
 
-        clusters_df = loader.aux_data[0]
+            clusters_df = loader.aux_data[0]
 
-        num_samples = coords_pred.shape[0]
-        for ind in range(num_samples):
-            x, y, z = coords_pred[ind]
-            cell = loader.val_maps["node_to_id"][cell_indices[ind]]
-            cluster = clusters_df.loc[cell, "label"]
+            num_samples = coords_pred.shape[0]
+            for ind in range(num_samples):
+                x, y, z = coords_pred[ind]
+                cell = loader.val_maps["node_to_id"][cell_indices[ind]]
+                cluster = clusters_df.loc[cell, "label"]
 
-            entry = {
-                "x": x, 
-                "y": y, 
-                "z": z, 
-                "cell": cell,
-                "cluster": cluster,
-            }
+                entry = {
+                    "x": x, 
+                    "y": y, 
+                    "z": z, 
+                    "cell": cell,
+                    "cluster": cluster,
+                }
 
-            data_lst.append(entry)
-        
-        count += num_samples
-        if count >= num_total:
+                data_lst.append(entry)
+            
+            count += num_samples
+            if count >= num_total:
+                enough = True
+                break
+                
+        if enough:
             break
 
     print(count) ####
@@ -162,7 +168,7 @@ if __name__ == '__main__':
     }
 
     num_samples = 100
-    num_total = 2000000
+    num_total = 1e6
     cells_per_cluster = 20
 
     dname = sys.argv[1]
