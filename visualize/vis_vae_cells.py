@@ -115,7 +115,7 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
 
         cmap = ListedColormap(sns.color_palette("husl", num_cells).as_hex())
 
-        ax.scatter(x, y, z, c=c, s=5)
+        ax.scatter(x, y, z, c=c, s=5, cmap=cmap)
 
         ax.set_xlabel('X (Microns)')
         ax.set_ylabel('Y (Microns)')
@@ -161,7 +161,7 @@ if __name__ == '__main__':
     }
 
     num_samples = 100
-    num_total = 1000000
+    num_total = 2000000
     cells_per_cluster = 20
 
     dname = sys.argv[1]
