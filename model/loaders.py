@@ -317,6 +317,8 @@ class ZhuangBasicCellFFiltered(ZhuangBasicCellF):
         in_data = (anndata, coords)
         partitions = (train, val, test)
 
+        print(len(val), len(test)) ####
+
         return in_data, partitions, clusters
 
 
