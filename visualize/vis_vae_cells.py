@@ -132,7 +132,7 @@ def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, cells_per_c
 
     modes = ["val", "test"]
     for mode in modes:
-        vae_model = load_model(vae_model_cls, loader, components, params, mode)
+        vae_model = load_model(vae_model_cls, loader, components, params, model_state)
 
         df = sample_model(loader, vae_model, num_samples, num_total, device)
         plt_scatter(df, name, exp, mode, out_dir)
