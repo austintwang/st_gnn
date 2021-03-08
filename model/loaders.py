@@ -102,7 +102,7 @@ class SaintRWLoader(Loader):
             os.makedirs(sampler_cache_dir)
 
         sampler = GraphSAINTSamplerFixed(
-            self.train_data, 
+            data, 
             batch_size=self.params["batch_size"],
             walk_length=self.params["saint_walk_length"],
             num_steps=self.params["saint_num_steps"][group], 
