@@ -179,7 +179,7 @@ if __name__ == '__main__':
 
     num_samples = 100
     num_total = 1e6
-    cells_per_cluster = 10
+    cells_per_cluster = 50
 
     dname = sys.argv[1]
 
