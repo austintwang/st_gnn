@@ -35,7 +35,7 @@ def load_model(vae_model_cls, loader, components, params, model_state):
 
 def load_loader(loader_cls, params, clusters_path, cells_per_cluster):
     loader_params = params.copy()
-    loader_params["st_clusters"] = clusters_path
+    loader_params["st_clusters_path"] = clusters_path
     loader_params["cells_per_cluster"] = cells_per_cluster
     loader_params["batch_size"] = 400
     loader_params["saint_num_steps"] = {"train": 500, "val": 500, "test":500}
