@@ -137,13 +137,14 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
         ax.set_zlim(0, 2000)
 
         plt.title(f"Cluster {name}, {num_cells} Cells")
-        res_dir = os.path.join(out_dir, model_name, exp, mode)
-        os.makedirs(res_dir, exist_ok=True)
-        plt.savefig(os.path.join(res_dir, f"samples_{name}.svg"), bbox_inches='tight')
+        for ii in xrange(0,360,30):
+            res_dir = os.path.join(out_dir, model_name, exp, mode, str(ii))
+            ax.view_init(azim=ii)
+            os.makedirs(res_dir, exist_ok=True)
+            plt.savefig(os.path.join(res_dir, f"samples_{name}.svg"), bbox_inches='tight')
 
         plt.clf()
-
-    plt.close()
+        plt.close()
 
 def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, cells_per_cluster, num_samples, num_total, data_dir, out_dir, clusters_path):
     device = dname if dname == "cpu" else f"cuda:{dname}" 
