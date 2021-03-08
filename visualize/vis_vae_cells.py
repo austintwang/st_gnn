@@ -6,6 +6,7 @@ import torch
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 import pandas as pd
 import seaborn as sns
 
@@ -112,6 +113,8 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
         z = cluster["z"]
         c = codes
 
+        cmap = ListedColormap(sns.color_palette("husl", num_cells).as_hex())
+
         ax.scatter(x, y, z, c=c, s=5)
 
         ax.set_xlabel('X (Microns)')
@@ -154,7 +157,7 @@ if __name__ == '__main__':
     }
 
     num_samples = 100
-    num_total = 100000
+    num_total = 500000
     cells_per_cluster = 20
 
     dname = sys.argv[1]
