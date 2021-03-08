@@ -132,9 +132,9 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
         ax.set_ylabel('Y (Microns)')
         ax.set_zlabel('Z (Microns)')
 
-        ax.set_xlim(-8500, 5000)
-        ax.set_ylim(-2000, 4000)
-        ax.set_zlim(0, 2000)
+        ax.set_xlim(-8500, 8000)
+        ax.set_ylim(-4000, 4000)
+        ax.set_zlim(0, 4000)
 
         plt.title(f"Cluster {name}, {num_cells} Cells")
         for ii in range(0, 360, 30):
