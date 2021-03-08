@@ -154,8 +154,8 @@ if __name__ == '__main__':
     }
 
     num_samples = 100
-    num_total = 2000000
-    cells_per_cluster = 50
+    num_total = 100000
+    cells_per_cluster = 20
 
     dname = sys.argv[1]
 
