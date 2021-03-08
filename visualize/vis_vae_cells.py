@@ -40,7 +40,7 @@ def load_loader(loader_cls, params, clusters_path, cells_per_cluster):
     loader_params["num_cells_per_cluster"] = cells_per_cluster
     loader_params["batch_size"] = 400
     loader_params["saint_num_steps"] = {"train": 500, "val": 500, "test": 500}
-    # loader_params["clear_cache"] = True ####
+    loader_params["clear_cache"] = True ####
 
     loader = loader_cls(**loader_params)
     return loader
@@ -127,9 +127,9 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
         ax.set_ylabel('Y (Microns)')
         ax.set_zlabel('Z (Microns)')
 
-        ax.set_xlim(-8000, 8000)
-        ax.set_ylim(-5500, 3500)
-        ax.set_zlim(0, 4500)
+        ax.set_xlim(-8500, 8500)
+        ax.set_ylim(-6500, 4000)
+        ax.set_zlim(0, 5000)
 
         plt.title(f"Cluster {name}, {num_cells} Cells")
         res_dir = os.path.join(out_dir, model_name, exp, mode)
@@ -167,8 +167,8 @@ if __name__ == '__main__':
     }
 
     num_samples = 10
-    num_total = 1e6
-    cells_per_cluster = 100
+    num_total = 1e7
+    cells_per_cluster = 1000
 
     dname = sys.argv[1]
 
