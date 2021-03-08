@@ -121,7 +121,7 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
 
         cmap = ListedColormap(sns.color_palette("husl", num_cells).as_hex())
 
-        ax.scatter(x, y, z, c=c, s=3, cmap=cmap)
+        ax.scatter(x, y, z, c=c, s=1, cmap=cmap)
 
         ax.set_xlabel('X (Microns)')
         ax.set_ylabel('Y (Microns)')
