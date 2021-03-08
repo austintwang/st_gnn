@@ -100,16 +100,17 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
 
     clusters = df.groupby("cluster")
     for name, cluster in clusters:
-        print(cluster) ####
+        # print(cluster) ####
         fig = plt.figure()
         ax = fig.add_subplot(111, projection = '3d')
 
         # cells = cluster.groupby("cell")
-        num_cells = len(pd.unique(cluster["cell"]))
+        codes, uniques = pd.factorize(cluster["cell"])
+        num_cells = len(uniques)
         x = cluster["x"]
         y = cluster["y"]
         z = cluster["z"]
-        c = cluster["cell"]
+        c = codes
 
         ax.scatter(x, y, z, c=c)
 
