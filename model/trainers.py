@@ -287,7 +287,7 @@ class SupMSETrainer(Trainer):
             "mse_500_1000": metrics.mse(pred, data, self.params, lbound=500., ubound=1000.),
             "mse_gt_1000": metrics.mse(pred, data, self.params, lbound=1000.),
             "spearman": metrics.spearman(pred, data, self.params),
-            "tril_cons": metrics.tril_cons(pred, data, self.params)
+            # "tril_cons": metrics.tril_cons(pred, data, self.params)
         }
         return out_metrics
 
