@@ -675,7 +675,7 @@ class SupCVAE(torch.nn.Module):
             prev = h
         dist = self.emb_add_final_layer(prev)
         emb_mean = dist[:,:self.vae_latent_dim]
-        emb_lstd = dist[:,self.vae_latent_dim:] - self.lvar_shift
+        emb_lstd = dist[:,self.vae_latent_dim:] * self.lvar_scale
         emb_std = torch.exp(emb_lstd)
         emb_sample = self._sample_sn_like(emb_std) * emb_std + emb_mean
 
