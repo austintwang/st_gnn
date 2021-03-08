@@ -39,7 +39,7 @@ def load_loader(loader_cls, params, clusters_path, cells_per_cluster):
     loader_params["num_cells_per_cluster"] = cells_per_cluster
     loader_params["batch_size"] = 400
     loader_params["saint_num_steps"] = {"train": 500, "val": 500, "test": 500}
-    loader_params["clear_cache"] = True ####
+    # loader_params["clear_cache"] = True ####
 
     loader = loader_cls(**loader_params)
     return loader
@@ -130,8 +130,8 @@ def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, cells_per_c
     params, model_state = load_state(data_dir, name, exp, device)
     loader = load_loader(loader_cls, params, clusters_path, cells_per_cluster)
 
-    mode = ["val", "test"]
-    for model_state in model_states:
+    modes = ["val", "test"]
+    for mode in modes:
         vae_model = load_model(vae_model_cls, loader, components, params, mode)
 
         df = sample_model(loader, vae_model, num_samples, num_total, device)
