@@ -124,7 +124,7 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
 
     plt.close()
 
-def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, num_samples, num_total, data_dir, out_dir, clusters_path):
+def vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, cells_per_cluster, num_samples, num_total, data_dir, out_dir, clusters_path):
     device = dname if dname == "cpu" else f"cuda:{dname}" 
     params, model_state = load_state(data_dir, name, exp, device)
     loader = load_loader(loader_cls, params, clusters_path, cells_per_cluster)
@@ -153,6 +153,7 @@ if __name__ == '__main__':
 
     num_samples = 100
     num_total = 100000
+    cells_per_cluster = 5
 
     dname = sys.argv[1]
 
@@ -160,4 +161,4 @@ if __name__ == '__main__':
 
     exps = ["0005"]
     for exp in exps:
-        vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, num_samples, num_total, data_dir, out_dir, clusters_path)
+        vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, cells_per_cluster, num_samples, num_total, data_dir, out_dir, clusters_path)
