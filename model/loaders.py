@@ -285,7 +285,7 @@ class Synth3Layer(ZhuangBasicCellF):
 
         return in_data, partitions
 
-class ZhuangBasicCellFFiltered(ZhuangBasic):
+class ZhuangBasicCellFFiltered(ZhuangBasicCellF):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.test_sampler = self._build_sampler(self.test_data, "test")
@@ -300,7 +300,7 @@ class ZhuangBasicCellFFiltered(ZhuangBasic):
 
         m = clusters["slice_id"].str.split("_", n=1, expand=True) 
         mouse = m[0]
-        print(m) ####
+        # print(m) ####
 
         clusters_m1 = clusters[mouse == "mouse1"]
         select_m1_df = clusters_m1.groupby("label").sample(n=num_cells_per_cluster)
