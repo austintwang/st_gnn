@@ -301,7 +301,7 @@ class ZhuangBasicCellFFiltered(ZhuangBasicCellF):
         m = clusters["slice_id"].str.split("_", n=1, expand=True) 
         mouse = m[0]
         # print(m) ####
-        print(coords) ####
+        # print(coords) ####
 
         clusters_m1 = clusters[mouse == "mouse1"]
         select_m1_df = clusters_m1.groupby("label").sample(n=num_cells_per_cluster)
@@ -313,6 +313,8 @@ class ZhuangBasicCellFFiltered(ZhuangBasicCellF):
 
         in_data = (anndata, coords)
         partitions = (train, val, test)
+
+        print(train) ####
 
         return in_data, partitions
 
