@@ -56,7 +56,7 @@ def sample_model(loader, vae_model, num_select, num_total, device, mode):
     
     vae_model.to(device)
     enough = False
-    while True:
+    while not enough:
         for data in sampler:
             data.to(device)
             num_samples = data.x.shape[0]
@@ -91,11 +91,8 @@ def sample_model(loader, vae_model, num_select, num_total, device, mode):
             if count >= num_total:
                 enough = True
                 break
-                
-        if enough:
-            break
 
-    print(count) ####
+    # print(count) ####
     data_df = pd.DataFrame.from_records(data_lst)
 
     df_sampled = data_df.groupby("cell").sample(n=num_select)
@@ -167,9 +164,9 @@ if __name__ == '__main__':
         "exp_dec": models.AuxExpDecMLP,
     }
 
-    num_samples = 100
-    num_total = 1e6
-    cells_per_cluster = 20
+    num_samples = 10
+    num_total = 1e5
+    cells_per_cluster = 100
 
     dname = sys.argv[1]
 

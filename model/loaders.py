@@ -307,11 +307,11 @@ class ZhuangBasicCellFFiltered(ZhuangBasicCellF):
         # print(coords) ####
 
         clusters_m1 = clusters[mouse == "mouse1"]
-        select_m1_df = clusters_m1.groupby("label").sample(n=num_cells_per_cluster)
+        select_m1_df = clusters_m1.groupby("label").sample(n=num_cells_per_cluster, replace=True)
         val = train = set(select_m1_df.index)
 
         clusters_m2 = clusters[mouse == "mouse2"]
-        select_m2_df = clusters_m2.groupby("label").sample(n=num_cells_per_cluster)
+        select_m2_df = clusters_m2.groupby("label").sample(n=num_cells_per_cluster, replace=True)
         test = set(select_m2_df.index)
 
         in_data = (anndata, coords)
