@@ -40,7 +40,7 @@ def load_loader(loader_cls, params, clusters_path, cells_per_cluster):
     loader_params["num_cells_per_cluster"] = cells_per_cluster
     loader_params["batch_size"] = 400
     loader_params["saint_num_steps"] = {"train": 500, "val": 500, "test": 500}
-    loader_params["clear_cache"] = True ####
+    # loader_params["clear_cache"] = True ####
 
     loader = loader_cls(**loader_params)
     return loader
@@ -167,7 +167,7 @@ if __name__ == '__main__':
     }
 
     num_samples = 10
-    num_total = 1e5
+    num_total = 1e6
     cells_per_cluster = 100
 
     dname = sys.argv[1]
