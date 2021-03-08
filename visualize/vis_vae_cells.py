@@ -102,6 +102,8 @@ def sample_model(loader, vae_model, num_select, num_total, device, mode):
 
 def plt_scatter_3d(df, model_name, exp, mode, out_dir):
     # sns.set()
+    print(df.max(axis=0)) ####
+    print(df.min(axis=0)) ####
 
     clusters = df.groupby("cluster")
     for name, cluster in clusters:
@@ -125,9 +127,9 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
         ax.set_ylabel('Y (Microns)')
         ax.set_zlabel('Z (Microns)')
 
-        ax.set_xlim(-10000, 10000)
-        ax.set_ylim(-10000, 10000)
-        ax.set_zlim(-1000, 10000)
+        ax.set_xlim(-5000, 10000)
+        ax.set_ylim(0, 20000)
+        ax.set_zlim(-1000, 3000)
 
         plt.title(f"Cluster {name}, {num_cells} Cells")
         res_dir = os.path.join(out_dir, model_name, exp, mode)
