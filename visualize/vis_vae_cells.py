@@ -133,7 +133,7 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
         ax.set_zlabel('Z (Microns)')
 
         ax.set_xlim(-8500, 8000)
-        ax.set_ylim(-4000, 4000)
+        ax.set_ylim(-4000, 5000)
         ax.set_zlim(0, 4000)
 
         plt.title(f"Cluster {name}, {num_cells} Cells")
@@ -180,6 +180,7 @@ if __name__ == '__main__':
 
     name = "vb2"
 
-    exps = ["0005"]
+    # exps = ["0005"]
+    exp = ["0009"]
     for exp in exps:
         vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, cells_per_cluster, num_samples, num_total, data_dir, out_dir, clusters_path)
