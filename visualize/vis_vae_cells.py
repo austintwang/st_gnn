@@ -63,7 +63,7 @@ def sample_model(loader, vae_model, num_select, num_total, device, mode):
         cell_mask = data.cell_mask.detach().cpu().numpy()
         # exp = data.x.detach().cpu().numpy()[cell_mask]
         # coords_true = data.pos.detach().cpu().numpy()[cell_mask]
-        cell_indices = data.node_indices_orig.detach().cpu().numpy()[cell_mask]
+        cell_indices = data.node_index_orig.detach().cpu().numpy()[cell_mask]
         coords_pred = out_coords.detach().cpu().numpy()
 
         # print(latent_exp) ####
