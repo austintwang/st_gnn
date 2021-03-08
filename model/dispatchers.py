@@ -83,7 +83,12 @@ test_params = {
     "debug": True
 }
 
-# sg_params = [global_params, train_params, gnn_params, loader_params, zhuang_params, saint_params]
+sg_components = {
+    "emb": models.EmbMLP,
+    "struct": models.StructCoords,
+}
+
+sg_params = [global_params, train_params, gnn_params, loader_params, zhuang_params, saint_params]
 
 # sg2 = Dispatcher("sg2", sg_params, {"emb": models.EmbRGCN, "struct": models.StructPairwiseLN}, loaders.ZhuangBasic, models.SupRCGN, trainers.SupTrainer)
 # Dispatcher.variant(sg2, "sgt", [test_params])
@@ -91,8 +96,13 @@ test_params = {
 # sgc2 = Dispatcher("sgc2", sg_params, loaders.ZhuangBasicCellF, models.SupRCGN, trainers.SupTrainer)
 # Dispatcher.variant(sgc2, "sgct", [test_params])
 
-# sb2 = Dispatcher("sb2", sg_params, loaders.ZhuangBasicCellF, models.SupMLP, trainers.SupTrainer)
-# Dispatcher.variant(sb2, "sbt", [test_params])
+sb2_components = {
+    "emb": models.EmbMLP,
+    "struct": models.StructCoords,
+}
+
+sb2 = Dispatcher("sb2", sg_params, sb2_components, loaders.ZhuangBasicCellF, models.SupFF, trainers.SupTrainer)
+Dispatcher.variant(sb2, "sbt", [test_params])
 
 
 # sg2s = Dispatcher("sg2s", sg_params, loaders.ZhuangBasic, models.SupSRCGN, trainers.SupMSETrainer)
