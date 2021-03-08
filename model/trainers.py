@@ -324,16 +324,23 @@ class CVAETrainer(Trainer):
         # print((~(data.edge_attr == data.edge_attr)).sum()) ####
         # print((~(pred["coords"] == pred["coords"])).sum()) ####
 
-        nll_struct = ((pred["coords"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_struct_nll_std"] / 2
+        nll_struct = ((pred["coords"] - data.cell_pos)**2).sum(dim=1) / 2
         # nll_struct = 0 ####
-        nll_exp = ((pred["exp"] - data.cell_exp)**2).sum(dim=1) / self.params["vae_exp_nll_std"] / 2
+        nll_exp = ((pred["exp"] - data.cell_exp)**2).sum(dim=1) / 2
 
-        nll_sup = ((pred["coords_from_exp"] - data.cell_pos)**2).sum(dim=1) / self.params["vae_sup_nll_std"] / 2
+        nll_sup = ((pred["coords_from_exp"] - data.cell_pos)**2).sum(dim=1) / 2
      
         kl_struct = self._kl(pred["aux_enc_mean"], pred["aux_enc_std"], pred["aux_enc_lstd"], pred["emb_mean"], pred["emb_std"], pred["emb_lstd"])
         kl_exp = self._kl(pred["emb_mean"], pred["emb_std"], pred["emb_lstd"], 1., 1., 0.)
 
-        loss = ((nll_struct + nll_exp + nll_sup + kl_struct + kl_exp) * w).mean(dim=0)
+        sn = self.params["vae_struct_nll_w"]
+        en = self.params["vae_exp_nll_w"]
+        sup = self.params["vae_sup_nll_w"]
+
+        sk = self.params["vae_struct_kl_w"]
+        ek = self.params["vae_exp_kl_w"]
+
+        loss = ((nll_struct * sn + nll_exp * en + nll_sup * sup + kl_struct * sk + kl_exp * ek) * w).mean(dim=0)
 
         return loss
 
