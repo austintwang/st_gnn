@@ -54,10 +54,10 @@ def sample_model(loader, vae_model, num_select, num_total, device, mode):
 
     if mode == "val":
         sampler = loader.val_sampler
-        node_map = loader.val_map
+        node_map = loader.val_maps["node_to_id"]
     elif mode == "test":
         sampler = loader.test_sampler
-        node_map = loader.test_map
+        node_map = loader.test_maps["node_to_id"]
     
     vae_model.to(device)
     enough = False
