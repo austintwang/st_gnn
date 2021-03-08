@@ -112,7 +112,7 @@ def plt_scatter_3d(df, model_name, exp, mode, out_dir):
         z = cluster["z"]
         c = codes
 
-        ax.scatter(x, y, z, c=c)
+        ax.scatter(x, y, z, c=c, s=10)
 
         ax.set_xlabel('X (Microns)')
         ax.set_ylabel('Y (Microns)')
@@ -155,7 +155,7 @@ if __name__ == '__main__':
 
     num_samples = 100
     num_total = 100000
-    cells_per_cluster = 5
+    cells_per_cluster = 50
 
     dname = sys.argv[1]
 
