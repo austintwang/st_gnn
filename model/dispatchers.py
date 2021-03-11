@@ -189,6 +189,14 @@ vae_train_params = {
     "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
 }
 
+synth_vae_train_params = {
+    "vae_struct_nll_w": 1.,
+    "vae_exp_nll_w": 1,
+    "vae_sup_nll_w": 0.,
+    "vae_struct_kl_w": 0.1.,
+    "vae_exp_kl_w": 0.1,
+}
+
 synth_vae_model_params = {
     "emb_layers_out_chnls": [16, 16],
     "struct_layers_out_chnls": [16, 16],
@@ -211,7 +219,9 @@ synth_saint_params = {
     "saint_num_steps": {"train": 200, "val": 40, "test": 200},
 }
 
-vae_params = [global_params, vae_train_params, synth_vae_model_params, synth_loader_params, synth_params, saint_params, synth_saint_params]
+noexp_params = {"vae_exp_nll_w": 0}
+
+vae_params = [global_params, vae_train_params, synth_vae_train_params, synth_vae_model_params, synth_loader_params, synth_params, saint_params, synth_saint_params]
 
 vae_components = {
     "emb": models.EmbMLP,
@@ -222,7 +232,10 @@ vae_components = {
 
 vs = Dispatcher("vs", vae_params, vae_components, loaders.Synth3Layer, models.SupCVAE, trainers.CVAETrainer)
 Dispatcher.variant(vs, "vst", [test_params])
+Dispatcher.variant(vs, "vsae", [noexp_params])
 
+vs = Dispatcher("vsas", vae_params, vae_components, loaders.Synth3Layer, models.SupCVAENS, trainers.CVAETrainer)
+Dispatcher.variant(vs, "vsaes", [noexp_params])
 
 vae_model_params = {
     "emb_layers_out_chnls": [256, 256],

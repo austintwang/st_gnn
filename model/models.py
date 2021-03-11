@@ -690,6 +690,49 @@ class SupCVAE(torch.nn.Module):
 
         return out
 
+class SupCVAENS(SupCVAE):
+    def __init__(self, in_channels, components, **kwargs):
+        components = components.copy()
+        components["struct_enc"] = self._dummy_fn
+        super().__init__(in_channels, components, **kwargs)
+
+    @staticmethod
+    def _dummy_fn(*args, **kwargs):
+        return None
+
+    def forward(self, data):
+        emb = self.embedder(data)
+        prev = emb
+        for i in self.emb_add_chnls:
+            h = F.dropout(F.relu(i(prev)), p=self.dropout_prop, training=self.training)
+            prev = h
+        dist = self.emb_add_final_layer(prev)
+        # print(dist) ####
+        emb_mean = dist[:,:self.vae_latent_dim]
+        emb_lstd = dist[:,self.vae_latent_dim:] * self.lvar_scale
+        emb_std = torch.exp(emb_lstd)
+        emb_sample = self._sample_sn_like(emb_std) * emb_std + emb_mean
+
+        aux_enc_sample = self._sample_sn_like(emb_std) * emb_std + emb_mean
+
+        out_coords = self.struct_module(aux_enc_sample)["coords"]
+        out_exp = self.aux_exp_dec(emb_sample)["exp"]
+        coords_from_exp = self.struct_module(emb_sample)["coords"]
+
+        out = {
+            "coords": out_coords,
+            "exp": out_exp,
+            "coords_from_exp": coords_from_exp,
+            "emb_mean": emb_mean,
+            "emb_std": emb_std,
+            "emb_lstd": emb_lstd,
+            "emb_sample": emb_sample,
+            "aux_enc_mean": aux_enc_mean,
+            "aux_enc_std": aux_enc_std,
+            "aux_enc_lstd": aux_enc_lstd,
+            "aux_enc_sample": aux_enc_sample,
+        }
+
 
 # class MixinRGCN(object):
 #     def _get_gnn(self, in_channels, out_channels):
