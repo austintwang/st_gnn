@@ -713,7 +713,10 @@ class SupCVAENS(SupCVAE):
         emb_std = torch.exp(emb_lstd)
         emb_sample = self._sample_sn_like(emb_std) * emb_std + emb_mean
 
-        aux_enc_sample = self._sample_sn_like(emb_std) * emb_std + emb_mean
+        aux_enc_mean = dist[:,:self.vae_latent_dim]
+        aux_enc_lstd = dist[:,self.vae_latent_dim:] * self.lvar_scale
+        aux_enc_std = torch.exp(aux_enc_lstd)
+        aux_enc_sample = self._sample_sn_like(aux_enc_std) * aux_enc_std + aux_enc_mean
 
         out_coords = self.struct_module(aux_enc_sample)["coords"]
         out_exp = self.aux_exp_dec(emb_sample)["exp"]

@@ -235,8 +235,8 @@ vs = Dispatcher("vs", vae_params, vae_components, loaders.Synth3Layer, models.Su
 Dispatcher.variant(vs, "vst", [test_params])
 Dispatcher.variant(vs, "vsae", [noexp_params])
 
-vs = Dispatcher("vsas", vae_params, vae_components, loaders.Synth3Layer, models.SupCVAENS, trainers.CVAETrainer)
-Dispatcher.variant(vs, "vsaes", [noexp_params])
+vsas = Dispatcher("vsas", vae_params, vae_components, loaders.Synth3Layer, models.SupCVAENS, trainers.CVAETrainer)
+Dispatcher.variant(vsas, "vsaes", [noexp_params])
 
 vae_model_params = {
     "emb_layers_out_chnls": [256, 256],
