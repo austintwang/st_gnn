@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import model.models as models
 import model.loaders as loaders
 import model.trainers as trainers
@@ -190,7 +191,7 @@ vae_train_params = {
 }
 
 synth_vae_train_params = {
-    "early_stop_min_delta": 0.0001,
+    "early_stop_min_delta": -np.inf,
     "vae_struct_nll_w": 0.1,
     "vae_exp_nll_w": 1.,
     "vae_sup_nll_w": 0.,
