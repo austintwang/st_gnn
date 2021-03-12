@@ -190,6 +190,7 @@ vae_train_params = {
 }
 
 synth_vae_train_params = {
+    "early_stop_min_delta": 0.0001,
     "vae_struct_nll_w": 1.,
     "vae_exp_nll_w": 1,
     "vae_sup_nll_w": 0.,
