@@ -193,7 +193,7 @@ if __name__ == '__main__':
 
     name = "vs"
     names = [
-        ("vs", "0032", models.SupCVAE),
+        ("vs", "0033", models.SupCVAE),
         # ("vsae", "0004", models.SupCVAE),
         # ("vsas", "0004", models.SupCVAENS),
         # ("vsaes", "0003", models.SupCVAENS),
