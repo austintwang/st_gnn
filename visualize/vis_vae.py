@@ -192,12 +192,12 @@ if __name__ == '__main__':
 
     name = "vs"
     names = [
-        ("vs", "0030"),
-        # ("", "0004"),
-        ("vsas", "0004"),
-        # ("", "0003"),
+        ("vs", "0030", models.SupCVAE),
+        ("vsae", "0004", models.SupCVAE),
+        ("vsas", "0004", models.SupCVAENS),
+        ("vsaes", "0003", models.SupCVAENS),
     ]
 
-    exps = ["0022"]
-    for exp in exps:
+    # exps = ["0022"]
+    for name, exp, vae_model_cls in names:
         vis_vae(loader_cls, vae_model_cls, components, dname, name, exp, num_samples, data_dir, out_dir)
