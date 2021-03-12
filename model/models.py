@@ -736,6 +736,8 @@ class SupCVAENS(SupCVAE):
             "aux_enc_sample": aux_enc_sample,
         }
 
+        return out
+
 
 # class MixinRGCN(object):
 #     def _get_gnn(self, in_channels, out_channels):
