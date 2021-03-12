@@ -18,7 +18,7 @@ def load_state(data_dir, name, exp, device):
     with open(params_path, "rb") as f:
         params = pickle.load(f)
     params["clear_cache"] = False
-    params["clear_cache"] = True ####
+    # params["clear_cache"] = True ####
     params["device"] = device
     best_path = os.path.join(target_dir, "best_model_epoch.txt")
     with open(best_path, "r") as f:
@@ -193,10 +193,10 @@ if __name__ == '__main__':
 
     name = "vs"
     names = [
-        ("vs", "0030", models.SupCVAE),
-        ("vsae", "0004", models.SupCVAE),
-        ("vsas", "0004", models.SupCVAENS),
-        ("vsaes", "0003", models.SupCVAENS),
+        ("vs", "0032", models.SupCVAE),
+        # ("vsae", "0004", models.SupCVAE),
+        # ("vsas", "0004", models.SupCVAENS),
+        # ("vsaes", "0003", models.SupCVAENS),
     ]
 
     # exps = ["0022"]
