@@ -191,6 +191,12 @@ if __name__ == '__main__':
     dname = sys.argv[1]
 
     name = "vs"
+    names = [
+        ("vs", "0030"),
+        # ("", "0004"),
+        ("vsas", "0004"),
+        # ("", "0003"),
+    ]
 
     exps = ["0022"]
     for exp in exps:
