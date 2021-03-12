@@ -194,7 +194,7 @@ synth_vae_train_params = {
     "vae_struct_nll_w": 0.1,
     "vae_exp_nll_w": 1.,
     "vae_sup_nll_w": 0.,
-    "vae_struct_kl_w": 0.1,
+    "vae_struct_kl_w": 0.01,
     "vae_exp_kl_w": 0.001,
 }
 
