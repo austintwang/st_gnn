@@ -177,18 +177,18 @@ Dispatcher.variant(sb2s, "sbts", [test_params])
 vae_train_params = {
     "num_epochs": 500,
     "learning_rate": 1e-3,
-    "early_stop_min_delta": 0.001,
+    "early_stop_min_delta": -np.inf,
     "early_stop_hist_len": 10,
     "dropout_prop": 0.1,
     "grad_clip_norm": 1.,
     # "vae_struct_nll_std": 10,
     # "vae_exp_nll_std": 1.,
     # "vae_sup_nll_std": 1e4,
-    "vae_struct_nll_w": 10.,
+    "vae_struct_nll_w": 100.,
     "vae_exp_nll_w": 1.,
-    "vae_sup_nll_w": 1e-5,
-    "vae_struct_kl_w": 1.,
-    "vae_exp_kl_w": 0.1,
+    "vae_sup_nll_w": 0.,
+    "vae_struct_kl_w": 0.1,
+    "vae_exp_kl_w": 0.001,
     "results_dir": os.path.join(base_path, "analyses/st_gnn")
 }
 
