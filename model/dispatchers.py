@@ -34,6 +34,8 @@ class Dispatcher(object):
         trainer.run()
 
 
+base_path = "/mnt/lab_data2/atwang/data/"
+
 global_params = {
     "num_workers": 8,
 }
@@ -47,7 +49,7 @@ train_params = {
     "struct_layers_out_chnls": [64],
     "min_dist": 1e-4,
     "grad_clip_norm": 1.,
-    "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
+    "results_dir": os.path.join(base_path, "analyses/st_gnn")
 }
 
 gnn_params = {
@@ -59,7 +61,7 @@ loader_params = {
     "train_prop": 0.8,
 }
 
-data_path = "/dfs/user/atwang/data/spt_zhuang/"
+data_path = os.path.join(base_path, "spt_zhuang/")
 coords_path = os.path.join(data_path, "parsed", "cell_coords.pickle")
 orgs_path = os.path.join(data_path, "parsed", "cell_orgs.pickle")
 exp_path = os.path.join(data_path, "source/processed_data/counts.h5ad")
@@ -74,13 +76,13 @@ saint_params = {
     "saint_walk_length": 2,
     "saint_num_steps": {"train": 625, "val": 150},
     "saint_sample_coverage": 100,
-    "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/saint"
+    "loader_cache_dir": os.path.join(data_path, "cache/saint")
 }
 
 test_params = {
     "saint_sample_coverage": 2, 
     "saint_num_steps": {"train": 10, "val": 10, "test": 10},
-    "loader_cache_dir": "/dfs/user/atwang/data/spt_zhuang/cache/test",
+    "loader_cache_dir": os.path.join(data_path, "cache/test"),
     "debug": True
 }
 
@@ -187,7 +189,7 @@ vae_train_params = {
     "vae_sup_nll_w": 1e-5,
     "vae_struct_kl_w": 1.,
     "vae_exp_kl_w": 0.1,
-    "results_dir": "/dfs/user/atwang/data/analyses/st_gnn"
+    "results_dir": os.path.join(base_path, "analyses/st_gnn")
 }
 
 synth_vae_train_params = {
